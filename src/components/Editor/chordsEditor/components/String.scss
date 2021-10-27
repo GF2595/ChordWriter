@@ -1,0 +1,14 @@
+@import '@stylesheets/common.scss';
+.string {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    &__container:hover .string__icon {
+        visibility: visible;
+    }
+    &__icon {
+        padding-left: $spacing-xs;
+        visibility: hidden;
+    }
+}

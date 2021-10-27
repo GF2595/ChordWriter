@@ -1,0 +1,5 @@
+@import '../../../stylesheets/common.scss';
+.page-content {
+    padding: $spacing-xs $spacing $spacing $spacing;
+    overflow: auto;
+}
