@@ -1,14 +1,13 @@
-import React, { useMemo, useState } from 'react';
-import { Cell, Column, HeaderCell, RowDataType, Table } from 'rsuite-table';
+import React, { useState } from 'react';
 import { PageContent } from '../../common/PageContent/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
-import { InstrumentalPart, Song, SongPart } from '../../../model/song';
+import { InstrumentalPartType, Song, LyricsPartType } from '@model/song';
 import './ChordsEditor.scss';
-import breathing from './breathe';
-import { Panel, PanelGroup } from 'rsuite';
-import { String } from './components';
+import seventeen from './seventeen';
+import { String, LyricsPart } from './components';
+import { InstrumentalPart } from './components/InstrumentalPart';
 
-const CLASS = 'chords-editor';
+// const CLASS = 'chords-editor';
 
 // export interface ChordsEditorProps {}
 
@@ -25,14 +24,14 @@ export const ChordsEditor: React.FC = () => {
     //     ],
     // });
 
-    const [song, setSong] = useState<Song>(breathing);
+    const [song, setSong] = useState<Song>(seventeen);
 
     // const tableData: RowDataType[] = lines.map((line, index) => ({
     //     dataKey: `${index}`,
     //     line,
     // }));
 
-    const result = [];
+    // const result = [];
 
     // for (let i = 0; i < text.length; i++) {
     //     const letter = text[i];
@@ -97,45 +96,14 @@ export const ChordsEditor: React.FC = () => {
                     }}
                 >
                     {song.songBody.map((part) => {
-                        if ((part as SongPart).lines !== undefined) {
-                            const songPart = part as SongPart;
-                            return (
-                                <div style={{ paddingTop: 16 }}>
-                                    <span style={{ fontWeight: 'bolder' }}>
-                                        {part.title}
-                                    </span>
-                                    <Table
-                                        autoHeight
-                                        rowHeight={20}
-                                        hover={false}
-                                        showHeader={false}
-                                        data={songPart.lines.map(
-                                            (line, index) => ({
-                                                dataKey: `${index}`,
-                                                line: line.lyrics.reduce(
-                                                    (previous, current) =>
-                                                        `${previous}${current}`
-                                                ),
-                                            })
-                                        )}
-                                        rowClassName={`${CLASS}__table_row`}
-                                    >
-                                        <Column flexGrow={1}>
-                                            <HeaderCell>line</HeaderCell>
-                                            <Cell
-                                                style={{ padding: 0 }}
-                                                dataKey={'line'}
-                                            />
-                                        </Column>
-                                    </Table>
-                                </div>
-                            );
+                        if ((part as LyricsPartType).lines !== undefined) {
+                            return <LyricsPart part={part as LyricsPartType} />;
                         }
 
                         return (
-                            <div style={{ paddingTop: 8 }}>
-                                {(part as InstrumentalPart).title}
-                            </div>
+                            <InstrumentalPart
+                                part={part as InstrumentalPartType}
+                            />
                         );
                     })}
                 </div>

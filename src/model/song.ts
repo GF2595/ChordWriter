@@ -1,26 +1,24 @@
-type Chord =
-    | string
-    | {
-          chord: string;
-          mod: string;
-      };
+export type ChordType = {
+    chord: string;
+    mod: string;
+};
 
-type SongLine = {
+export type SongLine = {
     firstChordOffset?: boolean;
     lastChordOffset?: boolean;
-    chords?: Chord[];
+    chords?: ChordType[];
     lyrics: string[];
     repeatStart?: number;
     repeatEnd?: boolean;
 };
 
-export type InstrumentalPart = {
+export type InstrumentalPartType = {
     title?: string;
-    chords?: Chord[][];
+    chords?: ChordType[][];
     tabs?: string;
 };
 
-export type SongPart = {
+export type LyricsPartType = {
     title?: string;
     offset?: boolean;
     lines: SongLine[];
@@ -29,5 +27,5 @@ export type SongPart = {
 export type Song = {
     title: string;
     author: string;
-    songBody: (SongPart | InstrumentalPart)[];
+    songBody: (LyricsPartType | InstrumentalPartType)[];
 };
