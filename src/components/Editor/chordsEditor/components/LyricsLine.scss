@@ -1,0 +1,36 @@
+@import '@stylesheets/common';
+.lyrics-line {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    &:hover .lyrics-line__icon {
+        visibility: visible;
+    }
+    &__cell {
+        display: flex;
+        flex-direction: column;
+        white-space: pre;
+        &_line {
+            display: flex;
+            flex-direction: row;
+        }
+        &_letter {
+            cursor: pointer;
+            &-clickable:hover {
+                background: rgb(236, 236, 30);
+            }
+        }
+        &_popover {
+            height: unset !important;
+        }
+    }
+    &__icon {
+        cursor: pointer;
+        visibility: hidden;
+        margin-left: $spacing;
+        margin-bottom: $spacing-xxs;
+        &:hover {
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+        }
+    }
+}

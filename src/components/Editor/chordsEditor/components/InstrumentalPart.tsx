@@ -13,8 +13,14 @@ export const InstrumentalPart: React.FC<InstrumentalPartProps> = ({ part }) => {
             <div>
                 {part.chords
                     ? part.chords
-                          .map((line) =>
-                              line.map((chord) => <Chord chord={chord} />)
+                          .map((line, index) =>
+                              line.map((chord, chordIndex) => (
+                                  // TODO: нормальный key
+                                  <Chord
+                                      key={`${index}_${chordIndex}`}
+                                      chord={chord}
+                                  />
+                              ))
                           )
                           .reduce((prev, next) => [...prev, <br />, ...next])
                     : part.tabs}

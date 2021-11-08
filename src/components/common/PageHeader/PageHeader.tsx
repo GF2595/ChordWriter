@@ -20,6 +20,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
             <div className={`${CLASS}_content`}>
                 {buttons.map((button, index) => {
                     if (button.icon)
+                        // TODO: key index
                         return (
                             <IconButton
                                 key={`btn_${index}`}
@@ -30,6 +31,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
                                 {button.title}
                             </IconButton>
                         );
+                    // TODO: key index
                     else
                         return (
                             <Button

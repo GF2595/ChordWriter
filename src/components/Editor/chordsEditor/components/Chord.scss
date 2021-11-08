@@ -1,0 +1,7 @@
+@import '@stylesheets/common';
+.chord {
+    font-weight: bolder;
+    padding-right: $spacing-xs;
+    white-space: pre;
+    width: fit-content;
+}

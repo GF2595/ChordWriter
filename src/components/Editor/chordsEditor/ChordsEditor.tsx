@@ -95,13 +95,43 @@ export const ChordsEditor: React.FC = () => {
                         paddingTop: '24px',
                     }}
                 >
-                    {song.songBody.map((part) => {
+                    {song.songBody.map((part, index) => {
                         if ((part as LyricsPartType).lines !== undefined) {
-                            return <LyricsPart part={part as LyricsPartType} />;
+                            // TODO: key index
+                            return (
+                                <LyricsPart
+                                    key={`${index}`}
+                                    part={part as LyricsPartType}
+                                    onEdit={(newPart?: LyricsPartType) => {
+                                        setSong({
+                                            ...song,
+                                            songBody:
+                                                index === 0
+                                                    ? [
+                                                          newPart,
+                                                          ...song.songBody.slice(
+                                                              1
+                                                          ),
+                                                      ]
+                                                    : [
+                                                          ...song.songBody.slice(
+                                                              0,
+                                                              index
+                                                          ),
+                                                          newPart,
+                                                          ...song.songBody.slice(
+                                                              index + 1
+                                                          ),
+                                                      ],
+                                        });
+                                    }}
+                                />
+                            );
                         }
-
+                        // TODO: key index
                         return (
                             <InstrumentalPart
+                                key={`${index}`}
                                 part={part as InstrumentalPartType}
                             />
                         );

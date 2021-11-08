@@ -1,0 +1,45 @@
+@import '@stylesheets/common.scss';
+.chord-edit-popup {
+    height: unset !important;
+    // 111px - ширина с placeholder'ом
+    min-width: 111px;
+    &__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        white-space: pre;
+    }
+    &__input-container {
+        margin: $spacing-xs 0;
+        display: flex;
+        flex-direction: row;
+    }
+    &__chord-input {
+        width: 30px;
+        padding: 1px 4px;
+        &_mod {
+            margin-top: $spacing-xs;
+            font-size: 0.7rem;
+        }
+    }
+    &__chord-view {
+        font-weight: bolder;
+    }
+    &__icon-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    &__icon {
+        font-size: 14px;
+        margin-left: $spacing-xxs;
+        margin-right: $spacing-xxs;
+        margin-top: $spacing-xs;
+        &_enabled {
+            cursor: pointer;
+            &:hover {
+                filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+            }
+        }
+    }
+}
