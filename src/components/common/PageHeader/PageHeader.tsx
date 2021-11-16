@@ -8,6 +8,7 @@ export interface ButtonInfo {
     title?: string;
     icon?: IconButtonProps['icon'];
     onClick?: () => void;
+    disabled?: boolean;
 }
 
 export interface PageHeaderProps {
@@ -19,29 +20,32 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
         <Header className={`${CLASS}_container`}>
             <div className={`${CLASS}_content`}>
                 {buttons.map((button, index) => {
-                    if (button.icon)
+                    const { icon, onClick, disabled, title } = button;
+
+                    return icon ? (
                         // TODO: key index
-                        return (
-                            <IconButton
-                                key={`btn_${index}`}
-                                size={'xs'}
-                                icon={button.icon}
-                                onClick={button.onClick}
-                            >
-                                {button.title}
-                            </IconButton>
-                        );
-                    // TODO: key index
-                    else
-                        return (
-                            <Button
-                                key={`btn_${index}`}
-                                size={'xs'}
-                                onClick={button.onClick}
-                            >
-                                {button.title}
-                            </Button>
-                        );
+                        <IconButton
+                            className={`${CLASS}__button`}
+                            key={`btn_${index}`}
+                            size={'xs'}
+                            icon={icon}
+                            onClick={onClick}
+                            disabled={disabled}
+                        >
+                            {title}
+                        </IconButton>
+                    ) : (
+                        // TODO: key index
+                        <Button
+                            className={`${CLASS}__button`}
+                            key={`btn_${index}`}
+                            size={'xs'}
+                            onClick={onClick}
+                            disabled={disabled}
+                        >
+                            {title}
+                        </Button>
+                    );
                 })}
             </div>
         </Header>

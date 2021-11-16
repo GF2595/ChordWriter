@@ -6,21 +6,23 @@ export type ChordType = {
 export type SongLine = {
     firstChordOffset?: boolean;
     lastChordOffset?: boolean;
-    chords?: ChordType[];
+    chords?: Array<ChordType | null>; //ChordType[];
     lyrics: string[];
     repeatStart?: number;
     repeatEnd?: boolean;
 };
 
-export type InstrumentalPartType = {
+export type PartType = {
     title?: string;
+    alwaysShowChords?: boolean;
+};
+
+export type InstrumentalPartType = PartType & {
     chords?: ChordType[][];
     tabs?: string;
 };
 
-export type LyricsPartType = {
-    title?: string;
-    offset?: boolean;
+export type LyricsPartType = PartType & {
     lines: SongLine[];
 };
 

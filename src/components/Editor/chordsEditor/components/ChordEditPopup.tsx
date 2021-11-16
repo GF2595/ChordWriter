@@ -17,22 +17,25 @@ export interface ChordEditPopupProps extends Omit<PopoverProps, 'className'> {
 
 export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
     ({ chord: initialChord, onSubmit, onRemove, className, ...props }, ref) => {
-        // //React.FC<ChordEditPopupProps> = ({
-        //     chord: initialChord,
-        //     onSubmit: _onSubmit,
-        //     ...props
-        // }) => {
-        const [chord, setChord] = useState<ChordType>(
+        const [fullChord, setFullChord] = useState<ChordType>(
             initialChord ?? { chord: '', mod: '' }
         );
 
+        const { chord, mod } = fullChord;
+
         return (
             <Popover ref={ref} {...props} className={cn(CLASS, className)}>
-                <div className={`${CLASS}__container`}>
-                    {chord.chord.length ? (
+                <div
+                    onKeyDown={(event) => {
+                        if (chord.length && event.key === 'Enter')
+                            onSubmit(fullChord);
+                    }}
+                    className={`${CLASS}__container`}
+                >
+                    {chord.length ? (
                         <span className={`${CLASS}__chord-view`}>
-                            {chord.chord}
-                            <sub>{chord.mod}</sub>
+                            {chord}
+                            <sub>{mod}</sub>
                         </span>
                     ) : (
                         'Введите аккорд'
@@ -40,11 +43,11 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
                     <div className={`${CLASS}__input-container`}>
                         <Input
                             size={'sm'}
-                            value={chord.chord}
+                            value={chord}
                             className={`${CLASS}__chord-input`}
                             onChange={(value) =>
-                                setChord({
-                                    ...chord,
+                                setFullChord({
+                                    ...fullChord,
                                     chord: `${value}`,
                                 })
                             }
@@ -52,14 +55,14 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
                         <sub>
                             <Input
                                 size={'xs'}
-                                value={chord.mod}
+                                value={mod}
                                 className={cn(
                                     `${CLASS}__chord-input`,
                                     `${CLASS}__chord-input_mod`
                                 )}
                                 onChange={(value) =>
-                                    setChord({
-                                        ...chord,
+                                    setFullChord({
+                                        ...fullChord,
                                         mod: `${value}`,
                                     })
                                 }
@@ -69,11 +72,10 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
                     <div>
                         <CheckIcon
                             className={cn(`${CLASS}__icon`, {
-                                [`${CLASS}__icon_enabled`]:
-                                    !!chord.chord.length,
+                                [`${CLASS}__icon_enabled`]: !!chord.length,
                             })}
-                            fill={!chord.chord.length ? 'lightgray' : undefined}
-                            onClick={() => onSubmit(chord)}
+                            fill={!chord.length ? 'lightgray' : undefined}
+                            onClick={() => onSubmit(fullChord)}
                         />
                         {!!onRemove && (
                             <TrashIcon

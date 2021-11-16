@@ -3,3 +3,4 @@ $spacing-unit: 8px;
 $spacing: $spacing-unit;
 $spacing-xs: math.div($spacing-unit, 2);
 $spacing-xxs: math.div($spacing-unit, 4);
+$spacing-lg: #{8px * 2};

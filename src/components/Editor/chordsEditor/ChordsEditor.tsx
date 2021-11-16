@@ -47,7 +47,25 @@ export const ChordsEditor: React.FC = () => {
     //     } else if (letter === '\n') result.push(<br />);
     // }
 
-    const buttons: ButtonInfo[] = [];
+    const buttons: ButtonInfo[] = [
+        {
+            title: 'Новая',
+            disabled: true,
+        },
+        {
+            title: 'Открыть',
+            disabled: true,
+        },
+        {
+            // icon: (),
+            title: 'Сохранить',
+            disabled: true,
+        },
+        {
+            title: 'Повтор',
+            disabled: true,
+        },
+    ];
 
     return (
         <>
@@ -81,7 +99,6 @@ export const ChordsEditor: React.FC = () => {
                 />
                 <String
                     value={song.author}
-                    align={'right'}
                     onEdit={(author: string) => {
                         setSong({
                             ...song,

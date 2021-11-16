@@ -14,27 +14,30 @@ export interface LyricsPartProps {
 export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
     const [editedLine, setEditedLine] = useState(-1);
 
+    const { lines, title } = part;
+
     const onRemoveLine = (index: number) => {
-        if (part.lines.length === 1) onEdit(undefined);
+        if (lines.length === 1) onEdit(undefined);
 
         onEdit({
             ...part,
             lines:
                 index === 0
-                    ? [...part.lines.slice(1)]
-                    : [
-                          ...part.lines.slice(0, index),
-                          ...part.lines.slice(index + 1),
-                      ],
+                    ? [...lines.slice(1)]
+                    : [...lines.slice(0, index), ...lines.slice(index + 1)],
         });
     };
 
-    const lines: TableProps['data'] = useMemo(
+    const tableData: TableProps['data'] = useMemo(
         () =>
-            part.lines.map((line, index) => {
+            lines.map((line, index) => {
                 // TODO: key index
                 return {
                     dataKey: `${index}`,
+                    hasChords:
+                        line.chords &&
+                        line.chords.length &&
+                        !(line.chords.length === 1 && !line.chords[0]),
                     line: (
                         <LyricsLine
                             line={line}
@@ -44,9 +47,9 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                                 onEdit({
                                     ...part,
                                     lines: [
-                                        ...part.lines.slice(0, index),
+                                        ...lines.slice(0, index),
                                         line,
-                                        ...part.lines.slice(index + 1),
+                                        ...lines.slice(index + 1),
                                     ],
                                 });
                             }}
@@ -54,19 +57,21 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                     ),
                 };
             }),
-        [part.lines, editedLine]
+        [lines, editedLine]
     );
 
     return (
         <div style={{ paddingTop: 16 }}>
-            <span style={{ fontWeight: 'bolder' }}>{part.title}</span>
-            {!!part.lines.length && (
+            <span style={{ fontWeight: 'bolder' }}>{title}</span>
+            {!!lines.length && (
                 <Table
                     autoHeight
-                    // rowHeight={40}
+                    rowHeight={(rowData) => {
+                        return rowData && rowData['hasChords'] ? 40 : 20;
+                    }}
                     hover={false}
                     showHeader={false}
-                    data={lines}
+                    data={tableData}
                     rowClassName={`${CLASS}__table_row`}
                     wordWrap={false}
                 >

@@ -38,7 +38,7 @@ const seventeen: Song = {
                 {
                     lastChordOffset: true,
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'F', mod: '' },
                         { chord: 'G', mod: '' },
                         { chord: 'C', mod: '' },
@@ -55,7 +55,7 @@ const seventeen: Song = {
                 {
                     lastChordOffset: true,
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'F', mod: '' },
                         { chord: 'G', mod: '' },
                         { chord: 'C', mod: '' },
@@ -71,7 +71,7 @@ const seventeen: Song = {
                 },
                 {
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'F', mod: '' },
                         { chord: 'G', mod: '' },
                         { chord: 'C', mod: '' },
@@ -85,7 +85,7 @@ const seventeen: Song = {
             lines: [
                 {
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'C', mod: '' },
                         { chord: 'C', mod: '7' },
                     ],
@@ -93,7 +93,7 @@ const seventeen: Song = {
                 },
                 {
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'F', mod: '' },
                         { chord: 'Fm', mod: '' },
                     ],
@@ -108,7 +108,7 @@ const seventeen: Song = {
                 },
                 {
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'F', mod: '' },
                         { chord: 'Fm', mod: '' },
                     ],
@@ -116,7 +116,7 @@ const seventeen: Song = {
                 },
                 {
                     chords: [
-                        { chord: '', mod: '' },
+                        undefined,
                         { chord: 'C', mod: '' },
                         { chord: 'C', mod: '7' },
                     ],

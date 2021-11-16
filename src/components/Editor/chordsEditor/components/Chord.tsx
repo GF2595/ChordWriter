@@ -28,7 +28,11 @@ export const Chord: React.FC<ChordProps> = ({
 
     const chordContent = (
         <span
-            className={cn(`${CLASS}`, className)}
+            className={cn(
+                CLASS,
+                { [`${CLASS}-clickable`]: !!onEdit && !!onRemove },
+                className
+            )}
             style={{
                 fontWeight: 'bolder',
                 paddingRight: 4,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import EditIcon from '@rsuite/icons/Edit';
 import CheckIcon from '@rsuite/icons/Check';
 import cn from 'classnames';
@@ -36,11 +36,19 @@ export const String: React.FC<StringProps> = ({
         fontSize: bold ? 20 : undefined,
     };
 
+    const handleSave = useCallback(() => {
+        setIsEditing((value) => !value);
+        onEdit(text);
+    }, [onEdit, setIsEditing, text]);
+
     return (
         <div className={CLASS} style={style[align]}>
             <div
                 className={cn(`${CLASS}__container`, className)}
                 style={containerStyle}
+                onKeyDown={(event) => {
+                    if (isEditing && event.key === 'Enter') handleSave();
+                }}
             >
                 {isEditing ? (
                     <>
@@ -50,12 +58,7 @@ export const String: React.FC<StringProps> = ({
                                 size={bold ? 'sm' : 'xs'}
                                 onChange={(value) => setText(`${value}`)}
                             />
-                            <InputGroup.Button
-                                onClick={() => {
-                                    setIsEditing((value) => !value);
-                                    onEdit(text);
-                                }}
-                            >
+                            <InputGroup.Button onClick={handleSave}>
                                 <CheckIcon />
                             </InputGroup.Button>
                         </InputGroup>

@@ -1,0 +1,10 @@
+@import '@stylesheets/colors';
+.letter {
+    cursor: pointer;
+    &-clickable:hover {
+        filter: drop-shadow(0 -2px 2px $text-hover-shadow);
+    }
+    &__popover {
+        height: unset !important;
+    }
+}

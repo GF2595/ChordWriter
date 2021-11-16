@@ -4,9 +4,11 @@ import { Chord } from './Chord';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
-import { Tooltip, Whisper } from 'rsuite';
+import PlusIcon from '@rsuite/icons/Plus';
+import DragableIcon from '@rsuite/icons/Dragable';
+import { Letter } from './Letter';
 import cn from 'classnames';
-import { ChordEditPopup } from './ChordEditPopup';
+import { noop } from 'lodash';
 
 const CLASS = 'lyrics-line';
 
@@ -23,9 +25,9 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     onAlterLine,
     onRemove,
 }) => {
-    if (line.lyrics.length === 1) return <>{line.lyrics[0]}</>;
+    const { lyrics, chords } = line;
 
-    if (!line.chords || line.lyrics.length !== line.chords.length)
+    if (lyrics.length !== 1 && (!chords || lyrics.length !== chords.length))
         return <div style={{ color: 'red' }}>error</div>;
 
     const onAddChord = useCallback(
@@ -35,134 +37,151 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             letterIndex: number,
             index: number
         ) => {
-            const firstLyricBlock = lyric.slice(0, letterIndex);
-            const secondLyricBlock = lyric.slice(letterIndex);
+            if (chords && !chords[index] && letterIndex === 0) {
+                onAlterLine({
+                    ...line,
+                    chords: [chord, ...chords.slice(1)],
+                });
+
+                return;
+            }
+
+            if (!chords && letterIndex === 0) {
+                onAlterLine({
+                    ...line,
+                    chords: [chord],
+                });
+
+                return;
+            }
+
+            const newLyrics = [
+                ...lyrics.slice(0, index),
+                lyric.slice(0, letterIndex),
+                lyric.slice(letterIndex),
+                ...lyrics.slice(index + 1),
+            ];
+
+            if (chords) {
+                onAlterLine({
+                    chords: [
+                        ...chords.slice(0, index),
+                        chords[index],
+                        chord,
+                        ...chords.slice(index + 1),
+                    ],
+                    lyrics: newLyrics,
+                });
+            } else {
+                onAlterLine({
+                    chords: [undefined, chord],
+                    lyrics: newLyrics,
+                });
+            }
+        },
+        [onAlterLine, lyrics, chords, line]
+    );
+
+    const onEditChord = useCallback(
+        (index: number, chord: ChordType) => {
             onAlterLine({
+                ...line,
                 chords: [
-                    ...line.chords.slice(0, index),
-                    line.chords[index],
+                    ...chords.slice(0, index),
                     chord,
-                    ...line.chords.slice(index + 1),
-                ],
-                lyrics: [
-                    ...line.lyrics.slice(0, index),
-                    firstLyricBlock,
-                    secondLyricBlock,
-                    ...line.lyrics.slice(index + 1),
+                    ...chords.slice(index + 1),
                 ],
             });
         },
-        [onAlterLine, line]
+        [onAlterLine, lyrics, chords, line]
     );
+
+    const onRemoveChord = useCallback(
+        (index: number) => {
+            onAlterLine(
+                index === 0
+                    ? {
+                          ...line,
+                          chords:
+                              chords.length === 1
+                                  ? undefined
+                                  : [undefined, ...chords.slice(1)],
+                      }
+                    : {
+                          chords:
+                              chords.length === 2 && !chords[0]
+                                  ? undefined
+                                  : [
+                                        ...chords.slice(0, index),
+                                        ...chords.slice(index + 1),
+                                    ],
+                          lyrics: [
+                              ...lyrics.slice(0, index - 1),
+                              `${lyrics[index - 1]}${lyrics[index]}`,
+                              ...lyrics.slice(index + 1),
+                          ],
+                      }
+            );
+        },
+        [onAlterLine, line, lyrics, chords]
+    );
+
     // TODO: key index
     return (
         <div className={`${CLASS}`}>
-            {line.lyrics.map((lyric, index) => (
+            <DragableIcon
+                className={cn(`${CLASS}__icon`, `${CLASS}__icon_left`)}
+            />
+            {lyrics.map((lyric, index) => (
                 <div key={`${lyric}`} className={`${CLASS}__cell`}>
-                    <Chord
-                        chord={line.chords[index]}
-                        onEdit={(chord: ChordType) => {
-                            onAlterLine({
-                                ...line,
-                                chords: [
-                                    ...line.chords.slice(0, index),
-                                    chord,
-                                    ...line.chords.slice(index + 1),
-                                ],
-                            });
-                        }}
-                        onRemove={() => {
-                            onAlterLine(
-                                index === 0
-                                    ? {
-                                          ...line,
-                                          chords: [
-                                              { chord: '', mod: '' },
-                                              ...line.chords.slice(1),
-                                          ],
-                                      }
-                                    : {
-                                          chords: [
-                                              ...line.chords.slice(0, index),
-                                              ...line.chords.slice(index + 1),
-                                          ],
-                                          lyrics: [
-                                              ...line.lyrics.slice(
-                                                  0,
-                                                  index - 1
-                                              ),
-                                              `${line.lyrics[index - 1]}${
-                                                  line.lyrics[index]
-                                              }`,
-                                              ...line.lyrics.slice(index + 1),
-                                          ],
-                                      }
-                            );
-                        }}
-                    />
+                    {chords && !!chords.length && chords[index] ? (
+                        <Chord
+                            chord={chords[index]}
+                            onEdit={(chord) => onEditChord(index, chord)}
+                            onRemove={() => onRemoveChord(index)}
+                        />
+                    ) : (
+                        ' '
+                    )}
                     <div className={`${CLASS}__cell_line`}>
                         {lyric.length ? (
-                            lyric.split('').map((letter, letterIndex) =>
-                                letterIndex ? (
-                                    <Whisper
-                                        key={`${letterIndex}`}
-                                        placement={'top'}
-                                        trigger={'click'}
-                                        speaker={
-                                            <ChordEditPopup
-                                                onSubmit={(chord: ChordType) =>
-                                                    onAddChord(
-                                                        chord,
-                                                        lyric,
-                                                        letterIndex,
-                                                        index
-                                                    )
-                                                }
-                                            />
+                            lyric
+                                .split('')
+                                .map((letter, letterIndex) => (
+                                    <Letter
+                                        key={`${letter}.${letterIndex}`}
+                                        letter={letter}
+                                        hasChord={
+                                            letterIndex === 0 &&
+                                            chords &&
+                                            !!chords[index]
                                         }
-                                    >
-                                        <span
-                                            className={cn(
-                                                `${CLASS}__cell_letter`,
-                                                `${CLASS}__cell_letter-clickable`
-                                            )}
-                                        >
-                                            {letter}
-                                        </span>
-                                    </Whisper>
-                                ) : (
-                                    <Whisper
-                                        trigger={'click'}
-                                        placement={'top'}
-                                        speaker={
-                                            <Tooltip
-                                                className={`${CLASS}__cell_popover`}
-                                            >
-                                                Чтобы добавить сюда новый
-                                                аккорд, удалите существующий
-                                            </Tooltip>
+                                        onAddChord={(chord) =>
+                                            onAddChord(
+                                                chord,
+                                                lyric,
+                                                letterIndex,
+                                                index
+                                            )
                                         }
-                                    >
-                                        <span
-                                            className={`${CLASS}__cell_letter`}
-                                        >
-                                            {letter}
-                                        </span>
-                                    </Whisper>
-                                )
-                            )
+                                    />
+                                ))
                         ) : (
                             <div> </div>
                         )}
                     </div>
                 </div>
             ))}
-            <EditIcon className={`${CLASS}__icon`} onClick={onToggleEdit} />
-            <TrashIcon
-                className={`${CLASS}__icon`}
-                fill={'firebrick'}
-                onClick={onRemove}
-            />
+            <div className={`${CLASS}__actions`}>
+                <EditIcon className={`${CLASS}__icon`} onClick={onToggleEdit} />
+                <TrashIcon
+                    className={`${CLASS}__icon`}
+                    fill={'firebrick'}
+                    onClick={onRemove}
+                />
+                {/* TODO: noop */}
+                <PlusIcon className={`${CLASS}__icon`} onClick={noop} />
+            </div>
         </div>
     );
 };

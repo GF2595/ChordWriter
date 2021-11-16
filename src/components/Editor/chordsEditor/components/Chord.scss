@@ -1,7 +1,14 @@
 @import '@stylesheets/common';
+@import '@stylesheets/colors';
 .chord {
     font-weight: bolder;
     padding-right: $spacing-xs;
     white-space: pre;
     width: fit-content;
+    &-clickable {
+        cursor: pointer;
+        &:hover {
+            filter: drop-shadow(0 -2px 2px $text-hover-shadow);
+        }
+    }
 }
