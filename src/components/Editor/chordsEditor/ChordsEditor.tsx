@@ -7,7 +7,7 @@ import seventeen from './seventeen';
 import { String, LyricsPart } from './components';
 import { InstrumentalPart } from './components/InstrumentalPart';
 
-// const CLASS = 'chords-editor';
+const CLASS = 'chords-editor';
 
 // export interface ChordsEditorProps {}
 
@@ -86,7 +86,7 @@ export const ChordsEditor: React.FC = () => {
                     </Column>
                 </Table>
             </PageContent> */}
-            <PageContent>
+            <PageContent className={CLASS}>
                 <String
                     value={song.title}
                     bold

@@ -1,9 +1,4 @@
 .chords-editor {
     height: 100%;
-    &__letter {
-        &:hover {
-            background-color: rgba(251, 221, 91, 0.5);
-        }
-        cursor: pointer;
-    }
+    user-select: none;
 }

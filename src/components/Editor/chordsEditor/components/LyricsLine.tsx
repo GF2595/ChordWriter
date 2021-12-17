@@ -37,6 +37,15 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             letterIndex: number,
             index: number
         ) => {
+            if (chords && index === lyrics.length) {
+                onAlterLine({
+                    lyrics: [...lyrics, ''],
+                    chords: [...chords, chord],
+                });
+
+                return;
+            }
+
             if (chords && !chords[index] && letterIndex === 0) {
                 onAlterLine({
                     ...line,
@@ -133,7 +142,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                 className={cn(`${CLASS}__icon`, `${CLASS}__icon_left`)}
             />
             {lyrics.map((lyric, index) => (
-                <div key={`${lyric}`} className={`${CLASS}__cell`}>
+                <div key={`${lyric}.${index}`} className={`${CLASS}__cell`}>
                     {chords && !!chords.length && chords[index] ? (
                         <Chord
                             chord={chords[index]}
@@ -172,6 +181,12 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                     </div>
                 </div>
             ))}
+            <Letter
+                key={lyrics.length}
+                letter={'  '}
+                hasChord={false}
+                onAddChord={(chord) => onAddChord(chord, '', 0, lyrics.length)}
+            />
             <div className={`${CLASS}__actions`}>
                 <EditIcon className={`${CLASS}__icon`} onClick={onToggleEdit} />
                 <TrashIcon

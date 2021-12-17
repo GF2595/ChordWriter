@@ -1,8 +1,19 @@
 @import '@stylesheets/colors';
 .letter {
-    cursor: pointer;
-    &-clickable:hover {
-        filter: drop-shadow(0 -2px 2px $text-hover-shadow);
+    cursor: default;
+    white-space: pre;
+    &-clickable {
+        cursor: pointer;
+        &:hover {
+            filter: drop-shadow(0 -2px 2px $text-hover-shadow);
+        }
+    }
+    &-whitespace_clickable {
+        cursor: pointer;
+        border-radius: 5px;
+        &:hover {
+            background: linear-gradient(white, rgba($text-hover-shadow, 0.5));
+        }
     }
     &__popover {
         height: unset !important;

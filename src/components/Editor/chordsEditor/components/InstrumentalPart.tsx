@@ -1,6 +1,9 @@
 import { InstrumentalPartType } from '@model/song';
 import React from 'react';
 import { Chord } from './Chord';
+import './InstrumentalPart.scss';
+
+const CLASS = 'instrumental-part';
 
 export interface InstrumentalPartProps {
     part: InstrumentalPartType;
@@ -8,7 +11,7 @@ export interface InstrumentalPartProps {
 
 export const InstrumentalPart: React.FC<InstrumentalPartProps> = ({ part }) => {
     return (
-        <div style={{ paddingTop: 8 }}>
+        <div className={CLASS}>
             <div>{part.title}</div>
             <div>
                 {part.chords

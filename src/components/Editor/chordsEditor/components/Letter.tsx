@@ -17,22 +17,32 @@ export const Letter: React.FC<LetterProps> = ({
     letter,
     hasChord,
     onAddChord,
-}) => (
-    <Whisper
-        placement={'top'}
-        trigger={'click'}
-        speaker={
-            hasChord ? (
-                <Tooltip className={`${CLASS}__popover`}>
-                    Чтобы добавить сюда новый аккорд, удалите существующий
-                </Tooltip>
-            ) : (
-                <ChordEditPopup onSubmit={onAddChord} />
-            )
-        }
-    >
-        <span className={cn(CLASS, { [`${CLASS}-clickable`]: !hasChord })}>
-            {letter}
-        </span>
-    </Whisper>
-);
+}) => {
+    const isWhitespace = letter.trim() === '';
+
+    return (
+        <Whisper
+            placement={'top'}
+            trigger={'click'}
+            speaker={
+                hasChord ? (
+                    <Tooltip className={`${CLASS}__popover`}>
+                        Чтобы добавить сюда новый аккорд, удалите существующий
+                    </Tooltip>
+                ) : (
+                    <ChordEditPopup onSubmit={onAddChord} />
+                )
+            }
+        >
+            <span
+                className={cn(
+                    CLASS,
+                    { [`${CLASS}-clickable`]: !hasChord && !isWhitespace },
+                    { [`${CLASS}-whitespace_clickable`]: isWhitespace }
+                )}
+            >
+                {letter}
+            </span>
+        </Whisper>
+    );
+};
