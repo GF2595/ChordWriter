@@ -138,9 +138,6 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     // TODO: key index
     return (
         <div className={`${CLASS}`}>
-            <DragableIcon
-                className={cn(`${CLASS}__icon`, `${CLASS}__icon_left`)}
-            />
             {lyrics.map((lyric, index) => (
                 <div key={`${lyric}.${index}`} className={`${CLASS}__cell`}>
                     {chords && !!chords.length && chords[index] ? (
