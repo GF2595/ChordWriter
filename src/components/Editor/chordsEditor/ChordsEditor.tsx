@@ -106,12 +106,7 @@ export const ChordsEditor: React.FC = () => {
                         });
                     }}
                 />
-                <div
-                    style={{
-                        paddingLeft: 'calc(100vw / 7)',
-                        paddingTop: '24px',
-                    }}
-                >
+                <div className={`${CLASS}__text`}>
                     {song.songBody.map((part, index) => {
                         if ((part as LyricsPartType).lines !== undefined) {
                             // TODO: key index

@@ -1,4 +1,12 @@
+@import '@stylesheets/common.scss';
+
 .chords-editor {
-    height: 100%;
+    height: calc(100vh - 84.5px);
+    
     user-select: none;
+
+    &__text {
+        margin-left: calc(100vw / 7);
+        padding-top: $spacing-xl;
+    }
 }
