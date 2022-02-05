@@ -1,0 +1,13 @@
+@import '@stylesheets/common.scss';
+
+.icon-button {
+    cursor: pointer;
+    visibility: hidden;
+    &:not(:first-child) {
+        margin-left: $spacing;
+    }
+    margin-bottom: $spacing-xxs;
+    &:hover {
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+    }
+}
