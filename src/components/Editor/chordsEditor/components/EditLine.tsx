@@ -33,7 +33,7 @@ export const EditLine: React.FC<EditLineProps> = ({
                 className={CLASS}
                 suppressContentEditableWarning={true}
             >
-                {originalText}
+                {originalText.current}
             </span>
             <IconButton Icon={CheckIcon} disabled={disabled} onClick={() => onSave(text.current)} />
             <IconButton Icon={CloseIcon} color={'firebrick'} onClick={onCancel} />
