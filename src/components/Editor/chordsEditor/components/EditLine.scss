@@ -1,0 +1,12 @@
+.edit-line {
+    border-bottom: 1px solid black;
+    // border-radius: 5px;
+    padding: 0 4px;
+    // background-color: #eee;
+    font-style: italic;
+
+    &:focus-within {
+        border: unset;
+        border-bottom: 1px solid orange;
+    } 
+}

@@ -9,6 +9,7 @@ import DragableIcon from '@rsuite/icons/Dragable';
 import { Letter } from './Letter';
 import cn from 'classnames';
 import { noop } from 'lodash';
+import { IconButton } from '@components/common/IconButton';
 
 const CLASS = 'lyrics-line';
 
@@ -185,14 +186,10 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                 onAddChord={(chord) => onAddChord(chord, '', 0, lyrics.length)}
             />
             <div className={`${CLASS}__actions`}>
-                <EditIcon className={`${CLASS}__icon`} onClick={onToggleEdit} />
-                <TrashIcon
-                    className={`${CLASS}__icon`}
-                    fill={'firebrick'}
-                    onClick={onRemove}
-                />
+                <IconButton Icon={EditIcon} className={'lyrics-line__icon'} onClick={onToggleEdit} />
+                <IconButton Icon={TrashIcon} className={'lyrics-line__icon'} onClick={onRemove} fill={'firebrick'} />
                 {/* TODO: noop */}
-                <PlusIcon className={`${CLASS}__icon`} onClick={noop} />
+                <IconButton Icon={PlusIcon} className={'lyrics-line__icon'} onClick={noop} />
             </div>
         </div>
     );

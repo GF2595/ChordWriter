@@ -3,6 +3,7 @@ import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { LyricsLine } from './LyricsLine';
+import { EditLine } from './EditLine';
 
 const CLASS = 'lyrics-part';
 
@@ -38,23 +39,46 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                         line.chords &&
                         line.chords.length &&
                         !(line.chords.length === 1 && !line.chords[0]),
-                    line: (
-                        <LyricsLine
-                            line={line}
-                            onToggleEdit={() => setEditedLine(index)}
-                            onRemove={() => onRemoveLine(index)}
-                            onAlterLine={(line: SongLine) => {
-                                onEdit({
-                                    ...part,
-                                    lines: [
-                                        ...lines.slice(0, index),
-                                        line,
-                                        ...lines.slice(index + 1),
-                                    ],
-                                });
-                            }}
-                        />
-                    ),
+                    line:
+                        index === editedLine ? (
+                            <EditLine
+                                line={line}
+                                onSave={(text) => {
+                                    setEditedLine(-1);
+                                    onEdit({
+                                        ...part,
+                                        lines: [
+                                            ...lines.slice(0, index),
+                                            {
+                                                ...line,
+                                                chords: undefined,
+                                                lyrics: [text],
+                                                lastChordOffset: undefined,
+                                                firstChordOffset: undefined,
+                                            },
+                                            ...lines.slice(index + 1),
+                                        ],
+                                    });
+                                }}
+                                onCancel={() => setEditedLine(-1)}
+                            />
+                        ) : (
+                            <LyricsLine
+                                line={line}
+                                onToggleEdit={() => setEditedLine(index)}
+                                onRemove={() => onRemoveLine(index)}
+                                onAlterLine={(line: SongLine) => {
+                                    onEdit({
+                                        ...part,
+                                        lines: [
+                                            ...lines.slice(0, index),
+                                            line,
+                                            ...lines.slice(index + 1),
+                                        ],
+                                    });
+                                }}
+                            />
+                        ),
                 };
             }),
         [lines, editedLine]
@@ -67,7 +91,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                 <Table
                     autoHeight
                     rowHeight={(rowData) => {
-                        return rowData && rowData['hasChords'] ? 40 : 20;
+                        return rowData && rowData['hasChords'] ? 40 : 21;
                     }}
                     hover={false}
                     showHeader={false}
@@ -77,7 +101,14 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                 >
                     <Column flexGrow={1}>
                         <HeaderCell>line</HeaderCell>
-                        <Cell style={{ padding: 0 }} dataKey={'line'} />
+                        <Cell
+                            style={{
+                                padding: 0,
+                                display: 'flex',
+                                alignItems: 'end',
+                            }}
+                            dataKey={'line'}
+                        />
                     </Column>
                 </Table>
             )}
