@@ -1,14 +1,12 @@
 import { ChordType, SongLine } from '@model/song';
 import React, { useCallback } from 'react';
-import { Chord } from './Chord';
+import { Chord } from '../Chord';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
-import PlusIcon from '@rsuite/icons/Plus';
-import DragableIcon from '@rsuite/icons/Dragable';
+import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
+import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import { Letter } from './Letter';
-import cn from 'classnames';
-import { noop } from 'lodash';
 import { IconButton } from '@components/common/IconButton';
 
 const CLASS = 'lyrics-line';
@@ -18,6 +16,8 @@ export interface LyricsLineProps {
     onToggleEdit: () => void;
     onAlterLine: (line: SongLine) => void;
     onRemove: () => void;
+    onAddLineBefore: () => void;
+    onAddLineAfter: () => void;
 }
 
 export const LyricsLine: React.FC<LyricsLineProps> = ({
@@ -25,6 +25,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     onToggleEdit,
     onAlterLine,
     onRemove,
+    onAddLineBefore,
+    onAddLineAfter
 }) => {
     const { lyrics, chords } = line;
 
@@ -38,6 +40,16 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             letterIndex: number,
             index: number
         ) => {
+            if (index === -1) {
+                onAlterLine({
+                    lyrics: ['', ...lyrics],
+                    chords: [chord, ...chords],
+                    firstChordOffset: true
+                });
+
+                return;
+            }
+
             if (chords && index === lyrics.length) {
                 onAlterLine({
                     lyrics: [...lyrics, ''],
@@ -50,7 +62,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             if (chords && !chords[index] && letterIndex === 0) {
                 onAlterLine({
                     ...line,
-                    chords: [chord, ...chords.slice(1)],
+                    chords: index === 0 ? [chord, ...chords.slice(1)] : [...chords.slice(0, index), chord, ...chords.slice(index + 1)],
                 });
 
                 return;
@@ -108,30 +120,51 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
 
     const onRemoveChord = useCallback(
         (index: number) => {
-            onAlterLine(
-                index === 0
-                    ? {
-                          ...line,
-                          chords:
-                              chords.length === 1
-                                  ? undefined
-                                  : [undefined, ...chords.slice(1)],
-                      }
-                    : {
-                          chords:
-                              chords.length === 2 && !chords[0]
-                                  ? undefined
-                                  : [
-                                        ...chords.slice(0, index),
-                                        ...chords.slice(index + 1),
-                                    ],
-                          lyrics: [
-                              ...lyrics.slice(0, index - 1),
-                              `${lyrics[index - 1]}${lyrics[index]}`,
-                              ...lyrics.slice(index + 1),
+            if (index === 0 && line.firstChordOffset) {
+                onAlterLine({
+                    ...line,
+                    lyrics: lyrics.slice(1),
+                    chords: chords.slice(1),
+                    firstChordOffset: false
+                });
+                return;
+            }
+
+            if (index === 0) {
+                onAlterLine({
+                    ...line,
+                    chords:
+                        chords.length === 1
+                            ? undefined
+                            : [undefined, ...chords.slice(1)],
+                });
+
+                return;
+            }
+
+            if (index === 1 && line.firstChordOffset) {
+                onAlterLine({
+                    ...line,
+                    chords: [chords[0], undefined, ...chords.slice(2)]
+                });
+
+                return;
+            }
+
+            onAlterLine({
+                chords:
+                    chords.length === 2 && !chords[0]
+                        ? undefined
+                        : [
+                              ...chords.slice(0, index),
+                              ...chords.slice(index + 1),
                           ],
-                      }
-            );
+                lyrics: [
+                    ...lyrics.slice(0, index - 1),
+                    `${lyrics[index - 1]}${lyrics[index]}`,
+                    ...lyrics.slice(index + 1),
+                ],
+            })
         },
         [onAlterLine, line, lyrics, chords]
     );
@@ -139,10 +172,12 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     // TODO: key index
     return (
         <div className={`${CLASS}`}>
+            <Letter letter={'  '} hasChord={line.firstChordOffset} onAddChord={(chord) => onAddChord(chord, '', 0, -1)} />
             {lyrics.map((lyric, index) => (
                 <div key={`${lyric}.${index}`} className={`${CLASS}__cell`}>
                     {chords && !!chords.length && chords[index] ? (
                         <Chord
+                            className={index === 0 && line.firstChordOffset ? `${CLASS}__chord-offset` : undefined}
                             chord={chords[index]}
                             onEdit={(chord) => onEditChord(index, chord)}
                             onRemove={() => onRemoveChord(index)}
@@ -188,8 +223,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             <div className={`${CLASS}__actions`}>
                 <IconButton Icon={EditIcon} className={'lyrics-line__icon'} onClick={onToggleEdit} />
                 <IconButton Icon={TrashIcon} className={'lyrics-line__icon'} onClick={onRemove} fill={'firebrick'} />
-                {/* TODO: noop */}
-                <IconButton Icon={PlusIcon} className={'lyrics-line__icon'} onClick={noop} />
+                <IconButton Icon={ArrowUpLineIcon} className={'lyrics-line__icon'} onClick={onAddLineBefore} />
+                <IconButton Icon={ArrowDownLineIcon} className={'lyrics-line__icon'} onClick={onAddLineAfter} />
             </div>
         </div>
     );

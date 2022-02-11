@@ -6,7 +6,7 @@
     flex-direction: row;
     align-items: flex-end;
     margin-bottom: 1px;
-    margin-left: 5px;
+    position: relative;
     &:hover .lyrics-line__icon {
         visibility: visible;
     }
@@ -25,5 +25,11 @@
 
     &__icon {
         visibility: hidden;
+    }
+
+    &__chord-offset {
+        position: absolute;
+        left: 0px;
+        top: 0px;
     }
 }

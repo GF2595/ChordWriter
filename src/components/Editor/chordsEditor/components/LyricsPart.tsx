@@ -40,6 +40,29 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                         line.chords.length &&
                         !(line.chords.length === 1 && !line.chords[0]),
                     line:
+                        !line.lyrics.length ? (
+                            <EditLine
+                                line={line}
+                                onSave={(text) => {
+                                    setEditedLine(-1);
+                                    onEdit({
+                                        ...part,
+                                        lines: [
+                                            ...lines.slice(0, index),
+                                            {
+                                                ...line,
+                                                chords: undefined,
+                                                lyrics: [text],
+                                                lastChordOffset: undefined,
+                                                firstChordOffset: undefined,
+                                            },
+                                            ...lines.slice(index + 1),
+                                        ],
+                                    });
+                                }}
+                                onCancel={() => onRemoveLine(index)}
+                            />
+                        ) :
                         index === editedLine ? (
                             <EditLine
                                 line={line}
@@ -77,6 +100,26 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                                         ],
                                     });
                                 }}
+                                onAddLineAfter={() => onEdit({
+                                    ...part,
+                                    lines: [
+                                        ...lines.slice(0, index + 1),
+                                        {
+                                            lyrics: []
+                                        },
+                                        ...lines.slice(index + 1)
+                                    ]
+                                })}
+                                onAddLineBefore={() => onEdit({
+                                    ...part,
+                                    lines: [
+                                        ...lines.slice(0, index),
+                                        {
+                                            lyrics: []
+                                        },
+                                        ...lines.slice(index)
+                                    ]
+                                })}
                             />
                         ),
                 };

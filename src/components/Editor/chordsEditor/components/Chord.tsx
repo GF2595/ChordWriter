@@ -12,7 +12,6 @@ export interface ChordProps {
     className?: string;
     onEdit?: (chord: ChordType) => void;
     onRemove?: () => void;
-    // popover?: any;
 }
 
 export const Chord: React.FC<ChordProps> = ({
@@ -21,7 +20,6 @@ export const Chord: React.FC<ChordProps> = ({
     onEdit,
     onRemove,
 }) => {
-    // if (!chord.length) return <div style={{ height: '1em' }} />;
     const { chord, mod } = chordBase;
 
     const whisperRef = React.useRef<any>();

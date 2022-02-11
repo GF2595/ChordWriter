@@ -19,23 +19,31 @@ export const EditLine: React.FC<EditLineProps> = ({
     onCancel,
 }) => {
     const originalText = useRef(line.lyrics.join(''));
-    const text = useRef(originalText.current);
+    const [text, setText] = useState(originalText.current);
 
-    const disabled = originalText.current.localeCompare(text.current) === 0;
+    const disabled = !originalText.current.localeCompare(text) || !text.length;
 
     return (
         <>
             <span
                 role="textbox"
                 contentEditable
-                onInput={(value) => text.current = value.currentTarget.textContent}
-                onKeyDownCapture={(value) => value.key === 'Enter' && (disabled ? onCancel() : onSave(text.current))}
+                onInput={(value) => setText(value.currentTarget.textContent)}
+                onKeyDown={(event) => {
+                    if (event.key === 'Escape') onCancel();
+                }}
+                onKeyPress={(event) => {
+                    if (event.key === 'Enter') {
+                        disabled ? onCancel() : onSave(text);
+                        event.preventDefault();
+                    }
+                }}
                 className={CLASS}
                 suppressContentEditableWarning={true}
             >
                 {originalText.current}
             </span>
-            <IconButton Icon={CheckIcon} disabled={disabled} onClick={() => onSave(text.current)} />
+            <IconButton Icon={CheckIcon} disabled={disabled} onClick={() => onSave(text)} />
             <IconButton Icon={CloseIcon} color={'firebrick'} onClick={onCancel} />
         </>
     );
