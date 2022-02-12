@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { LyricsPartType, SongLine } from '@model/song';
+import { LyricsPartType } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
-import { LyricsLine } from './LyricsLine';
-import { EditLine } from './EditLine';
+import { Line } from './Line';
 
 const CLASS = 'lyrics-part';
 
@@ -13,12 +12,12 @@ export interface LyricsPartProps {
 }
 
 export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
-    const [editedLine, setEditedLine] = useState(-1);
-
     const { lines, title } = part;
+    const [editedLine, setEditedLine] = useState(-1);
 
     const onRemoveLine = (index: number) => {
         if (lines.length === 1) onEdit(undefined);
+        setEditedLine(-1);
 
         onEdit({
             ...part,
@@ -39,92 +38,24 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
                         line.chords &&
                         line.chords.length &&
                         !(line.chords.length === 1 && !line.chords[0]),
-                    line:
-                        !line.lyrics.length ? (
-                            <EditLine
-                                line={line}
-                                onSave={(text) => {
-                                    setEditedLine(-1);
-                                    onEdit({
-                                        ...part,
-                                        lines: [
-                                            ...lines.slice(0, index),
-                                            {
-                                                ...line,
-                                                chords: undefined,
-                                                lyrics: [text],
-                                                lastChordOffset: undefined,
-                                                firstChordOffset: undefined,
-                                            },
-                                            ...lines.slice(index + 1),
-                                        ],
-                                    });
-                                }}
-                                onCancel={() => onRemoveLine(index)}
-                            />
-                        ) :
-                        index === editedLine ? (
-                            <EditLine
-                                line={line}
-                                onSave={(text) => {
-                                    setEditedLine(-1);
-                                    onEdit({
-                                        ...part,
-                                        lines: [
-                                            ...lines.slice(0, index),
-                                            {
-                                                ...line,
-                                                chords: undefined,
-                                                lyrics: [text],
-                                                lastChordOffset: undefined,
-                                                firstChordOffset: undefined,
-                                            },
-                                            ...lines.slice(index + 1),
-                                        ],
-                                    });
-                                }}
-                                onCancel={() => setEditedLine(-1)}
-                            />
-                        ) : (
-                            <LyricsLine
-                                line={line}
-                                onToggleEdit={() => setEditedLine(index)}
-                                onRemove={() => onRemoveLine(index)}
-                                onAlterLine={(line: SongLine) => {
-                                    onEdit({
-                                        ...part,
-                                        lines: [
-                                            ...lines.slice(0, index),
-                                            line,
-                                            ...lines.slice(index + 1),
-                                        ],
-                                    });
-                                }}
-                                onAddLineAfter={() => onEdit({
-                                    ...part,
-                                    lines: [
-                                        ...lines.slice(0, index + 1),
-                                        {
-                                            lyrics: []
-                                        },
-                                        ...lines.slice(index + 1)
-                                    ]
-                                })}
-                                onAddLineBefore={() => onEdit({
-                                    ...part,
-                                    lines: [
-                                        ...lines.slice(0, index),
-                                        {
-                                            lyrics: []
-                                        },
-                                        ...lines.slice(index)
-                                    ]
-                                })}
-                            />
-                        ),
+                    line: (
+                        <Line
+                            part={part}
+                            line={line}
+                            lineIndex={index}
+                            isEdited={index === editedLine}
+                            onSetLineEdit={() => setEditedLine(index)}
+                            onCancelLineEdit={() => setEditedLine(-1)}
+                            onEdit={(newPart) => {
+                                setEditedLine(-1);
+                                onEdit(newPart);
+                            }}
+                            onRemoveLine={onRemoveLine}
+                        />
+                    ),
                 };
             }),
-        [lines, editedLine]
+        [lines, editedLine, part]
     );
 
     return (
