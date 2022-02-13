@@ -1,2 +1,3 @@
 export * from './String';
-export * from './LyricsPart';
+export * from './Chord';
+export * from './ChordEditPopup';

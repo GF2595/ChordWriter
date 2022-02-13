@@ -1,6 +1,6 @@
 import { SongLine } from '@model/song';
 import React from 'react';
-import { Chord } from '../../Chord';
+import { Chord } from '../../../components/Chord';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';

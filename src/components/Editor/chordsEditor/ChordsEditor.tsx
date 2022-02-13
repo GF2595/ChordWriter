@@ -4,8 +4,9 @@ import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
 import { InstrumentalPartType, Song, LyricsPartType } from '@model/song';
 import './ChordsEditor.scss';
 import seventeen from './seventeen';
-import { String, LyricsPart } from './components';
-import { InstrumentalPart } from './components/InstrumentalPart';
+import { String } from './components';
+import { InstrumentalPart } from './InstrumentalPart';
+import { LyricsPart } from './LyricsPart';
 
 const CLASS = 'chords-editor';
 

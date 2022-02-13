@@ -1,5 +1,5 @@
 import { LyricsPartType, SongLine } from '@model/song';
-import React, { useState } from 'react';
+import React from 'react';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
 

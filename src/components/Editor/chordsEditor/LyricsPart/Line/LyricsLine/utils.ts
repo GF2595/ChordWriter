@@ -7,7 +7,7 @@ export const onAddChord = (
     letterIndex: number,
     index: number,
     onAlterLine: (line: SongLine) => void
-) => {
+): void => {
     const { lyrics, chords } = line;
 
     if (index === -1) {
@@ -84,7 +84,7 @@ export const onEditChord = (
     chord: ChordType,
     line: SongLine,
     onAlterLine: (line: SongLine) => void
-) => {
+): void => {
     onAlterLine({
         ...line,
         chords: [
@@ -99,7 +99,7 @@ export const onRemoveChord = (
     index: number,
     line: SongLine,
     onAlterLine: (line: SongLine) => void
-) => {
+): void => {
     const { chords, lyrics } = line;
 
     if (index === 0 && line.firstChordOffset) {

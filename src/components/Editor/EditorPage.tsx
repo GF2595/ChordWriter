@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container } from 'rsuite';
-import { ChordsEditor } from './chordsEditor/ChordsEditor';
-import './EditorPage.scss';
+import { ChordsEditor } from './ChordsEditor';
 
 export const EditorPage: React.FC = () => {
     return (
