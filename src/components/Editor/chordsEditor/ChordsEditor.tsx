@@ -7,6 +7,7 @@ import seventeen from './seventeen';
 import { String } from './components';
 import { InstrumentalPart } from './InstrumentalPart';
 import { LyricsPart } from './LyricsPart';
+import { SongPart } from './SongPart';
 
 const CLASS = 'chords-editor';
 
@@ -71,22 +72,6 @@ export const ChordsEditor: React.FC = () => {
     return (
         <>
             <PageHeader buttons={buttons} />
-            {/* <PageContent className={CLASS}>
-                <Table
-                    autoHeight
-                    rowHeight={20}
-                    bordered={false}
-                    hover={false}
-                    showHeader={false}
-                    data={tableData}
-                    rowClassName={`${CLASS}__table_row`}
-                >
-                    <Column flexGrow={1}>
-                        <HeaderCell>Line</HeaderCell>
-                        <Cell style={{ padding: 0 }} dataKey="line" />
-                    </Column>
-                </Table>
-            </PageContent> */}
             <PageContent className={CLASS}>
                 <String
                     value={song.title}
@@ -108,47 +93,31 @@ export const ChordsEditor: React.FC = () => {
                     }}
                 />
                 <div className={`${CLASS}__text`}>
-                    {song.songBody.map((part, index) => {
-                        if ((part as LyricsPartType).lines !== undefined) {
-                            // TODO: key index
-                            return (
-                                <LyricsPart
-                                    key={`${index}`}
-                                    part={part as LyricsPartType}
-                                    onEdit={(newPart?: LyricsPartType) => {
-                                        setSong({
-                                            ...song,
-                                            songBody:
-                                                index === 0
-                                                    ? [
-                                                          newPart,
-                                                          ...song.songBody.slice(
-                                                              1
-                                                          ),
-                                                      ]
-                                                    : [
-                                                          ...song.songBody.slice(
-                                                              0,
-                                                              index
-                                                          ),
-                                                          newPart,
-                                                          ...song.songBody.slice(
-                                                              index + 1
-                                                          ),
-                                                      ],
-                                        });
-                                    }}
-                                />
-                            );
-                        }
-                        // TODO: key index
-                        return (
-                            <InstrumentalPart
-                                key={`${index}`}
-                                part={part as InstrumentalPartType}
-                            />
-                        );
-                    })}
+                    {song.songBody.map((part, index) => (
+                        <SongPart
+                            key={`${index}`}
+                            part={part}
+                            partIndex={index}
+                            onEdit={(part) => {
+                                setSong({
+                                    ...song,
+                                    songBody:
+                                        index === 0
+                                            ? [part, ...song.songBody.slice(1)]
+                                            : [
+                                                  ...song.songBody.slice(
+                                                      0,
+                                                      index
+                                                  ),
+                                                  part,
+                                                  ...song.songBody.slice(
+                                                      index + 1
+                                                  ),
+                                              ],
+                                });
+                            }}
+                        />
+                    ))}
                 </div>
             </PageContent>
         </>

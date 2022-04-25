@@ -17,7 +17,7 @@ export interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
     return (
-        <Header className={`${CLASS}_container`}>
+        <Header className={CLASS}>
             <div className={`${CLASS}_content`}>
                 {buttons.map((button, index) => {
                     const { icon, onClick, disabled, title } = button;

@@ -1,9 +1,8 @@
 @import '../../../stylesheets/common.scss';
 .header {
-    &__container {
-        display: flex;
-        flex-direction: row;
-    }
+    display: flex;
+    flex-direction: row;
+
     &__content {
         height: 30px;
         display: flex;

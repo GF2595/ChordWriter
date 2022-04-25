@@ -36,9 +36,9 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
 
     // TODO: key index
     return (
-        <div className={`${CLASS}`}>
+        <div className={CLASS}>
             <Letter
-                letter={'  '}
+                letter={'   '}
                 hasChord={line.firstChordOffset}
                 onAddChord={(chord) =>
                     onAddChord(chord, line, '', 0, -1, onAlterLine)

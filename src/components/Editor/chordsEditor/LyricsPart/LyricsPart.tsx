@@ -33,7 +33,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
             lines.map((line, index) => {
                 // TODO: key index
                 return {
-                    dataKey: `${index}`,
+                    dataKey: line.lyrics[0],
                     hasChords:
                         line.chords &&
                         line.chords.length &&
@@ -60,7 +60,6 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
 
     return (
         <div style={{ paddingTop: 16 }}>
-            <span style={{ fontWeight: 'bolder' }}>{title}</span>
             {!!lines.length && (
                 <Table
                     autoHeight
