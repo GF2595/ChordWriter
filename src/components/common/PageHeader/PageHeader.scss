@@ -2,6 +2,8 @@
 .header {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    height: 30px;
 
     &__content {
         height: 30px;

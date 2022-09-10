@@ -33,8 +33,8 @@ const createWindow = (): void => {
     const mainWindow = new BrowserWindow({
         show: false,
         height: 600,
-        width: 1024,
-        minWidth: 1024,
+        width: 800,
+        minWidth: 800,
         minHeight: 600,
         frame: false,
         webPreferences: {
@@ -51,7 +51,7 @@ const createWindow = (): void => {
     });
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished

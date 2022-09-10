@@ -2,7 +2,7 @@ import { InstrumentalPartType } from '@model/song';
 import React from 'react';
 import { Chord } from '../components/Chord';
 import './InstrumentalPart.scss';
-import { noop } from 'lodash';
+import { removeAt, replace } from '@utils/array';
 
 const CLASS = 'instrumental-part';
 
@@ -32,28 +32,24 @@ export const InstrumentalPart: React.FC<InstrumentalPartProps> = ({
 
                                       onEdit({
                                           ...part,
-                                          chords: [
-                                              ...chords.splice(index, 1, [
-                                                  ...line.splice(
-                                                      chordIndex,
-                                                      1,
-                                                      chord
-                                                  ),
-                                              ]),
-                                          ],
+                                          chords: replace(
+                                              chords,
+                                              index,
+                                              replace(line, chordIndex, chord)
+                                          ),
                                       });
                                   }}
                                   onRemove={() =>
                                       onEdit({
                                           ...part,
-                                          chords: [
-                                              ...chords.splice(index, 1, [
-                                                  ...chords[index].splice(
-                                                      chordIndex,
-                                                      1
-                                                  ),
-                                              ]),
-                                          ],
+                                          chords: replace(
+                                              chords,
+                                              index,
+                                              removeAt(
+                                                  chords[index],
+                                                  chordIndex
+                                              )
+                                          ),
                                       })
                                   }
                               />

@@ -3,6 +3,7 @@ import { LyricsPartType } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
+import { removeAt } from '@utils/array';
 
 const CLASS = 'lyrics-part';
 
@@ -21,10 +22,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
 
         onEdit({
             ...part,
-            lines:
-                index === 0
-                    ? [...lines.slice(1)]
-                    : [...lines.slice(0, index), ...lines.slice(index + 1)],
+            lines: removeAt(lines, index),
         });
     };
 

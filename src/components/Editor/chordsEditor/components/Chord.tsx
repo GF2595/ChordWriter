@@ -56,7 +56,10 @@ export const Chord: React.FC<ChordProps> = ({
                         onEdit(chord);
                         whisperRef.current.close();
                     }}
-                    onRemove={onRemove}
+                    onRemove={() => {
+                        onRemove();
+                        whisperRef.current.close();
+                    }}
                 />
             }
         >

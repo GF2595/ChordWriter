@@ -12,10 +12,11 @@
         "resolveJsonModule": true,
         "jsx": "react",
         "paths": {
-            "*": ["node_modules/*"],
             "@components/*": ["src/components/*"],
             "@stylesheets/*": ["src/stylesheets/*"],
-            "@model/*": ["src/model/*"]
+            "@model/*": ["src/model/*"],
+            "@utils/*": ["src/utils/*"],
+            "*": ["node_modules/*"]
         }
     },
     "include": ["src/**/*"]
