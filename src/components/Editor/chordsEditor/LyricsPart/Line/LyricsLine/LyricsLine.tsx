@@ -38,7 +38,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     return (
         <div className={CLASS}>
             <Letter
-                letter={'   '}
+                // TODO: нормальное решение
+                letter={'      '}
                 hasChord={line.firstChordOffset}
                 onAddChord={(chord) =>
                     onAddChord(chord, line, '', 0, -1, onAlterLine)
@@ -90,7 +91,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                     />
                                 ))
                         ) : (
-                            <div> </div>
+                            <div>{index === 0 ? '' : ' '}</div>
                         )}
                     </div>
                 </div>

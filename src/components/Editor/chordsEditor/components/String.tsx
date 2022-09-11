@@ -65,7 +65,7 @@ export const String: React.FC<StringProps> = ({
                     </>
                 ) : (
                     <>
-                        <span>{text}</span>
+                        <span className={`${CLASS}__text`}>{text}</span>
                         <EditIcon
                             className={`${CLASS}__icon`}
                             onClick={() => setIsEditing((value) => !value)}
