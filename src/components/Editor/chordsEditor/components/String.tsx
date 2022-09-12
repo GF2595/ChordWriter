@@ -4,13 +4,14 @@ import CheckIcon from '@rsuite/icons/Check';
 import cn from 'classnames';
 import './String.scss';
 import { Input, InputGroup } from 'rsuite';
+import { useEditorContext } from '../EditorContext';
+import { get } from 'lodash';
 
 const CLASS = 'string';
 
 export interface StringProps {
     className?: string;
-    value: string;
-    onEdit: (value: string) => void;
+    path: string;
     align?: 'left' | 'center' | 'right';
     bold?: boolean;
 }
@@ -24,11 +25,14 @@ const style: { [name: string]: React.CSSProperties } = {
 export const String: React.FC<StringProps> = ({
     className,
     align = 'center',
-    value,
+    path,
     bold,
-    onEdit,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const { song, dispatch } = useEditorContext();
+    const value = get(song, path);
+    const onEdit = (value: string) =>
+        dispatch({ type: 'setValue', payload: { path, value } });
     const [text, setText] = useState(value);
 
     const containerStyle: React.CSSProperties = {

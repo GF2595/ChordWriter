@@ -21,11 +21,12 @@ export interface LyricsLineProps {
     onAddLineAfter: () => void;
 }
 
+// TODO: рефакторинг всех этих onAddChord
 export const LyricsLine: React.FC<LyricsLineProps> = ({
     line,
     onToggleEdit,
-    onAlterLine,
     onRemove,
+    onAlterLine,
     onAddLineBefore,
     onAddLineAfter,
 }) => {
@@ -39,7 +40,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
         <div className={CLASS}>
             <Letter
                 // TODO: нормальное решение
-                letter={'      '}
+                letter={'   '}
                 hasChord={line.firstChordOffset}
                 onAddChord={(chord) =>
                     onAddChord(chord, line, '', 0, -1, onAlterLine)

@@ -1,29 +1,44 @@
 import React, { useMemo, useState } from 'react';
-import { LyricsPartType } from '@model/song';
+import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
 import { removeAt } from '@utils/array';
+import { useEditorContext } from '../EditorContext';
+import { get } from 'lodash';
 
 const CLASS = 'lyrics-part';
 
 export interface LyricsPartProps {
-    part: LyricsPartType;
-    onEdit: (newPart?: LyricsPartType) => void;
+    path: string;
 }
 
-export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
-    const { lines, title } = part;
+const newLine: SongLine = {
+    lyrics: [],
+};
+
+export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
+    const { song, dispatch } = useEditorContext();
+    const part = get(song, path);
+
+    const { lines, title } = part as LyricsPartType;
     const [editedLine, setEditedLine] = useState(-1);
 
     const onRemoveLine = (index: number) => {
-        if (lines.length === 1) onEdit(undefined);
-        setEditedLine(-1);
+        if (lines.length === 1) {
+            dispatch({
+                type: 'setValue',
+                payload: { path: `${path}.lines[0]`, value: newLine },
+            });
+            setEditedLine(0);
+            return;
+        }
 
-        onEdit({
-            ...part,
-            lines: removeAt(lines, index),
+        dispatch({
+            type: 'removeArrayValue',
+            payload: { path: `${path}.lines`, index },
         });
+        setEditedLine(-1);
     };
 
     const tableData: TableProps['data'] = useMemo(
@@ -31,24 +46,39 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ part, onEdit }) => {
             lines.map((line, index) => {
                 // TODO: key index
                 return {
-                    dataKey: line.lyrics[0],
+                    dataKey: line?.lyrics?.[0],
                     hasChords:
                         line.chords &&
                         line.chords.length &&
                         !(line.chords.length === 1 && !line.chords[0]),
                     line: (
                         <Line
-                            part={part}
-                            line={line}
+                            path={`${path}.lines[${index}]`}
                             lineIndex={index}
                             isEdited={index === editedLine}
                             onSetLineEdit={() => setEditedLine(index)}
                             onCancelLineEdit={() => setEditedLine(-1)}
-                            onEdit={(newPart) => {
-                                setEditedLine(-1);
-                                onEdit(newPart);
-                            }}
-                            onRemoveLine={onRemoveLine}
+                            onRemoveLine={() => onRemoveLine(index)}
+                            onAddLineAfter={() =>
+                                dispatch({
+                                    type: 'addArrayValue',
+                                    payload: {
+                                        path: `${path}.lines`,
+                                        value: newLine,
+                                        index: index + 1,
+                                    },
+                                })
+                            }
+                            onAddLineBefore={() =>
+                                dispatch({
+                                    type: 'addArrayValue',
+                                    payload: {
+                                        path: `${path}.lines`,
+                                        value: newLine,
+                                        index: index,
+                                    },
+                                })
+                            }
                         />
                     ),
                 };

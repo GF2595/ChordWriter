@@ -1,30 +1,32 @@
 import { LyricsPartType, SongLine } from '@model/song';
 import React from 'react';
+import { useEditorContext } from '../../EditorContext';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
+import { get } from 'lodash';
 
 export interface LineProps {
-    part: LyricsPartType;
-    line: SongLine;
+    path: string;
     lineIndex: number;
     isEdited: boolean;
-    onEdit: (newPart?: LyricsPartType) => void;
-    onRemoveLine: (index: number) => void;
+    onRemoveLine: () => void;
     onSetLineEdit: () => void;
     onCancelLineEdit: () => void;
+    onAddLineAfter: () => void;
+    onAddLineBefore: () => void;
 }
 
 export const Line: React.FC<LineProps> = ({
-    part,
-    line,
-    lineIndex,
+    path,
     isEdited,
-    onEdit,
     onRemoveLine,
     onSetLineEdit,
     onCancelLineEdit,
+    onAddLineAfter,
+    onAddLineBefore,
 }) => {
-    const { lines } = part;
+    const { song, dispatch } = useEditorContext();
+    const line = get(song, path);
 
     const isLyricsEmpty = !line.lyrics.length;
 
@@ -34,26 +36,21 @@ export const Line: React.FC<LineProps> = ({
                 line={line}
                 onSave={(text) => {
                     onCancelLineEdit();
-                    onEdit({
-                        ...part,
-                        lines: [
-                            ...lines.slice(0, lineIndex),
-                            {
+                    dispatch({
+                        type: 'setValue',
+                        payload: {
+                            path,
+                            value: {
                                 ...line,
                                 chords: undefined,
                                 lyrics: [text],
                                 lastChordOffset: undefined,
                                 firstChordOffset: undefined,
                             },
-                            ...lines.slice(lineIndex + 1),
-                        ],
+                        },
                     });
                 }}
-                onCancel={
-                    isLyricsEmpty
-                        ? () => onRemoveLine(lineIndex)
-                        : onCancelLineEdit
-                }
+                onCancel={isLyricsEmpty ? onRemoveLine : onCancelLineEdit}
             />
         );
 
@@ -61,41 +58,12 @@ export const Line: React.FC<LineProps> = ({
         <LyricsLine
             line={line}
             onToggleEdit={onSetLineEdit}
-            onRemove={() => onRemoveLine(lineIndex)}
-            onAlterLine={(line: SongLine) => {
-                onEdit({
-                    ...part,
-                    lines: [
-                        ...lines.slice(0, lineIndex),
-                        line,
-                        ...lines.slice(lineIndex + 1),
-                    ],
-                });
-            }}
-            onAddLineAfter={() =>
-                onEdit({
-                    ...part,
-                    lines: [
-                        ...lines.slice(0, lineIndex + 1),
-                        {
-                            lyrics: [],
-                        },
-                        ...lines.slice(lineIndex + 1),
-                    ],
-                })
+            onRemove={onRemoveLine}
+            onAlterLine={(line: SongLine) =>
+                dispatch({ type: 'setValue', payload: { path, value: line } })
             }
-            onAddLineBefore={() =>
-                onEdit({
-                    ...part,
-                    lines: [
-                        ...lines.slice(0, lineIndex),
-                        {
-                            lyrics: [],
-                        },
-                        ...lines.slice(lineIndex),
-                    ],
-                })
-            }
+            onAddLineAfter={onAddLineAfter}
+            onAddLineBefore={onAddLineBefore}
         />
     );
 };

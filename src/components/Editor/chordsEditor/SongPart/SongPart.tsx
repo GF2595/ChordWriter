@@ -1,22 +1,26 @@
 import { InstrumentalPartType, LyricsPartType, PartType } from '@model/song';
 import React from 'react';
+import { useEditorContext } from '../EditorContext';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
+import { get, noop } from 'lodash';
 
 export interface SongPartProps {
-    part: PartType;
-    partIndex: number;
-    onEdit: (part: PartType) => void;
+    path: string;
 }
 
-export const SongPart: React.FC<SongPartProps> = ({ part, onEdit }) => {
+export const SongPart: React.FC<SongPartProps> = ({ path }) => {
+    const { song } = useEditorContext();
+    const part = get(song, path);
+
     const { title, lines, chords, tabs } = part as InstrumentalPartType &
         LyricsPartType;
 
     let content = null;
 
-    if (!!lines)
-        content = <LyricsPart part={part as LyricsPartType} onEdit={onEdit} />;
+    let onEdit = noop;
+
+    if (!!lines) content = <LyricsPart path={path} />;
 
     if ((!content && !!chords) || !!tabs)
         content = (
