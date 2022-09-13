@@ -3,9 +3,9 @@ import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
-import { removeAt } from '@utils/array';
 import { useEditorContext } from '../EditorContext';
-import { get } from 'lodash';
+import EditIcon from '@rsuite/icons/Edit';
+import { IconButton } from '@components/common/IconButton';
 
 const CLASS = 'lyrics-part';
 
@@ -24,15 +24,6 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     const [editedLine, setEditedLine] = useState(-1);
 
     const onRemoveLine = (index: number) => {
-        if (lines.length === 1) {
-            dispatch({
-                type: 'setValue',
-                payload: { path: `${path}.lines[0]`, value: newLine },
-            });
-            setEditedLine(0);
-            return;
-        }
-
         dispatch({
             type: 'removeArrayValue',
             payload: { path: `${path}.lines`, index },
@@ -86,7 +77,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
 
     return (
         <div style={{ paddingTop: 16 }}>
-            {!!lines.length && (
+            {!!lines.length ? (
                 <Table
                     autoHeight
                     rowHeight={(rowData) => {
@@ -110,6 +101,21 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                         />
                     </Column>
                 </Table>
+            ) : (
+                <IconButton
+                    className={`${CLASS}__empty_part_button`}
+                    Icon={EditIcon}
+                    onClick={() => {
+                        dispatch({
+                            type: 'addArrayValue',
+                            payload: {
+                                path: `${path}.lines`,
+                                value: newLine,
+                            },
+                        });
+                        setEditedLine(0);
+                    }}
+                />
             )}
         </div>
     );

@@ -8,4 +8,4 @@ export interface AddChordAreaProps extends Pick<LetterProps, 'onAddChord'> {
 export const AddChordArea: React.FC<AddChordAreaProps> = ({
     shortArea = false,
     ...props
-}) => <Letter hasChord={false} letter={shortArea ? ' ' : '  '} {...props} />;
+}) => <Letter hasChord={false} letter={shortArea ? ' ' : '   '} {...props} />;

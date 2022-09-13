@@ -1,5 +1,11 @@
 @import '@stylesheets/common';
 
 .instrumental-part {
-    margin-left: $spacing;
+    &__line--offset {
+        margin-left: $spacing;
+    }
+
+    &__empty-button:hover {
+        filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+    }
 }
