@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Tooltip, Whisper } from 'rsuite';
-import { ChordEditPopup } from './ChordEditPopup';
+import { ChordEditPopup } from '../ChordEditPopup';
 import cn from 'classnames';
 import { ChordType } from '@model/song';
 import './Letter.scss';

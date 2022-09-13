@@ -2,7 +2,7 @@ import React from 'react';
 import { ChordType } from '@model/song';
 import cn from 'classnames';
 import './Chord.scss';
-import { ChordEditPopup } from './ChordEditPopup';
+import { ChordEditPopup } from '../ChordEditPopup';
 import { Whisper } from 'rsuite';
 
 const CLASS = 'chord';

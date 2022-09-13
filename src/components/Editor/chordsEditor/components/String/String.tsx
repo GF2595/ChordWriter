@@ -4,7 +4,7 @@ import CheckIcon from '@rsuite/icons/Check';
 import cn from 'classnames';
 import './String.scss';
 import { Input, InputGroup } from 'rsuite';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '../../EditorContext';
 import { get } from 'lodash';
 
 const CLASS = 'string';
