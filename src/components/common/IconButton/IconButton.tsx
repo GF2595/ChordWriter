@@ -21,14 +21,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
     ...props
 }) => (
     <Whisper
-        trigger={'hover'}
+        trigger={title ? 'hover' : 'none'}
         placement={'top'}
         delayOpen={400}
-        speaker={
-            title ? (
-                <Tooltip className={`${CLASS}__popover`}>{title}</Tooltip>
-            ) : null
-        }
+        speaker={<Tooltip className={`${CLASS}__popover`}>{title}</Tooltip>}
     >
         <Icon
             className={cn(

@@ -43,8 +43,18 @@ export const EditLine: React.FC<EditLineProps> = ({
             >
                 {originalText.current}
             </span>
-            <IconButton Icon={CheckIcon} disabled={disabled} onClick={() => onSave(text)} />
-            <IconButton Icon={CloseIcon} color={'firebrick'} onClick={onCancel} />
+            <IconButton
+                Icon={CheckIcon}
+                disabled={disabled}
+                title={'Сохранить изменения'}
+                onClick={() => onSave(text)}
+            />
+            <IconButton
+                Icon={CloseIcon}
+                color={'firebrick'}
+                title={'Отменить изменения'}
+                onClick={onCancel}
+            />
         </>
     );
 };
