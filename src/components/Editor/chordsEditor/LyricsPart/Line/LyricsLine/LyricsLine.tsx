@@ -107,23 +107,29 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             <div className={`${CLASS}__actions`}>
                 <IconButton
                     Icon={EditIcon}
+                    title={
+                        'Редактировать текст (редактирование стирает добавленные аккорды)'
+                    }
                     className={'lyrics-line__icon'}
                     onClick={onToggleEdit}
                 />
                 <IconButton
                     Icon={TrashIcon}
                     className={'lyrics-line__icon'}
+                    title={'Удалить строку'}
                     onClick={onRemove}
                     fill={'firebrick'}
                 />
                 <IconButton
                     Icon={ArrowUpLineIcon}
                     className={'lyrics-line__icon'}
+                    title={'Добавить строку выше'}
                     onClick={onAddLineBefore}
                 />
                 <IconButton
                     Icon={ArrowDownLineIcon}
                     className={'lyrics-line__icon'}
+                    title={'Добавить строку ниже'}
                     onClick={onAddLineAfter}
                 />
             </div>

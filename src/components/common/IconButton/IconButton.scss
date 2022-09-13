@@ -14,4 +14,8 @@
         cursor: default;
         opacity: 0.5;
     }
+
+    &__popover {
+        height: unset !important;
+    }
 }
