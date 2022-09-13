@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Tooltip, Whisper } from 'rsuite';
-import { ChordEditPopup } from '../../../components/ChordEditPopup';
+import { ChordEditPopup } from './ChordEditPopup';
 import cn from 'classnames';
 import { ChordType } from '@model/song';
 import './Letter.scss';
@@ -18,10 +18,12 @@ export const Letter: React.FC<LetterProps> = ({
     hasChord,
     onAddChord,
 }) => {
+    const triggerRef = useRef();
     const isWhitespace = letter.trim() === '';
 
     return (
         <Whisper
+            ref={triggerRef}
             placement={'top'}
             trigger={'click'}
             speaker={
@@ -30,7 +32,14 @@ export const Letter: React.FC<LetterProps> = ({
                         Чтобы добавить сюда новый аккорд, удалите существующий
                     </Tooltip>
                 ) : (
-                    <ChordEditPopup onSubmit={onAddChord} />
+                    <ChordEditPopup
+                        onSubmit={(chord) => {
+                            onAddChord(chord);
+                            // тут странная ошибка, которая не убирается ни ?, ни !
+                            // @ts-ignore
+                            triggerRef.current.close();
+                        }}
+                    />
                 )
             }
         >

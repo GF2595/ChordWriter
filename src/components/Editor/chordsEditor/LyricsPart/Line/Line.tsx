@@ -7,7 +7,6 @@ import { get } from 'lodash';
 
 export interface LineProps {
     path: string;
-    lineIndex: number;
     isEdited: boolean;
     onRemoveLine: () => void;
     onSetLineEdit: () => void;
@@ -25,10 +24,11 @@ export const Line: React.FC<LineProps> = ({
     onAddLineAfter,
     onAddLineBefore,
 }) => {
-    const { song, dispatch } = useEditorContext();
-    const line = get(song, path);
+    const { value: line, dispatch } = useEditorContext(path);
 
-    const isLyricsEmpty = !line.lyrics.length;
+    if (!line) return null;
+
+    const isLyricsEmpty = !line?.lyrics || !line.lyrics.length;
 
     if (isLyricsEmpty || isEdited)
         return (

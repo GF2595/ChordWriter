@@ -29,11 +29,13 @@ export const String: React.FC<StringProps> = ({
     bold,
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const { song, dispatch } = useEditorContext();
-    const value = get(song, path);
+
+    const { value, dispatch } = useEditorContext(path);
+
+    const [text, setText] = useState(value);
+
     const onEdit = (value: string) =>
         dispatch({ type: 'setValue', payload: { path, value } });
-    const [text, setText] = useState(value);
 
     const containerStyle: React.CSSProperties = {
         fontWeight: bold ? 'bolder' : undefined,

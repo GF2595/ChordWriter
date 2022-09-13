@@ -8,12 +8,13 @@ export interface EditorContextProps {
 }
 
 type State = {
-    song: Song;
+    // TODO: any
+    value: any;
     dispatch: React.Dispatch<Action>;
 };
 
 const defaultValue: State = {
-    song: {
+    value: {
         title: '',
         author: '',
         songBody: [],
@@ -63,7 +64,7 @@ const Actions: { [key: string]: (state: Song, payload: Payload) => Song } = {
             throw new Error(`Trying to add element not to array: ${path}`);
         }
 
-        if (!index) {
+        if (index === undefined) {
             arr.push(value);
         } else {
             arr = insert(arr, index, value);
@@ -81,12 +82,18 @@ type Action = {
 };
 
 const editorReducer = (state: Song, { type, payload }: Action) => {
+    console.groupCollapsed(
+        `%c${type} action`,
+        'color: CadetBlue',
+        '\n',
+        `path: ${payload.path}`
+    );
+    console.log('Payload:', JSON.parse(JSON.stringify(payload)));
+    console.log('Previous state:', JSON.parse(JSON.stringify(state)));
+
     const newState = Actions[type](state, payload);
 
-    console.groupCollapsed(`%c ${type} action`, 'color: CadetBlue');
-    console.log('Payload:', payload);
-    console.log('Previous state:', state);
-    console.log('New state:', newState);
+    console.log('New state:', JSON.parse(JSON.stringify(newState)));
     console.groupEnd();
 
     return newState;
@@ -101,17 +108,28 @@ export const EditorContextProvider: React.FC<EditorContextProps> = ({
     const [state, dispatch] = useReducer(editorReducer, initialSong);
 
     return (
-        <editorContext.Provider value={{ song: state, dispatch }}>
+        <editorContext.Provider value={{ value: state, dispatch }}>
             {children}
         </editorContext.Provider>
     );
 };
 
-export const useEditorContext = () => {
+export const useEditorContext = (path?: string): State => {
     const context = useContext(editorContext);
 
     if (!context) {
         throw new Error('useEditorContext usage outside EditorContextProvider');
+    }
+
+    if (path) {
+        const { value, dispatch } = context;
+
+        const pathValue = get(value, path);
+
+        if (!pathValue)
+            console.error(`useEditorContext value at ${path} is undefined`);
+
+        return { value: pathValue, dispatch };
     }
 
     return context;

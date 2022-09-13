@@ -18,8 +18,7 @@ const newLine: SongLine = {
 };
 
 export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
-    const { song, dispatch } = useEditorContext();
-    const part = get(song, path);
+    const { value: part, dispatch } = useEditorContext(path);
 
     const { lines, title } = part as LyricsPartType;
     const [editedLine, setEditedLine] = useState(-1);
@@ -54,7 +53,6 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                     line: (
                         <Line
                             path={`${path}.lines[${index}]`}
-                            lineIndex={index}
                             isEdited={index === editedLine}
                             onSetLineEdit={() => setEditedLine(index)}
                             onCancelLineEdit={() => setEditedLine(-1)}

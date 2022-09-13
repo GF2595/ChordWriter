@@ -9,6 +9,7 @@ const CLASS = 'chord';
 
 export interface ChordProps {
     chord: ChordType;
+    hasPadding?: boolean;
     className?: string;
     onEdit?: (chord: ChordType) => void;
     onRemove?: () => void;
@@ -16,6 +17,7 @@ export interface ChordProps {
 
 export const Chord: React.FC<ChordProps> = ({
     chord: chordBase,
+    hasPadding = true,
     className,
     onEdit,
     onRemove,
@@ -28,12 +30,12 @@ export const Chord: React.FC<ChordProps> = ({
         <span
             className={cn(
                 CLASS,
+                { [`${CLASS}-with_padding`]: hasPadding },
                 { [`${CLASS}-clickable`]: !!onEdit && !!onRemove },
                 className
             )}
             style={{
                 fontWeight: 'bolder',
-                paddingRight: 4,
                 whiteSpace: 'pre',
             }}
         >

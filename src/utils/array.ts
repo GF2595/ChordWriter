@@ -18,4 +18,4 @@ export const insert = <T extends any>(
     array: Array<T>,
     index: number,
     value: T
-): Array<T> => [...array.slice(0, index), value, ...array.slice(index + 1)];
+): Array<T> => [...array.slice(0, index), value, ...array.slice(index)];

@@ -1,12 +1,11 @@
 import { SongLine } from '@model/song';
 import React from 'react';
-import { Chord } from '../../../components/Chord';
+import { Chord, Letter } from '../../../components';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
-import { Letter } from './Letter';
 import { IconButton } from '@components/common/IconButton';
 import { onAddChord, onEditChord, onRemoveChord } from './utils';
 

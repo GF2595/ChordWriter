@@ -1,10 +1,15 @@
 @import '@stylesheets/common';
 @import '@stylesheets/colors';
+
 .chord {
     font-weight: bolder;
-    padding-right: $spacing-xs;
     white-space: pre;
     width: fit-content;
+
+    &-with_padding {
+        padding-right: $spacing-xs;
+    }
+
     &-clickable {
         cursor: pointer;
         &:hover {
