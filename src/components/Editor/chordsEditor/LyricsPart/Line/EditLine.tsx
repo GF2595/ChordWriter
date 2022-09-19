@@ -3,25 +3,35 @@ import { SongLine } from '@model/song';
 import CheckIcon from '@rsuite/icons/Check';
 import CloseIcon from '@rsuite/icons/Close';
 import React, { useRef, useState } from 'react';
+import cn from 'classnames';
 import './EditLine.scss';
 
 const CLASS = 'edit-line';
 
 export interface EditLineProps {
-    line: SongLine;
+    line: SongLine | string;
+    placeholder?: string;
+    noMargin?: boolean;
+    canSaveEmpty?: boolean;
     onSave: (text: string) => void;
     onCancel: () => void;
 }
 
 export const EditLine: React.FC<EditLineProps> = ({
     line,
+    noMargin,
+    canSaveEmpty,
     onSave,
     onCancel,
 }) => {
-    const originalText = useRef(line.lyrics.join(''));
+    const originalText = useRef(
+        typeof line === 'string' ? line : line.lyrics.join('')
+    );
     const [text, setText] = useState(originalText.current);
 
-    const disabled = !originalText.current.localeCompare(text) || !text.length;
+    const disabled =
+        !originalText.current.localeCompare(text) ||
+        (!canSaveEmpty && !text.length);
 
     return (
         <>
@@ -38,7 +48,7 @@ export const EditLine: React.FC<EditLineProps> = ({
                         event.preventDefault();
                     }
                 }}
-                className={CLASS}
+                className={cn(CLASS, { [`${CLASS}--no-margin`]: noMargin })}
                 suppressContentEditableWarning={true}
             >
                 {originalText.current}

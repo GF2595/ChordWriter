@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageContent } from '../../common/PageContent/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
 import './ChordsEditor.scss';
@@ -6,6 +6,7 @@ import seventeen from './seventeen';
 import { String } from './components';
 import { SongPart } from './SongPart';
 import { EditorContextProvider } from './EditorContext';
+import ListIcon from '@rsuite/icons/List';
 
 const CLASS = 'chords-editor';
 
@@ -23,13 +24,12 @@ export const ChordsEditor: React.FC = () => {
             disabled: true,
         },
         {
-            // icon: (),
             title: 'Сохранить',
             disabled: true,
         },
         {
-            title: 'Повтор',
-            disabled: true,
+            icon: <ListIcon />,
+            title: 'Структура',
         },
     ];
 
@@ -38,8 +38,8 @@ export const ChordsEditor: React.FC = () => {
             <PageHeader buttons={buttons} />
             <PageContent className={CLASS}>
                 <EditorContextProvider song={song}>
-                    <String bold path={'title'} />
-                    <String path={'author'} />
+                    <String alt={'Добавьте название'} bold path={'title'} />
+                    <String alt={'Добавьте автора'} path={'author'} />
                     <div className={`${CLASS}__text`}>
                         {song.songBody.map((_, index) => (
                             <SongPart

@@ -11,6 +11,11 @@
 
     &__text {
         margin-left: 20px;
+
+        &--placeholder {
+            font-style: italic;
+            color: darkgrey;
+        }
     }
 
     &__icon {

@@ -12,6 +12,8 @@ export interface SongPartProps {
 export const SongPart: React.FC<SongPartProps> = ({ path }) => {
     const { value: part } = useEditorContext(path);
 
+    if (!part) return null;
+
     const { title, lines, chords, tabs } = part as InstrumentalPartType &
         LyricsPartType;
 

@@ -12,6 +12,7 @@ const CLASS = 'string';
 export interface StringProps {
     className?: string;
     path: string;
+    alt?: string;
     align?: 'left' | 'center' | 'right';
     bold?: boolean;
 }
@@ -24,6 +25,7 @@ const style: { [name: string]: React.CSSProperties } = {
 
 export const String: React.FC<StringProps> = ({
     className,
+    alt,
     align = 'center',
     path,
     bold,
@@ -71,7 +73,13 @@ export const String: React.FC<StringProps> = ({
                     </>
                 ) : (
                     <>
-                        <span className={`${CLASS}__text`}>{text}</span>
+                        <span
+                            className={cn(`${CLASS}__text`, {
+                                [`${CLASS}__text--placeholder`]: !text,
+                            })}
+                        >
+                            {text || alt || 'введите текст'}
+                        </span>
                         <EditIcon
                             className={`${CLASS}__icon`}
                             onClick={() => setIsEditing((value) => !value)}

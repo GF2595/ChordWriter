@@ -26,8 +26,12 @@ export type LyricsPartType = PartType & {
     lines: SongLine[];
 };
 
+export type SongPart = LyricsPartType | InstrumentalPartType;
+
+export type SongBody = SongPart[];
+
 export type Song = {
     title: string;
     author: string;
-    songBody: (LyricsPartType | InstrumentalPartType)[];
+    songBody: SongBody;
 };
