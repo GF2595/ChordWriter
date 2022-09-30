@@ -5,13 +5,55 @@ import './ChordsEditor.scss';
 import seventeen from './seventeen';
 import { String } from './components';
 import { SongPart } from './SongPart';
-import { EditorContextProvider } from './EditorContext';
+import { EditorContextProvider, useEditorContext } from './EditorContext';
 import ListIcon from '@rsuite/icons/List';
+import { Song, SongBody } from '@model/song';
+import { Button } from 'rsuite';
 
 const CLASS = 'chords-editor';
 
 // [TEMP] пока не добавится открытие и создание новых
 const song = seventeen;
+// const song: Song = { title: '', author: '', songBody: [] };
+
+const EditorContent: React.FC<{
+    isStructureVisible: boolean;
+    setStructureVisible: () => void;
+}> = ({ isStructureVisible, setStructureVisible }) => {
+    const { value, dispatch } = useEditorContext('songBody');
+    const songBody = value as SongBody;
+
+    return (
+        <>
+            <String size={'lg'} alt={'Добавьте название'} bold path={'title'} />
+            <String alt={'Добавьте автора'} path={'author'} />
+            <div className={`${CLASS}__text`}>
+                {songBody.length ? (
+                    songBody.map((part, index) => (
+                        <SongPart
+                            key={`${index}_${part.title}`}
+                            isStructureVisible={isStructureVisible}
+                            partsArrayPath={'songBody'}
+                            partIndex={index}
+                        />
+                    ))
+                ) : (
+                    <Button
+                        onClick={() => {
+                            dispatch({
+                                type: 'addArrayValue',
+                                payload: { path: 'songBody', value: {} },
+                            });
+                            setStructureVisible();
+                        }}
+                    >
+                        Добавить часть
+                    </Button>
+                )}
+            </div>
+        </>
+    );
+};
 
 export const ChordsEditor: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(true);
@@ -42,23 +84,10 @@ export const ChordsEditor: React.FC = () => {
             <PageHeader buttons={buttons} />
             <PageContent className={CLASS}>
                 <EditorContextProvider song={song}>
-                    <String
-                        size={'lg'}
-                        alt={'Добавьте название'}
-                        bold
-                        path={'title'}
+                    <EditorContent
+                        isStructureVisible={structureVisible}
+                        setStructureVisible={() => setStructureVisible(true)}
                     />
-                    <String alt={'Добавьте автора'} path={'author'} />
-                    <div className={`${CLASS}__text`}>
-                        {song.songBody.map((_, index) => (
-                            <SongPart
-                                key={`${index}`}
-                                isStructureVisible={structureVisible}
-                                partsArrayPath={'songBody'}
-                                partIndex={index}
-                            />
-                        ))}
-                    </div>
                 </EditorContextProvider>
             </PageContent>
         </>

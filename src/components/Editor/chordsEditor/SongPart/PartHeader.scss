@@ -5,6 +5,16 @@
         margin-bottom: $spacing;
     }
 
+    &__controls-block {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    &__buttons-cluster {
+        margin-left: $spacing-lg;
+    }
+
     &__type-picker {
         width: 100px;
         margin-top: $spacing-xs;
@@ -20,5 +30,10 @@
     &__picker-menu {
         height: fit-content;
         font-size: small;
+    }
+
+    &__regular-title {
+        font-weight: bolder;
+        padding-left: $spacing;
     }
 }

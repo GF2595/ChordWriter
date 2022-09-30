@@ -1,5 +1,9 @@
-import { InstrumentalPartType, LyricsPartType } from '@model/song';
-import React from 'react';
+import {
+    InstrumentalPartType,
+    LyricsPartType,
+    SongPart as SongPartType,
+} from '@model/song';
+import React, { useCallback } from 'react';
 import { useEditorContext } from '../EditorContext';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
@@ -24,7 +28,7 @@ export const SongPart: React.FC<SongPartProps> = ({
 }) => {
     const path = `${partsArrayPath}[${partIndex}]`;
 
-    const { value: part } = useEditorContext(path);
+    const { value: part, dispatch } = useEditorContext(path);
 
     if (!part) return null;
 
@@ -32,9 +36,12 @@ export const SongPart: React.FC<SongPartProps> = ({
         LyricsPartType;
 
     let content: JSX.Element = null;
-    let type: PartContentType = 'lyrics';
+    let type: PartContentType = null;
 
-    if (!!lines) content = <LyricsPart path={path} />;
+    if (!!lines) {
+        content = <LyricsPart path={path} />;
+        type = 'lyrics';
+    }
 
     if ((!content && !!chords) || !!tabs) {
         content = <InstrumentalPart path={path} />;
@@ -43,6 +50,32 @@ export const SongPart: React.FC<SongPartProps> = ({
         else type = 'tab';
     }
 
+    const onSetType = useCallback((type: PartContentType | null) => {
+        let newPart: SongPartType = {
+            title: part.title,
+        };
+
+        if (type === 'chords')
+            newPart = {
+                ...newPart,
+                chords: [[]],
+            };
+
+        if (type === 'lyrics')
+            newPart = {
+                ...newPart,
+                lines: [],
+            };
+
+        if (type === 'tab')
+            newPart = {
+                ...newPart,
+                tabs: '',
+            };
+
+        dispatch({ type: 'setValue', payload: { path, value: newPart } });
+    }, []);
+
     return (
         <div className={CLASS}>
             <PartHeader
@@ -50,11 +83,7 @@ export const SongPart: React.FC<SongPartProps> = ({
                 partsArrayPath={partsArrayPath}
                 partIndex={partIndex}
                 title={title}
-                onAddAbove={() => {}}
-                onAddBelow={() => {}}
-                onDelete={() => {}}
-                onSetTitle={() => {}}
-                onSetType={() => {}}
+                onSetType={onSetType}
                 showControls={isStructureVisible}
             />
             <div

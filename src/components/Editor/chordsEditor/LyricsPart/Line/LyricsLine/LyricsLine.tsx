@@ -6,7 +6,6 @@ import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
-import { IconButton } from '@components/common/IconButton';
 import { onAddChord, onEditChord, onRemoveChord } from './utils';
 import {
     IconButtonCluster,

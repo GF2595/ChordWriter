@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { PartContentType } from './types';
 import './PartHeader.scss';
 import cn from 'classnames';
-import { String } from '../components';
+import { IconButtonCluster, IconButtonInfo, String } from '../components';
+import TrashIcon from '@rsuite/icons/Trash';
+import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
+import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import { InputPicker } from 'rsuite';
+import { useEditorContext } from '../EditorContext';
 
 const CLASS = 'part-header';
 
@@ -15,10 +19,6 @@ export interface PartHeaderProps {
     type?: PartContentType;
     className?: string;
     onSetType: (type: PartContentType) => void;
-    onSetTitle: (title: string) => void;
-    onAddBelow: () => void;
-    onAddAbove: () => void;
-    onDelete: () => void;
 }
 
 const typePickerData: { label: string; value: PartContentType | null }[] = [
@@ -47,12 +47,52 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
     partIndex,
     type,
     className,
-    onAddAbove,
-    onAddBelow,
-    onDelete,
-    onSetTitle,
     onSetType,
 }) => {
+    const { dispatch } = useEditorContext();
+
+    const buttons: IconButtonInfo[] = useMemo(
+        () => [
+            {
+                Icon: TrashIcon,
+                title: 'Удалить часть',
+                onClick: () =>
+                    dispatch({
+                        type: 'removeArrayValue',
+                        payload: { path: partsArrayPath, index: partIndex },
+                    }),
+                fill: 'firebrick',
+            },
+            {
+                Icon: ArrowUpLineIcon,
+                title: 'Добавить часть выше',
+                onClick: () =>
+                    dispatch({
+                        type: 'addArrayValue',
+                        payload: {
+                            path: partsArrayPath,
+                            index: partIndex,
+                            value: {},
+                        },
+                    }),
+            },
+            {
+                Icon: ArrowDownLineIcon,
+                title: 'Добавить часть ниже',
+                onClick: () =>
+                    dispatch({
+                        type: 'addArrayValue',
+                        payload: {
+                            path: partsArrayPath,
+                            index: partIndex + 1,
+                            value: {},
+                        },
+                    }),
+            },
+        ],
+        [dispatch]
+    );
+
     return (
         <div
             className={cn(
@@ -61,7 +101,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
             )}
         >
             {showControls ? (
-                <>
+                <div className={`${CLASS}__controls-block`}>
                     <div>
                         <String
                             path={`${partsArrayPath}[${partIndex}].title`}
@@ -78,15 +118,18 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                             data={typePickerData}
                             value={type}
                             onSelect={onSetType}
+                            disabledItemValues={['tab']}
                             size={'xs'}
                         />
                     </div>
-                </>
+                    <IconButtonCluster
+                        buttons={buttons}
+                        className={`${CLASS}__buttons-cluster`}
+                    />
+                </div>
             ) : (
                 title && (
-                    <span style={{ fontWeight: 'bolder', paddingLeft: '8px' }}>
-                        {title}
-                    </span>
+                    <span className={`${CLASS}__regular-title`}>{title}</span>
                 )
             )}
         </div>
