@@ -14,6 +14,8 @@ const CLASS = 'chords-editor';
 const song = seventeen;
 
 export const ChordsEditor: React.FC = () => {
+    const [structureVisible, setStructureVisible] = useState(true);
+
     const buttons: ButtonInfo[] = [
         {
             title: 'Новая',
@@ -29,7 +31,9 @@ export const ChordsEditor: React.FC = () => {
         },
         {
             icon: <ListIcon />,
+            active: structureVisible,
             title: 'Структура',
+            onClick: () => setStructureVisible((value) => !value),
         },
     ];
 
@@ -38,13 +42,20 @@ export const ChordsEditor: React.FC = () => {
             <PageHeader buttons={buttons} />
             <PageContent className={CLASS}>
                 <EditorContextProvider song={song}>
-                    <String alt={'Добавьте название'} bold path={'title'} />
+                    <String
+                        size={'lg'}
+                        alt={'Добавьте название'}
+                        bold
+                        path={'title'}
+                    />
                     <String alt={'Добавьте автора'} path={'author'} />
                     <div className={`${CLASS}__text`}>
                         {song.songBody.map((_, index) => (
                             <SongPart
                                 key={`${index}`}
-                                path={`songBody[${index}]`}
+                                isStructureVisible={structureVisible}
+                                partsArrayPath={'songBody'}
+                                partIndex={index}
                             />
                         ))}
                     </div>

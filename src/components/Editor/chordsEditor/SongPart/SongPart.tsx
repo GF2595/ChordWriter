@@ -3,13 +3,27 @@ import React from 'react';
 import { useEditorContext } from '../EditorContext';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
-import { get } from 'lodash';
+import { PartHeader } from './PartHeader';
+import './SongPart.scss';
+import { PartContentType } from './types';
+import cn from 'classnames';
+import { Divider } from 'rsuite';
+
+const CLASS = 'song-part';
 
 export interface SongPartProps {
-    path: string;
+    partsArrayPath: string;
+    partIndex: number;
+    isStructureVisible?: boolean;
 }
 
-export const SongPart: React.FC<SongPartProps> = ({ path }) => {
+export const SongPart: React.FC<SongPartProps> = ({
+    partsArrayPath,
+    partIndex,
+    isStructureVisible,
+}) => {
+    const path = `${partsArrayPath}[${partIndex}]`;
+
     const { value: part } = useEditorContext(path);
 
     if (!part) return null;
@@ -18,16 +32,39 @@ export const SongPart: React.FC<SongPartProps> = ({ path }) => {
         LyricsPartType;
 
     let content: JSX.Element = null;
+    let type: PartContentType = 'lyrics';
 
     if (!!lines) content = <LyricsPart path={path} />;
 
-    if ((!content && !!chords) || !!tabs)
+    if ((!content && !!chords) || !!tabs) {
         content = <InstrumentalPart path={path} />;
 
+        if (!!chords) type = 'chords';
+        else type = 'tab';
+    }
+
     return (
-        <div style={{ paddingTop: '16px' }}>
-            <span style={{ fontWeight: 'bolder' }}>{title}</span>
-            {content}
+        <div className={CLASS}>
+            <PartHeader
+                type={type}
+                partsArrayPath={partsArrayPath}
+                partIndex={partIndex}
+                title={title}
+                onAddAbove={() => {}}
+                onAddBelow={() => {}}
+                onDelete={() => {}}
+                onSetTitle={() => {}}
+                onSetType={() => {}}
+                showControls={isStructureVisible}
+            />
+            <div
+                className={cn({
+                    [`${CLASS}__offset-content`]: isStructureVisible,
+                })}
+            >
+                {content}
+            </div>
+            {isStructureVisible && <Divider className={`${CLASS}__divider`} />}
         </div>
     );
 };

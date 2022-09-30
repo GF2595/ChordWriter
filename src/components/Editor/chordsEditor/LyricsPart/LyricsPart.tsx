@@ -76,7 +76,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     );
 
     return (
-        <div style={{ paddingTop: 16 }}>
+        <>
             {!!lines.length ? (
                 <Table
                     autoHeight
@@ -117,6 +117,6 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                     }}
                 />
             )}
-        </div>
+        </>
     );
 };

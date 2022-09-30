@@ -1,0 +1,24 @@
+@import '@stylesheets/common.scss';
+
+.part-header {
+    &--visible {
+        margin-bottom: $spacing;
+    }
+
+    &__type-picker {
+        width: 100px;
+        margin-top: $spacing-xs;
+        margin-left: $spacing-lg;
+        border: none;
+        box-shadow: none !important;
+
+        & > .rs-picker-toggle {
+            box-shadow: none !important;
+        }
+    }
+
+    &__picker-menu {
+        height: fit-content;
+        font-size: small;
+    }
+}

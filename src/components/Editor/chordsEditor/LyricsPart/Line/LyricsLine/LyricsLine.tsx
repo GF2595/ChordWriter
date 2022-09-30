@@ -1,5 +1,5 @@
 import { SongLine } from '@model/song';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Chord, Letter } from '../../../components';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
@@ -8,6 +8,10 @@ import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import { IconButton } from '@components/common/IconButton';
 import { onAddChord, onEditChord, onRemoveChord } from './utils';
+import {
+    IconButtonCluster,
+    IconButtonInfo,
+} from '@components/Editor/ChordsEditor/components/IconButtonCluster';
 
 const CLASS = 'lyrics-line';
 
@@ -30,6 +34,33 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     onAddLineAfter,
 }) => {
     const { lyrics, chords } = line;
+
+    const buttons: IconButtonInfo[] = useMemo(
+        () => [
+            {
+                Icon: EditIcon,
+                title: 'Редактировать текст (редактирование стирает добавленные аккорды)',
+                onClick: onToggleEdit,
+            },
+            {
+                Icon: TrashIcon,
+                title: 'Удалить строку',
+                onClick: onRemove,
+                fill: 'firebrick',
+            },
+            {
+                Icon: ArrowUpLineIcon,
+                title: 'Добавить строку выше',
+                onClick: onAddLineBefore,
+            },
+            {
+                Icon: ArrowDownLineIcon,
+                title: 'Добавить строку ниже',
+                onClick: onAddLineAfter,
+            },
+        ],
+        [onToggleEdit, onRemove, onAddLineAfter, onAddLineBefore]
+    );
 
     if (lyrics.length !== 1 && (!chords || lyrics.length !== chords.length))
         return <div style={{ color: 'red' }}>error</div>;
@@ -104,35 +135,11 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                     onAddChord(chord, line, '', 0, lyrics.length, onAlterLine)
                 }
             />
-            <div className={`${CLASS}__actions`}>
-                <IconButton
-                    Icon={EditIcon}
-                    title={
-                        'Редактировать текст (редактирование стирает добавленные аккорды)'
-                    }
-                    className={'lyrics-line__icon'}
-                    onClick={onToggleEdit}
-                />
-                <IconButton
-                    Icon={TrashIcon}
-                    className={'lyrics-line__icon'}
-                    title={'Удалить строку'}
-                    onClick={onRemove}
-                    fill={'firebrick'}
-                />
-                <IconButton
-                    Icon={ArrowUpLineIcon}
-                    className={'lyrics-line__icon'}
-                    title={'Добавить строку выше'}
-                    onClick={onAddLineBefore}
-                />
-                <IconButton
-                    Icon={ArrowDownLineIcon}
-                    className={'lyrics-line__icon'}
-                    title={'Добавить строку ниже'}
-                    onClick={onAddLineAfter}
-                />
-            </div>
+            <IconButtonCluster
+                buttons={buttons}
+                className={`${CLASS}__actions`}
+                buttonClassName={'lyrics-line__icon'}
+            />
         </div>
     );
 };

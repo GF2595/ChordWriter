@@ -15,6 +15,7 @@ export interface StringProps {
     alt?: string;
     align?: 'left' | 'center' | 'right';
     bold?: boolean;
+    size?: 'lg' | 'md';
 }
 
 const style: { [name: string]: React.CSSProperties } = {
@@ -28,7 +29,8 @@ export const String: React.FC<StringProps> = ({
     alt,
     align = 'center',
     path,
-    bold,
+    bold = false,
+    size = 'md',
 }) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -41,7 +43,7 @@ export const String: React.FC<StringProps> = ({
 
     const containerStyle: React.CSSProperties = {
         fontWeight: bold ? 'bolder' : undefined,
-        fontSize: bold ? 20 : undefined,
+        fontSize: size === 'lg' ? 20 : undefined,
     };
 
     const handleSave = useCallback(() => {
@@ -63,7 +65,7 @@ export const String: React.FC<StringProps> = ({
                         <InputGroup>
                             <Input
                                 value={text}
-                                size={bold ? 'sm' : 'xs'}
+                                size={size === 'md' ? 'sm' : 'xs'}
                                 onChange={(value) => setText(`${value}`)}
                             />
                             <InputGroup.Button onClick={handleSave}>

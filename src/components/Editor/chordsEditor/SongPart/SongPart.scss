@@ -1,0 +1,15 @@
+@import '@stylesheets/common.scss';
+
+.song-part {
+    margin-top: $spacing-lg;
+
+    &__offset-content {
+        padding-left: $spacing;
+        border-left: 1px dashed lightgray;
+    }
+
+    &__divider {
+        width: 100px;
+        margin-left: 45px;
+    }
+}
