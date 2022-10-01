@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PageContent } from '../../common/PageContent/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
 import './ChordsEditor.scss';
