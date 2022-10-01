@@ -68,7 +68,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                     }),
             },
         ],
-        []
+        [dispatch]
     );
 
     const line = value as ChordType[];
@@ -98,7 +98,10 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                               />
                           }
                       >
-                          <EditIcon className={`${CLASS}__empty-button`} />
+                          <EditIcon
+                              key={'add first chord button'}
+                              className={`${CLASS}__empty-button`}
+                          />
                       </Whisper>,
                   ]
                 : [
@@ -115,49 +118,47 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                               })
                           }
                       />,
-                      ...line.map((chord, chordIndex) => (
-                          <>
-                              {/* TODO: нормальный key*/}
-                              <Chord
-                                  hasPadding={false}
-                                  key={`${lineIndex}_${chordIndex}`}
-                                  chord={chord}
-                                  onEdit={(chord) =>
-                                      dispatch({
-                                          type: 'setValue',
-                                          payload: {
-                                              path: `${path}[${chordIndex}]`,
-                                              value: chord,
-                                          },
-                                      })
-                                  }
-                                  onRemove={() =>
-                                      dispatch({
-                                          type: 'removeArrayValue',
-                                          payload: {
-                                              path,
-                                              index: chordIndex,
-                                          },
-                                      })
-                                  }
-                              />
-                              <AddChordArea
-                                  shortArea={chordIndex != line.length - 1}
-                                  key={`${lineIndex}_area_[${chordIndex + 1}]`}
-                                  onAddChord={(chord) =>
-                                      dispatch({
-                                          type: 'addArrayValue',
-                                          payload: {
-                                              path,
-                                              value: chord,
-                                              index: chordIndex + 1,
-                                          },
-                                      })
-                                  }
-                              />
-                          </>
-                      )),
+                      ...line.map((chord, chordIndex) => [
+                          <Chord
+                              hasPadding={false}
+                              key={`${lineIndex}_${chordIndex}_${chord}`}
+                              chord={chord}
+                              onEdit={(chord) =>
+                                  dispatch({
+                                      type: 'setValue',
+                                      payload: {
+                                          path: `${path}[${chordIndex}]`,
+                                          value: chord,
+                                      },
+                                  })
+                              }
+                              onRemove={() =>
+                                  dispatch({
+                                      type: 'removeArrayValue',
+                                      payload: {
+                                          path,
+                                          index: chordIndex,
+                                      },
+                                  })
+                              }
+                          />,
+                          <AddChordArea
+                              shortArea={chordIndex != line.length - 1}
+                              key={`${lineIndex}_area_[${chordIndex + 1}]`}
+                              onAddChord={(chord) =>
+                                  dispatch({
+                                      type: 'addArrayValue',
+                                      payload: {
+                                          path,
+                                          value: chord,
+                                          index: chordIndex + 1,
+                                      },
+                                  })
+                              }
+                          />,
+                      ]),
                       <IconButtonCluster
+                          key={'icon button cluster'}
                           buttonClassName={`${CLASS}__icon`}
                           buttons={buttons}
                       />,

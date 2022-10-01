@@ -126,8 +126,8 @@ export const useEditorContext = (path?: string): State => {
 
         const pathValue = get(value, path);
 
-        if (!pathValue)
-            console.warn(`useEditorContext value at ${path} is undefined`);
+        // if (!pathValue)
+        // console.warn(`useEditorContext value at ${path} is undefined`);
 
         return { value: pathValue, dispatch };
     }

@@ -15,8 +15,9 @@ export const InstrumentalPart: React.FC<InstrumentalPartProps> = ({ path }) => {
     return (
         <div>
             {chords
-                ? chords.map((_, index) => (
+                ? chords.map((line, index) => (
                       <ChordsLine
+                          key={`${index}__${line[0]}-${line[1]}`}
                           lineArrayPath={`${path}.chords`}
                           lineIndex={index}
                       />

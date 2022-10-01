@@ -20,7 +20,11 @@ export const IconButtonCluster: React.FC<IconButtonClusterProps> = ({
     return (
         <div className={className}>
             {buttons.map((button) => (
-                <IconButton className={buttonClassName} {...button} />
+                <IconButton
+                    key={`${button.Icon.valueOf()}_${button.title}`}
+                    className={buttonClassName}
+                    {...button}
+                />
             ))}
         </div>
     );

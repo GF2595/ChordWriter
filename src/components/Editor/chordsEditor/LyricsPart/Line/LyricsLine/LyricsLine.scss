@@ -7,9 +7,11 @@
     align-items: flex-end;
     margin-bottom: 1px;
     position: relative;
+
     &:hover .lyrics-line__icon {
         visibility: visible;
     }
+
     &__cell {
         display: flex;
         flex-direction: column;
