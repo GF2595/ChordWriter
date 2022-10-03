@@ -31,49 +31,46 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
         setEditedLine(-1);
     };
 
-    const tableData: TableProps['data'] = useMemo(
-        () =>
-            lines.map((line, index) => {
-                // TODO: key index
-                return {
-                    dataKey: line?.lyrics?.[0],
-                    hasChords:
-                        line.chords &&
-                        line.chords.length &&
-                        !(line.chords.length === 1 && !line.chords[0]),
-                    line: (
-                        <Line
-                            path={`${path}.lines[${index}]`}
-                            isEdited={index === editedLine}
-                            onSetLineEdit={() => setEditedLine(index)}
-                            onCancelLineEdit={() => setEditedLine(-1)}
-                            onRemoveLine={() => onRemoveLine(index)}
-                            onAddLineAfter={() =>
-                                dispatch({
-                                    type: 'addArrayValue',
-                                    payload: {
-                                        path: `${path}.lines`,
-                                        value: newLine,
-                                        index: index + 1,
-                                    },
-                                })
-                            }
-                            onAddLineBefore={() =>
-                                dispatch({
-                                    type: 'addArrayValue',
-                                    payload: {
-                                        path: `${path}.lines`,
-                                        value: newLine,
-                                        index: index,
-                                    },
-                                })
-                            }
-                        />
-                    ),
-                };
-            }),
-        [lines, editedLine, part]
-    );
+    // TODO: оптимизация
+    const tableData: TableProps['data'] = lines.map((line, index) => {
+        // TODO: key index
+        return {
+            dataKey: line?.lyrics?.[0],
+            hasChords:
+                line.chords &&
+                line.chords.length &&
+                !(line.chords.length === 1 && !line.chords[0]),
+            line: (
+                <Line
+                    path={`${path}.lines[${index}]`}
+                    isEdited={index === editedLine}
+                    onSetLineEdit={() => setEditedLine(index)}
+                    onCancelLineEdit={() => setEditedLine(-1)}
+                    onRemoveLine={() => onRemoveLine(index)}
+                    onAddLineAfter={() =>
+                        dispatch({
+                            type: 'addArrayValue',
+                            payload: {
+                                path: `${path}.lines`,
+                                value: newLine,
+                                index: index + 1,
+                            },
+                        })
+                    }
+                    onAddLineBefore={() =>
+                        dispatch({
+                            type: 'addArrayValue',
+                            payload: {
+                                path: `${path}.lines`,
+                                value: newLine,
+                                index: index,
+                            },
+                        })
+                    }
+                />
+            ),
+        };
+    });
 
     return (
         <>
