@@ -30,6 +30,8 @@ type Payload = {
 
 const Actions: { [key: string]: (state: Song, payload: Payload) => Song } = {
     setValue: (state, { path, value }) => {
+        if (!path) return value as Song;
+
         const newState = {
             ...state,
         };

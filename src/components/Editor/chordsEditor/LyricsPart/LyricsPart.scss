@@ -4,6 +4,10 @@
     &__table {
         &_row {
             border-bottom: 0 !important;
+
+            & .rs-table-cell {
+                border: 0 !important;
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageContent } from '../../common/PageContent/PageContent';
+import { PageContent } from '@components/common/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
 import './ChordsEditor.scss';
 import seventeen from './seventeen';
@@ -8,68 +8,66 @@ import { SongPart } from './SongPart';
 import { EditorContextProvider, useEditorContext } from './EditorContext';
 import ListIcon from '@rsuite/icons/List';
 import { Song, SongBody } from '@model/song';
-import { Button } from 'rsuite';
+import { Button, Notification, toaster } from 'rsuite';
+import { checkSongJsonFormat, getNewSong } from './utils';
+import { get } from 'lodash';
 
 const CLASS = 'chords-editor';
 
-// [TEMP] пока не добавится открытие и создание новых
-const song = seventeen;
-// const song: Song = { title: '', author: '', songBody: [] };
+const EditorContent: React.FC = () => {
+    const [structureVisible, setStructureVisible] = useState(false);
+    const { value, dispatch } = useEditorContext();
+    const api = window.api.window;
 
-const EditorContent: React.FC<{
-    isStructureVisible: boolean;
-    setStructureVisible: () => void;
-}> = ({ isStructureVisible, setStructureVisible }) => {
-    const { value, dispatch } = useEditorContext('songBody');
-    const songBody = value as SongBody;
-
-    return (
-        <>
-            <String size={'lg'} alt={'Добавьте название'} bold path={'title'} />
-            <String alt={'Добавьте автора'} path={'author'} />
-            <div className={`${CLASS}__text`}>
-                {songBody.length ? (
-                    songBody.map((part, index) => (
-                        <SongPart
-                            key={`${index}_${part.title}`}
-                            isStructureVisible={isStructureVisible}
-                            partsArrayPath={'songBody'}
-                            partIndex={index}
-                        />
-                    ))
-                ) : (
-                    <Button
-                        onClick={() => {
-                            dispatch({
-                                type: 'addArrayValue',
-                                payload: { path: 'songBody', value: {} },
-                            });
-                            setStructureVisible();
-                        }}
-                    >
-                        Добавить часть
-                    </Button>
-                )}
-            </div>
-        </>
+    const message = (error: any) => (
+        <Notification
+            type={'error'}
+            header={'Ошибка'}
+            duration={30000}
+            closable
+        >
+            Ошибка при открытии файла:
+            <br />
+            {error.toString()}
+        </Notification>
     );
-};
 
-export const ChordsEditor: React.FC = () => {
-    const [structureVisible, setStructureVisible] = useState(true);
+    const songBody = get(value, 'songBody') as SongBody;
 
     const buttons: ButtonInfo[] = [
         {
             title: 'Новая',
-            disabled: true,
+            onClick: () => {
+                dispatch({
+                    type: 'setValue',
+                    payload: { value: getNewSong() },
+                });
+            },
         },
         {
             title: 'Открыть',
-            disabled: true,
+            onClick: () => {
+                api.openFile()
+                    .then((file) => {
+                        checkSongJsonFormat(file);
+
+                        dispatch({
+                            type: 'setValue',
+                            payload: { value: file },
+                        });
+                    })
+                    .catch((error) => {
+                        toaster.push(message(error), {
+                            placement: 'bottomEnd',
+                        });
+                    });
+            },
         },
         {
             title: 'Сохранить',
-            disabled: true,
+            onClick: () => {
+                api.saveToNewFile(JSON.stringify(value, null, 4));
+            },
         },
         {
             icon: <ListIcon />,
@@ -83,13 +81,44 @@ export const ChordsEditor: React.FC = () => {
         <>
             <PageHeader buttons={buttons} />
             <PageContent className={CLASS}>
-                <EditorContextProvider song={song}>
-                    <EditorContent
-                        isStructureVisible={structureVisible}
-                        setStructureVisible={() => setStructureVisible(true)}
-                    />
-                </EditorContextProvider>
+                <String
+                    size={'lg'}
+                    alt={'Добавьте название'}
+                    bold
+                    path={'title'}
+                />
+                <String alt={'Добавьте автора'} path={'author'} />
+                <div className={`${CLASS}__text`}>
+                    {songBody.length ? (
+                        songBody.map((part, index) => (
+                            <SongPart
+                                key={`${index}_${part.title}`}
+                                isStructureVisible={structureVisible}
+                                partsArrayPath={'songBody'}
+                                partIndex={index}
+                            />
+                        ))
+                    ) : (
+                        <Button
+                            onClick={() => {
+                                dispatch({
+                                    type: 'addArrayValue',
+                                    payload: { path: 'songBody', value: {} },
+                                });
+                                setStructureVisible(true);
+                            }}
+                        >
+                            Добавить часть
+                        </Button>
+                    )}
+                </div>
             </PageContent>
         </>
     );
 };
+
+export const ChordsEditor: React.FC = () => (
+    <EditorContextProvider song={getNewSong()}>
+        <EditorContent />
+    </EditorContextProvider>
+);

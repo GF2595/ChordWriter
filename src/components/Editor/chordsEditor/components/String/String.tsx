@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import EditIcon from '@rsuite/icons/Edit';
 import CheckIcon from '@rsuite/icons/Check';
 import cn from 'classnames';
@@ -36,7 +36,11 @@ export const String: React.FC<StringProps> = ({
 
     const { value, dispatch } = useEditorContext(path);
 
-    const [text, setText] = useState(value);
+    const [text, setText] = useState(value || '');
+
+    useEffect(() => {
+        setText(value || '');
+    }, [value, setText]);
 
     const onEdit = (value: string) =>
         dispatch({ type: 'setValue', payload: { path, value } });
