@@ -1,0 +1,39 @@
+@import '@stylesheets/common.scss';
+
+.part-header {
+    &--visible {
+        margin-bottom: $spacing;
+    }
+
+    &__controls-block {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    &__buttons-cluster {
+        margin-left: $spacing-lg;
+    }
+
+    &__type-picker {
+        width: 100px;
+        margin-top: $spacing-xs;
+        margin-left: $spacing-lg;
+        border: none;
+        box-shadow: none !important;
+
+        & > .rs-picker-toggle {
+            box-shadow: none !important;
+        }
+    }
+
+    &__picker-menu {
+        height: fit-content;
+        font-size: small;
+    }
+
+    &__regular-title {
+        font-weight: bolder;
+        padding-left: $spacing;
+    }
+}

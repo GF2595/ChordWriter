@@ -4,9 +4,20 @@
     flex-direction: row;
     align-items: center;
     height: 30px;
+
     &__container:hover .string__icon {
         visibility: visible;
     }
+
+    &__text {
+        margin-left: 20px;
+
+        &--placeholder {
+            font-style: italic;
+            color: darkgrey;
+        }
+    }
+
     &__icon {
         padding-left: $spacing-xs;
         visibility: hidden;

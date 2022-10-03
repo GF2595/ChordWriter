@@ -17,5 +17,8 @@
         "import/resolver": {
             "typescript": {}
         }
+    },
+    "rules": {
+        "no-empty-interface": false
     }
 }

@@ -1,0 +1,17 @@
+@import '@stylesheets/common';
+
+.lyrics-part {
+    &__table {
+        &_row {
+            border-bottom: 0 !important;
+
+            & .rs-table-cell {
+                border: 0 !important;
+            }
+        }
+    }
+
+    &__empty_part_button {
+        margin-left: $spacing;
+    }
+}

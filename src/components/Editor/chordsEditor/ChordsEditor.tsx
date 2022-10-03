@@ -1,160 +1,123 @@
 import React, { useState } from 'react';
-import { PageContent } from '../../common/PageContent/PageContent';
+import { PageContent } from '@components/common/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
-import { InstrumentalPartType, Song, LyricsPartType } from '@model/song';
 import './ChordsEditor.scss';
-import seventeen from './seventeen';
-import { String, LyricsPart } from './components';
-import { InstrumentalPart } from './components/InstrumentalPart';
+import { String } from './components';
+import { SongPart } from './SongPart';
+import { EditorContextProvider, useEditorContext } from './EditorContext';
+import ListIcon from '@rsuite/icons/List';
+import { SongBody } from '@model/song';
+import { Button, Notification, toaster } from 'rsuite';
+import { checkSongJsonFormat, getNewSong } from './utils';
+import { get } from 'lodash';
 
-// const CLASS = 'chords-editor';
+const CLASS = 'chords-editor';
 
-// export interface ChordsEditorProps {}
+const EditorContent: React.FC = () => {
+    const [structureVisible, setStructureVisible] = useState(false);
+    const { value, dispatch } = useEditorContext();
+    const api = window.api.window;
 
-export const ChordsEditor: React.FC = () => {
-    // const [song, setSong] = useState<Song>({
-    //     title: '',
-    //     author: '',
-    //     songBody: [
-    //         {
-    //             lines: lines.map((line) => ({
-    //                 lyrics: [line],
-    //             })),
-    //         },
-    //     ],
-    // });
+    const message = (error: any) => (
+        <Notification
+            type={'error'}
+            header={'Ошибка'}
+            duration={30000}
+            closable
+        >
+            Ошибка при открытии файла:
+            <br />
+            {error.toString()}
+        </Notification>
+    );
 
-    const [song, setSong] = useState<Song>(seventeen);
-
-    // const tableData: RowDataType[] = lines.map((line, index) => ({
-    //     dataKey: `${index}`,
-    //     line,
-    // }));
-
-    // const result = [];
-
-    // for (let i = 0; i < text.length; i++) {
-    //     const letter = text[i];
-    //     if (letter != '\n' && letter != '\r') {
-    //         result.push(
-    //             <span
-    //                 className={`${CLASS}__letter`}
-    //                 onClick={() => alert(letter)}
-    //             >
-    //                 {letter}
-    //             </span>
-    //         );
-    //     } else if (letter === '\n') result.push(<br />);
-    // }
+    const songBody = get(value, 'songBody') as SongBody;
 
     const buttons: ButtonInfo[] = [
         {
             title: 'Новая',
-            disabled: true,
+            onClick: () => {
+                dispatch({
+                    type: 'setValue',
+                    payload: { value: getNewSong() },
+                });
+            },
         },
         {
             title: 'Открыть',
-            disabled: true,
+            onClick: () => {
+                api.openFile()
+                    .then((file) => {
+                        checkSongJsonFormat(file);
+
+                        dispatch({
+                            type: 'setValue',
+                            payload: { value: file },
+                        });
+                    })
+                    .catch((error) => {
+                        toaster.push(message(error), {
+                            placement: 'bottomEnd',
+                        });
+                    });
+            },
         },
         {
-            // icon: (),
             title: 'Сохранить',
-            disabled: true,
+            onClick: () => {
+                api.saveToNewFile(JSON.stringify(value, null, 4));
+            },
         },
         {
-            title: 'Повтор',
-            disabled: true,
+            icon: <ListIcon />,
+            active: structureVisible,
+            title: 'Структура',
+            onClick: () => setStructureVisible((value) => !value),
         },
     ];
 
     return (
         <>
             <PageHeader buttons={buttons} />
-            {/* <PageContent className={CLASS}>
-                <Table
-                    autoHeight
-                    rowHeight={20}
-                    bordered={false}
-                    hover={false}
-                    showHeader={false}
-                    data={tableData}
-                    rowClassName={`${CLASS}__table_row`}
-                >
-                    <Column flexGrow={1}>
-                        <HeaderCell>Line</HeaderCell>
-                        <Cell style={{ padding: 0 }} dataKey="line" />
-                    </Column>
-                </Table>
-            </PageContent> */}
-            <PageContent>
+            <PageContent className={CLASS}>
                 <String
-                    value={song.title}
+                    size={'lg'}
+                    alt={'Добавьте название'}
                     bold
-                    onEdit={(title: string) => {
-                        setSong({
-                            ...song,
-                            title,
-                        });
-                    }}
+                    path={'title'}
                 />
-                <String
-                    value={song.author}
-                    onEdit={(author: string) => {
-                        setSong({
-                            ...song,
-                            author,
-                        });
-                    }}
-                />
-                <div
-                    style={{
-                        paddingLeft: 'calc(100vw / 7)',
-                        paddingTop: '24px',
-                    }}
-                >
-                    {song.songBody.map((part, index) => {
-                        if ((part as LyricsPartType).lines !== undefined) {
-                            // TODO: key index
-                            return (
-                                <LyricsPart
-                                    key={`${index}`}
-                                    part={part as LyricsPartType}
-                                    onEdit={(newPart?: LyricsPartType) => {
-                                        setSong({
-                                            ...song,
-                                            songBody:
-                                                index === 0
-                                                    ? [
-                                                          newPart,
-                                                          ...song.songBody.slice(
-                                                              1
-                                                          ),
-                                                      ]
-                                                    : [
-                                                          ...song.songBody.slice(
-                                                              0,
-                                                              index
-                                                          ),
-                                                          newPart,
-                                                          ...song.songBody.slice(
-                                                              index + 1
-                                                          ),
-                                                      ],
-                                        });
-                                    }}
-                                />
-                            );
-                        }
-                        // TODO: key index
-                        return (
-                            <InstrumentalPart
-                                key={`${index}`}
-                                part={part as InstrumentalPartType}
+                <String alt={'Добавьте автора'} path={'author'} />
+                <div className={`${CLASS}__text`}>
+                    {songBody.length ? (
+                        songBody.map((part, index) => (
+                            <SongPart
+                                key={`${index}_${part.title}`}
+                                isStructureVisible={structureVisible}
+                                partsArrayPath={'songBody'}
+                                partIndex={index}
                             />
-                        );
-                    })}
+                        ))
+                    ) : (
+                        <Button
+                            onClick={() => {
+                                dispatch({
+                                    type: 'addArrayValue',
+                                    payload: { path: 'songBody', value: {} },
+                                });
+                                setStructureVisible(true);
+                            }}
+                        >
+                            Добавить часть
+                        </Button>
+                    )}
                 </div>
             </PageContent>
         </>
     );
 };
+
+export const ChordsEditor: React.FC = () => (
+    <EditorContextProvider song={getNewSong()}>
+        <EditorContent />
+    </EditorContextProvider>
+);

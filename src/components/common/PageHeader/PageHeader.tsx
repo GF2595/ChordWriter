@@ -1,14 +1,22 @@
 import React from 'react';
-import { Button, Header, IconButton, IconButtonProps } from 'rsuite';
+import {
+    Button,
+    ButtonProps,
+    Header,
+    IconButton,
+    IconButtonProps,
+} from 'rsuite';
 import './PageHeader.scss';
 
 const CLASS = 'header';
 
-export interface ButtonInfo {
+export interface ButtonInfo
+    extends Pick<
+            IconButtonProps | ButtonProps,
+            'onClick' | 'active' | 'disabled'
+        >,
+        Pick<IconButtonProps, 'icon'> {
     title?: string;
-    icon?: IconButtonProps['icon'];
-    onClick?: () => void;
-    disabled?: boolean;
 }
 
 export interface PageHeaderProps {
@@ -17,10 +25,10 @@ export interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
     return (
-        <Header className={`${CLASS}_container`}>
+        <Header className={CLASS}>
             <div className={`${CLASS}_content`}>
                 {buttons.map((button, index) => {
-                    const { icon, onClick, disabled, title } = button;
+                    const { icon, title } = button;
 
                     return icon ? (
                         // TODO: key index
@@ -28,9 +36,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
                             className={`${CLASS}__button`}
                             key={`btn_${index}`}
                             size={'xs'}
-                            icon={icon}
-                            onClick={onClick}
-                            disabled={disabled}
+                            {...button}
                         >
                             {title}
                         </IconButton>
@@ -40,8 +46,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
                             className={`${CLASS}__button`}
                             key={`btn_${index}`}
                             size={'xs'}
-                            onClick={onClick}
-                            disabled={disabled}
+                            {...button}
                         >
                             {title}
                         </Button>

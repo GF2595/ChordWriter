@@ -18,6 +18,7 @@ module.exports = {
             '@components': path.resolve(__dirname, './src/components'),
             '@stylesheets': path.resolve(__dirname, './src/stylesheets'),
             '@model': path.resolve(__dirname, './src/model'),
+            '@utils': path.resolve(__dirname, './src/utils'),
         },
     },
 };

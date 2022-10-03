@@ -1,9 +1,12 @@
+@import '@stylesheets/common.scss';
+
 .chords-editor {
-    height: 100%;
-    &__letter {
-        &:hover {
-            background-color: rgba(251, 221, 91, 0.5);
-        }
-        cursor: pointer;
+    height: calc(100vh - 84.5px);
+    user-select: none;
+
+    &__text {
+        margin-left: calc(50% - 20rem);
+        padding-top: $spacing-xl;
+        margin-bottom: 75px;
     }
 }

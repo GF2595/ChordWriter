@@ -1,18 +1,21 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import EditIcon from '@rsuite/icons/Edit';
 import CheckIcon from '@rsuite/icons/Check';
 import cn from 'classnames';
 import './String.scss';
 import { Input, InputGroup } from 'rsuite';
+import { useEditorContext } from '../../EditorContext';
+import { get } from 'lodash';
 
 const CLASS = 'string';
 
 export interface StringProps {
     className?: string;
-    value: string;
-    onEdit: (value: string) => void;
+    path: string;
+    alt?: string;
     align?: 'left' | 'center' | 'right';
     bold?: boolean;
+    size?: 'lg' | 'md';
 }
 
 const style: { [name: string]: React.CSSProperties } = {
@@ -23,17 +26,28 @@ const style: { [name: string]: React.CSSProperties } = {
 
 export const String: React.FC<StringProps> = ({
     className,
+    alt,
     align = 'center',
-    value,
-    bold,
-    onEdit,
+    path,
+    bold = false,
+    size = 'md',
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [text, setText] = useState(value);
+
+    const { value, dispatch } = useEditorContext(path);
+
+    const [text, setText] = useState(value || '');
+
+    useEffect(() => {
+        setText(value || '');
+    }, [value, setText]);
+
+    const onEdit = (value: string) =>
+        dispatch({ type: 'setValue', payload: { path, value } });
 
     const containerStyle: React.CSSProperties = {
         fontWeight: bold ? 'bolder' : undefined,
-        fontSize: bold ? 20 : undefined,
+        fontSize: size === 'lg' ? 20 : undefined,
     };
 
     const handleSave = useCallback(() => {
@@ -55,7 +69,7 @@ export const String: React.FC<StringProps> = ({
                         <InputGroup>
                             <Input
                                 value={text}
-                                size={bold ? 'sm' : 'xs'}
+                                size={size === 'md' ? 'sm' : 'xs'}
                                 onChange={(value) => setText(`${value}`)}
                             />
                             <InputGroup.Button onClick={handleSave}>
@@ -65,7 +79,13 @@ export const String: React.FC<StringProps> = ({
                     </>
                 ) : (
                     <>
-                        <span>{text}</span>
+                        <span
+                            className={cn(`${CLASS}__text`, {
+                                [`${CLASS}__text--placeholder`]: !text,
+                            })}
+                        >
+                            {text || alt || 'введите текст'}
+                        </span>
                         <EditIcon
                             className={`${CLASS}__icon`}
                             onClick={() => setIsEditing((value) => !value)}

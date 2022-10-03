@@ -6,7 +6,7 @@ export type ChordType = {
 export type SongLine = {
     firstChordOffset?: boolean;
     lastChordOffset?: boolean;
-    chords?: Array<ChordType | null>; //ChordType[];
+    chords?: Array<ChordType | null>;
     lyrics: string[];
     repeatStart?: number;
     repeatEnd?: boolean;
@@ -26,8 +26,12 @@ export type LyricsPartType = PartType & {
     lines: SongLine[];
 };
 
+export type SongPart = LyricsPartType | InstrumentalPartType;
+
+export type SongBody = SongPart[];
+
 export type Song = {
     title: string;
     author: string;
-    songBody: (LyricsPartType | InstrumentalPartType)[];
+    songBody: SongBody;
 };
