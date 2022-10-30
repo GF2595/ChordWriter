@@ -48,6 +48,8 @@ const EditorContent: React.FC = () => {
             onClick: () => {
                 api.openFile()
                     .then((file) => {
+                        if (!file) return;
+
                         checkSongJsonFormat(file);
 
                         dispatch({
@@ -121,3 +123,4 @@ export const ChordsEditor: React.FC = () => (
         <EditorContent />
     </EditorContextProvider>
 );
+

@@ -128,6 +128,7 @@ const testPart = (
 
 export const checkSongJsonFormat = (song: Song): void => {
     const { title, author, songBody } = song;
+
     if (typeof title !== 'string') throw formatError('Название');
 
     if (typeof author !== 'string') throw formatError('Автор');
