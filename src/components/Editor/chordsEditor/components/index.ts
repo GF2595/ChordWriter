@@ -3,4 +3,6 @@ export * from './Chord';
 export * from './ChordEditPopup';
 export * from './IconButtonCluster';
 export * from './Letter';
-export * from './String';
+export * from './EditableHeader';
+export * from './InlineInput';
+

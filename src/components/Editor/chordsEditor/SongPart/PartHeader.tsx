@@ -2,7 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 import { PartContentType } from './types';
 import './PartHeader.scss';
 import cn from 'classnames';
-import { IconButtonCluster, IconButtonInfo, String } from '../components';
+import {
+    IconButtonCluster,
+    IconButtonInfo,
+    EditableHeader,
+} from '../components';
 import TrashIcon from '@rsuite/icons/Trash';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
@@ -103,8 +107,9 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
             {showControls ? (
                 <div className={`${CLASS}__controls-block`}>
                     <div>
-                        <String
+                        <EditableHeader
                             path={`${partsArrayPath}[${partIndex}].title`}
+                            className={`${CLASS}__editable_title`}
                             bold
                             size={'md'}
                             alt="Без названия"

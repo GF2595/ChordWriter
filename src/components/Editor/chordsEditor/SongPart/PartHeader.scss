@@ -36,4 +36,9 @@
         font-weight: bolder;
         padding-left: $spacing;
     }
+
+    &__editable_title {
+        min-width: 120px;
+    }
 }
+

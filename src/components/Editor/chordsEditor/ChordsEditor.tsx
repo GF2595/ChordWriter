@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { PageContent } from '@components/common/PageContent';
 import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
 import './ChordsEditor.scss';
-import { String } from './components';
 import { SongPart } from './SongPart';
 import { EditorContextProvider, useEditorContext } from './EditorContext';
 import ListIcon from '@rsuite/icons/List';
@@ -10,6 +9,7 @@ import { SongBody } from '@model/song';
 import { Button, Notification, toaster } from 'rsuite';
 import { checkSongJsonFormat, getNewSong } from './utils';
 import { get } from 'lodash';
+import { EditableHeader } from './components';
 
 const CLASS = 'chords-editor';
 
@@ -82,13 +82,13 @@ const EditorContent: React.FC = () => {
         <>
             <PageHeader buttons={buttons} />
             <PageContent className={CLASS}>
-                <String
+                <EditableHeader
                     size={'lg'}
                     alt={'Добавьте название'}
                     bold
                     path={'title'}
                 />
-                <String alt={'Добавьте автора'} path={'author'} />
+                <EditableHeader alt={'Добавьте автора'} path={'author'} />
                 <div className={`${CLASS}__text`}>
                     {songBody.length ? (
                         songBody.map((part, index) => (
