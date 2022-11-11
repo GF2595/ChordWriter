@@ -6,6 +6,7 @@
     flex-direction: row;
     align-items: center;
     height: 30px;
+    margin-bottom: 1px;
 
     &__container:hover {
         .editable-header__icon {
@@ -19,7 +20,7 @@
     }
 
     &__field {
-        margin-left: 19px;
+        margin-left: 20px;
     }
 
     &__text {

@@ -45,8 +45,6 @@ export const InlineInput: React.FC<InlineInputProps> = ({
 
     const iconSide = iconSize ? `${iconSize}px` : undefined;
 
-    console.log(initialValue);
-
     return (
         <div className={className}>
             <span
