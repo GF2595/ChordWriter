@@ -5,6 +5,8 @@ import {
     Header,
     IconButton,
     IconButtonProps,
+    Tooltip,
+    Whisper,
 } from 'rsuite';
 import './PageHeader.scss';
 
@@ -17,6 +19,7 @@ export interface ButtonInfo
         >,
         Pick<IconButtonProps, 'icon'> {
     title?: string;
+    info?: string;
 }
 
 export interface PageHeaderProps {
@@ -27,32 +30,46 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
     return (
         <Header className={CLASS}>
             <div className={`${CLASS}_content`}>
-                {buttons.map((button, index) => {
-                    const { icon, title } = button;
+                {buttons.map(({ title, info, ...button }, index) => {
+                    const { icon } = button;
 
-                    return icon ? (
-                        // TODO: key index
-                        <IconButton
-                            className={`${CLASS}__button`}
-                            key={`btn_${index}`}
-                            size={'xs'}
-                            {...button}
+                    return (
+                        <Whisper
+                            trigger={info ? 'hover' : 'none'}
+                            placement={'bottomStart'}
+                            delayOpen={400}
+                            speaker={
+                                <Tooltip className={`${CLASS}__popover`}>
+                                    {info}
+                                </Tooltip>
+                            }
                         >
-                            {title}
-                        </IconButton>
-                    ) : (
-                        // TODO: key index
-                        <Button
-                            className={`${CLASS}__button`}
-                            key={`btn_${index}`}
-                            size={'xs'}
-                            {...button}
-                        >
-                            {title}
-                        </Button>
+                            {icon ? (
+                                // TODO: key index
+                                <IconButton
+                                    className={`${CLASS}__button`}
+                                    key={`btn_${index}`}
+                                    size={'xs'}
+                                    {...button}
+                                >
+                                    {title}
+                                </IconButton>
+                            ) : (
+                                // TODO: key index
+                                <Button
+                                    className={`${CLASS}__button`}
+                                    key={`btn_${index}`}
+                                    size={'xs'}
+                                    {...button}
+                                >
+                                    {title}
+                                </Button>
+                            )}
+                        </Whisper>
                     );
                 })}
             </div>
         </Header>
     );
 };
+

@@ -36,6 +36,7 @@ const EditorContent: React.FC = () => {
     const buttons: ButtonInfo[] = [
         {
             title: 'Новая',
+            info: 'Открыть редактор новой песни',
             onClick: () => {
                 dispatch({
                     type: 'setValue',
@@ -45,6 +46,7 @@ const EditorContent: React.FC = () => {
         },
         {
             title: 'Открыть',
+            info: 'Открыть *.json файл с сохранённой песней',
             onClick: () => {
                 api.openFile()
                     .then((file) => {
@@ -66,6 +68,7 @@ const EditorContent: React.FC = () => {
         },
         {
             title: 'Сохранить',
+            info: 'Сохранить песню в *.json файл',
             onClick: () => {
                 api.saveToNewFile(JSON.stringify(value, null, 4));
             },
@@ -74,6 +77,7 @@ const EditorContent: React.FC = () => {
             icon: <ListIcon />,
             active: structureVisible,
             title: 'Структура',
+            info: 'Отобразить структуру (отдельные части и их типы) и элементы редактирования структуры песни',
             onClick: () => setStructureVisible((value) => !value),
         },
     ];
