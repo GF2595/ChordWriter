@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
@@ -131,3 +131,4 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
         </>
     );
 };
+
