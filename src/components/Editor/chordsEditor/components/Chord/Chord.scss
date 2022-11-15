@@ -16,4 +16,10 @@
             filter: drop-shadow(0 -2px 2px $text-hover-shadow);
         }
     }
+
+    &__absolute-mod {
+        position: absolute;
+        bottom: 0.25rem;
+    }
 }
+

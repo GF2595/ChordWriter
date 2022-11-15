@@ -9,16 +9,16 @@ const CLASS = 'chord';
 
 export interface ChordProps {
     chord: ChordType;
-    hasPadding?: boolean;
     className?: string;
+    absolutePositionedMod?: boolean;
     onEdit?: (chord: ChordType) => void;
     onRemove?: () => void;
 }
 
 export const Chord: React.FC<ChordProps> = ({
     chord: chordBase,
-    hasPadding = true,
     className,
+    absolutePositionedMod,
     onEdit,
     onRemove,
 }) => {
@@ -30,7 +30,6 @@ export const Chord: React.FC<ChordProps> = ({
         <span
             className={cn(
                 CLASS,
-                { [`${CLASS}-with_padding`]: hasPadding },
                 { [`${CLASS}-clickable`]: !!onEdit && !!onRemove },
                 className
             )}
@@ -40,7 +39,13 @@ export const Chord: React.FC<ChordProps> = ({
             }}
         >
             {chord.length ? chord : ' '}
-            <sub>{mod}</sub>
+            <sub
+                className={cn({
+                    [`${CLASS}__absolute-mod`]: absolutePositionedMod,
+                })}
+            >
+                {mod}
+            </sub>
         </span>
     );
 
@@ -69,3 +74,4 @@ export const Chord: React.FC<ChordProps> = ({
         </Whisper>
     );
 };
+

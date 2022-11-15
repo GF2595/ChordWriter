@@ -120,7 +120,6 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                       />,
                       ...line.map((chord, chordIndex) => [
                           <Chord
-                              hasPadding={false}
                               key={`${lineIndex}_${chordIndex}_${chord}`}
                               chord={chord}
                               onEdit={(chord) =>
@@ -166,3 +165,4 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
         </div>
     );
 };
+

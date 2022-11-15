@@ -1,16 +1,18 @@
 import { SongLine } from '@model/song';
 import React, { useMemo } from 'react';
-import { Chord, Letter } from '../../../components';
+import {
+    IconButtonCluster,
+    IconButtonInfo,
+    Chord,
+    Letter,
+} from '../../../components';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import { onAddChord, onEditChord, onRemoveChord } from './utils';
-import {
-    IconButtonCluster,
-    IconButtonInfo,
-} from '@components/Editor/ChordsEditor/components/IconButtonCluster';
+import cn from 'classnames';
 
 const CLASS = 'lyrics-line';
 
@@ -75,38 +77,54 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                     onAddChord(chord, line, '', 0, -1, onAlterLine)
                 }
             />
-            {lyrics.map((lyric, index) => (
-                <div key={`${lyric}.${index}`} className={`${CLASS}__cell`}>
-                    {chords && !!chords.length && chords[index] ? (
-                        <Chord
-                            className={
-                                index === 0 && line.firstChordOffset
-                                    ? `${CLASS}__chord-offset`
-                                    : undefined
-                            }
-                            chord={chords[index]}
-                            onEdit={(chord) =>
-                                onEditChord(index, chord, line, onAlterLine)
-                            }
-                            onRemove={() =>
-                                onRemoveChord(index, line, onAlterLine)
-                            }
-                        />
-                    ) : (
-                        ' '
-                    )}
+            {lyrics.map((lyric, lyricIndex) => (
+                <div
+                    key={`${lyric}.${lyricIndex}`}
+                    className={`${CLASS}__cell`}
+                >
                     <div className={`${CLASS}__cell_line`}>
                         {lyric.length ? (
-                            lyric
-                                .split('')
-                                .map((letter, letterIndex) => (
+                            lyric.split('').map((letter, letterIndex) => (
+                                <div
+                                    className={`${CLASS}__letter-chord-container`}
+                                >
+                                    {letterIndex === 0 &&
+                                        !!chords?.[lyricIndex] && (
+                                            <Chord
+                                                absolutePositionedMod
+                                                className={cn(
+                                                    `${CLASS}__chord`,
+                                                    {
+                                                        [`${CLASS}__chord--offset`]:
+                                                            lyricIndex === 0 &&
+                                                            line.firstChordOffset,
+                                                    }
+                                                )}
+                                                chord={chords[lyricIndex]}
+                                                onEdit={(chord) =>
+                                                    onEditChord(
+                                                        lyricIndex,
+                                                        chord,
+                                                        line,
+                                                        onAlterLine
+                                                    )
+                                                }
+                                                onRemove={() =>
+                                                    onRemoveChord(
+                                                        lyricIndex,
+                                                        line,
+                                                        onAlterLine
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     <Letter
                                         key={`${letter}.${letterIndex}`}
                                         letter={letter}
                                         hasChord={
                                             letterIndex === 0 &&
                                             chords &&
-                                            !!chords[index]
+                                            !!chords[lyricIndex]
                                         }
                                         onAddChord={(chord) =>
                                             onAddChord(
@@ -114,14 +132,15 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                                 line,
                                                 lyric,
                                                 letterIndex,
-                                                index,
+                                                lyricIndex,
                                                 onAlterLine
                                             )
                                         }
                                     />
-                                ))
+                                </div>
+                            ))
                         ) : (
-                            <div>{index === 0 ? '' : ' '}</div>
+                            <div>{lyricIndex === 0 ? '' : ' '}</div>
                         )}
                     </div>
                 </div>
@@ -142,3 +161,4 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
         </div>
     );
 };
+
