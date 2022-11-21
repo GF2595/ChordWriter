@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
@@ -13,9 +13,9 @@ export interface LyricsPartProps {
     path: string;
 }
 
-const newLine: SongLine = {
-    lyrics: [],
-};
+const newLine: (line?: string) => SongLine = (line) => ({
+    lyrics: !!line ? [line] : [],
+});
 
 export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     const { value: part, dispatch } = useEditorContext(path);
@@ -52,7 +52,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                             type: 'addArrayValue',
                             payload: {
                                 path: `${path}.lines`,
-                                value: newLine,
+                                value: newLine(),
                                 index: index + 1,
                             },
                         })
@@ -62,11 +62,25 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                             type: 'addArrayValue',
                             payload: {
                                 path: `${path}.lines`,
-                                value: newLine,
+                                value: newLine(),
                                 index: index,
                             },
                         })
                     }
+                    onMultilinePaste={(excessLines: string[]) => {
+                        excessLines.forEach((excessLine, excessLineIndex) => {
+                            dispatch({
+                                type: 'addArrayValue',
+                                payload: {
+                                    path: `${path}.lines`,
+                                    value: newLine(excessLine),
+                                    index: index + 1 + excessLineIndex,
+                                },
+                            });
+                        });
+
+                        setEditedLine(index + excessLines.length);
+                    }}
                 />
             ),
         };
@@ -107,7 +121,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                             type: 'addArrayValue',
                             payload: {
                                 path: `${path}.lines`,
-                                value: newLine,
+                                value: newLine(),
                             },
                         });
                         setEditedLine(0);
@@ -117,3 +131,4 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
         </>
     );
 };
+

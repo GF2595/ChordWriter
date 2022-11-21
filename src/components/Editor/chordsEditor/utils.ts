@@ -80,9 +80,9 @@ const testLyricsLinesArray = (lyricsLines: SongLine[], errorHeader: string) => {
     if (!isArray(lyricsLines)) throw formatError(errorHeader);
 
     lyricsLines.forEach((line, index) => {
-        if (!line) throw formatError(`${errorHeader}, строка #${index}`);
+        if (!line) throw formatError(`${errorHeader}, строка #${index + 1}`);
 
-        testLyricsLine(line, `${errorHeader}, строка #${index}`);
+        testLyricsLine(line, `${errorHeader}, строка #${index + 1}`);
     });
 };
 
@@ -128,6 +128,7 @@ const testPart = (
 
 export const checkSongJsonFormat = (song: Song): void => {
     const { title, author, songBody } = song;
+
     if (typeof title !== 'string') throw formatError('Название');
 
     if (typeof author !== 'string') throw formatError('Автор');

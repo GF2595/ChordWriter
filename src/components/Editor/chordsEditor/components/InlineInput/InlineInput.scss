@@ -1,0 +1,24 @@
+.inline-input {
+    border-bottom: 1px solid black;
+    padding-right: 4px;
+    margin-left: 10px;
+    min-width: 30px;
+    display: inline-block;
+    font-style: italic;
+    cursor: text;
+
+    &:empty:before {
+        content: attr(placeholder);
+        color: darkgrey;
+    }
+
+    &--no-margin {
+        margin-left: 0;
+    }
+
+    &:focus-within {
+        border: unset;
+        border-bottom: 1px solid orange;
+    }
+}
+

@@ -1,5 +1,11 @@
 import { Song } from '@model/song';
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useReducer,
+} from 'react';
 import { set, get, isArray } from 'lodash';
 import { insert, removeAt } from '@utils/array';
 
@@ -28,19 +34,42 @@ type Payload = {
     index?: number;
 };
 
-const Actions: { [key: string]: (state: Song, payload: Payload) => Song } = {
-    setValue: (state, { path, value }) => {
+type Action = {
+    type: string;
+    payload: Payload;
+};
+
+const UndoActionsList: Action[] = [];
+
+const Actions: {
+    [key: string]: (
+        state: Song,
+        payload: Payload,
+        omitSavingUndo?: boolean
+    ) => Song;
+} = {
+    setValue: (state, { path, value }, omitSavingUndo) => {
         if (!path) return value as Song;
 
         const newState = {
             ...state,
         };
 
+        const oldValue = get(state, path);
         set(newState, path, value);
+
+        if (!omitSavingUndo)
+            UndoActionsList.push({
+                type: 'setValue',
+                payload: {
+                    path,
+                    value: oldValue,
+                },
+            });
 
         return newState;
     },
-    removeArrayValue: (state, { path, index }) => {
+    removeArrayValue: (state, { path, index }, omitSavingUndo) => {
         const newState = {
             ...state,
         };
@@ -53,9 +82,19 @@ const Actions: { [key: string]: (state: Song, payload: Payload) => Song } = {
 
         set(newState, path, removeAt(arr, index));
 
+        if (!omitSavingUndo)
+            UndoActionsList.push({
+                type: 'addArrayValue',
+                payload: {
+                    path,
+                    index,
+                    value: arr[index],
+                },
+            });
+
         return newState;
     },
-    addArrayValue: (state, { path, value, index }) => {
+    addArrayValue: (state, { path, value, index }, omitSavingUndo) => {
         const newState = {
             ...state,
         };
@@ -74,13 +113,26 @@ const Actions: { [key: string]: (state: Song, payload: Payload) => Song } = {
 
         set(newState, path, arr);
 
+        if (!omitSavingUndo)
+            UndoActionsList.push({
+                type: 'removeArrayValue',
+                payload: {
+                    path,
+                    index: index || arr.length - 1,
+                },
+            });
+
         return newState;
     },
-};
+    undo: (state) => {
+        const action = UndoActionsList.pop();
 
-type Action = {
-    type: keyof typeof Actions;
-    payload: Payload;
+        if (!action) return state;
+
+        const { type, payload } = action;
+
+        return Actions[type](state, payload, true);
+    },
 };
 
 const editorReducer = (state: Song, { type, payload }: Action) => {
@@ -109,6 +161,33 @@ export const EditorContextProvider: React.FC<EditorContextProps> = ({
 }) => {
     const [state, dispatch] = useReducer(editorReducer, initialSong);
 
+    const onUndoClick = useCallback(
+        (event: KeyboardEvent) => {
+            if (
+                event.ctrlKey === true &&
+                event.code === 'KeyZ' &&
+                // TODO: убедиться, что это здравое решение
+                !(event.target as HTMLInputElement).isContentEditable &&
+                (event.target as HTMLElement).nodeName !== 'INPUT' &&
+                (event.target as HTMLElement).nodeName !== 'TEXTAREA'
+            ) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                if (!!UndoActionsList.length)
+                    dispatch({ type: 'undo', payload: {} });
+            }
+        },
+        [dispatch]
+    );
+
+    useEffect(() => {
+        document.addEventListener('keydown', onUndoClick);
+
+        return () => {
+            document.removeEventListener('keydown', onUndoClick);
+        };
+    }, []);
+
     return (
         <editorContext.Provider value={{ value: state, dispatch }}>
             {children}
@@ -128,11 +207,9 @@ export const useEditorContext = (path?: string): State => {
 
         const pathValue = get(value, path);
 
-        // if (!pathValue)
-        // console.warn(`useEditorContext value at ${path} is undefined`);
-
         return { value: pathValue, dispatch };
     }
 
     return context;
 };
+

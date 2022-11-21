@@ -13,6 +13,7 @@ export interface LineProps {
     onCancelLineEdit: () => void;
     onAddLineAfter: () => void;
     onAddLineBefore: () => void;
+    onMultilinePaste: (excessLines: string[]) => void;
 }
 
 export const Line: React.FC<LineProps> = ({
@@ -23,6 +24,7 @@ export const Line: React.FC<LineProps> = ({
     onCancelLineEdit,
     onAddLineAfter,
     onAddLineBefore,
+    onMultilinePaste,
 }) => {
     const { value: line, dispatch } = useEditorContext(path);
 
@@ -51,6 +53,7 @@ export const Line: React.FC<LineProps> = ({
                     });
                 }}
                 onCancel={isLyricsEmpty ? onRemoveLine : onCancelLineEdit}
+                onMultilinePaste={onMultilinePaste}
             />
         );
 

@@ -1,0 +1,55 @@
+@import '@stylesheets/common.scss';
+@import '@stylesheets/colors.scss';
+
+.editable-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    margin-bottom: 1px;
+
+    &__container:hover {
+        .editable-header__icon {
+            visibility: visible;
+            filter: drop-shadow(0 1px 1px $text-hover-shadow);
+        }
+
+        .editable-header__text {
+            filter: drop-shadow(0 1px 1px $text-hover-shadow);
+        }
+    }
+
+    &__field {
+        margin-left: 20px;
+    }
+
+    &__text {
+        margin-left: 20px;
+        cursor: pointer;
+
+        &--placeholder {
+            font-style: italic;
+            color: darkgrey;
+        }
+
+        &--lg {
+            font-size: 20px;
+        }
+
+        &--bold {
+            font-weight: bold;
+        }
+    }
+
+    &__icon {
+        padding-left: $spacing-xs;
+        visibility: hidden;
+        cursor: pointer;
+
+        &--lg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
+

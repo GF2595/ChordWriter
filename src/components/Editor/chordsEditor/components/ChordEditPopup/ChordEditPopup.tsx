@@ -42,6 +42,7 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
                     )}
                     <div className={`${CLASS}__input-container`}>
                         <Input
+                            autoFocus
                             size={'sm'}
                             value={chord}
                             className={`${CLASS}__chord-input`}
@@ -75,7 +76,9 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
                                 [`${CLASS}__icon_enabled`]: !!chord.length,
                             })}
                             fill={!chord.length ? 'lightgray' : undefined}
-                            onClick={() => !!chord.length && onSubmit(fullChord)}
+                            onClick={() =>
+                                !!chord.length && onSubmit(fullChord)
+                            }
                         />
                         {!!onRemove && (
                             <TrashIcon
@@ -93,3 +96,4 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
         );
     }
 );
+

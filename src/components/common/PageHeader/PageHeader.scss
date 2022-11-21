@@ -16,4 +16,9 @@
     &__button {
         margin-left: $spacing-xs;
     }
+
+    &__popover {
+        height: unset !important;
+    }
 }
+
