@@ -13,10 +13,11 @@ export interface EditorContextProps {
     song: Song;
 }
 
-type State = {
-    // TODO: any
-    value: any;
-    dispatch: React.Dispatch<Action>;
+// TODO: any
+type State<T = any> = {
+    value?: T;
+    dispatch: React.Dispatch<Action<T>>;
+    untypedDispatch: React.Dispatch<Action>;
 };
 
 const defaultValue: State = {
@@ -26,17 +27,18 @@ const defaultValue: State = {
         songBody: [],
     },
     dispatch: () => {},
+    untypedDispatch: () => {},
 };
 
-type Payload = {
+type Payload<T = unknown> = {
     path?: string;
-    value?: unknown;
+    value?: T;
     index?: number;
 };
 
-type Action = {
+type Action<T = unknown> = {
     type: string;
-    payload: Payload;
+    payload: Payload<T>;
 };
 
 const UndoActionsList: Action[] = [];
@@ -189,13 +191,15 @@ export const EditorContextProvider: React.FC<EditorContextProps> = ({
     }, []);
 
     return (
-        <editorContext.Provider value={{ value: state, dispatch }}>
+        <editorContext.Provider
+            value={{ value: state, dispatch, untypedDispatch: dispatch }}
+        >
             {children}
         </editorContext.Provider>
     );
 };
 
-export const useEditorContext = (path?: string): State => {
+export function useEditorContext<T = any>(path?: string): State<T> {
     const context = useContext(editorContext);
 
     if (!context) {
@@ -207,9 +211,8 @@ export const useEditorContext = (path?: string): State => {
 
         const pathValue = get(value, path);
 
-        return { value: pathValue, dispatch };
+        return { value: pathValue, dispatch, untypedDispatch: dispatch };
     }
 
     return context;
-};
-
+}
