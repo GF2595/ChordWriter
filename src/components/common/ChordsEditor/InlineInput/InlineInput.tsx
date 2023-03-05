@@ -1,4 +1,4 @@
-import { IconButton } from '@components/common/IconButton';
+import { IconButton } from '@common/IconButton';
 import CheckIcon from '@rsuite/icons/Check';
 import CloseIcon from '@rsuite/icons/Close';
 import React, { CSSProperties, HTMLAttributes } from 'react';

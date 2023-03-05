@@ -10,7 +10,7 @@ import {
     Chord,
     ChordEditPopup,
     IconButtonCluster,
-} from '../components';
+} from '@common/ChordsEditor';
 import { useEditorContext } from '../EditorContext';
 import { ChordType } from '@model/song';
 import './ChordsLine.scss';

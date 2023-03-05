@@ -5,7 +5,7 @@ import {
     IconButtonInfo,
     Chord,
     Letter,
-} from '../../../components';
+} from '@common/ChordsEditor';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';

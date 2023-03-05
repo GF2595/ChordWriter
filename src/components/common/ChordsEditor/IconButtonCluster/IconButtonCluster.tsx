@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps } from '@components/common/IconButton';
+import { IconButton, IconButtonProps } from '@common/IconButton';
 import React from 'react';
 
 export interface IconButtonInfo

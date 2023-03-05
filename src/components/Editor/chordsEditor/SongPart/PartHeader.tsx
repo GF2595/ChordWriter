@@ -6,7 +6,7 @@ import {
     IconButtonCluster,
     IconButtonInfo,
     EditableHeader,
-} from '../components';
+} from '@common/ChordsEditor';
 import TrashIcon from '@rsuite/icons/Trash';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';

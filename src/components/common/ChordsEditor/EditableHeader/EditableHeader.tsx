@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import EditIcon from '@rsuite/icons/Edit';
 import cn from 'classnames';
 import './EditableHeader.scss';
-import { useEditorContext } from '../../EditorContext';
-import { InlineInput } from '../InlineInput';
+import { useEditorContext } from '../../../Editor/ChordsEditor/EditorContext';
+import { InlineInput } from '@common/ChordsEditor/InlineInput';
 
 const CLASS = 'editable-header';
 

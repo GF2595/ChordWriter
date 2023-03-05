@@ -1,5 +1,5 @@
 import React from 'react';
-import { Letter, LetterProps } from './Letter';
+import { Letter, LetterProps } from '@common/ChordsEditor/Letter';
 
 export interface AddChordAreaProps extends Pick<LetterProps, 'onAddChord'> {
     shortArea?: boolean;

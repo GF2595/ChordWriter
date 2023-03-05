@@ -5,7 +5,7 @@ import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
 import { useEditorContext } from '../EditorContext';
 import EditIcon from '@rsuite/icons/Edit';
-import { IconButton } from '@components/common/IconButton';
+import { IconButton } from '@common/IconButton';
 
 const CLASS = 'lyrics-part';
 

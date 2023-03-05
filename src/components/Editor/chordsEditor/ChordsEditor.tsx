@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PageContent } from '@components/common/PageContent';
-import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
+import { PageContent } from '@common/PageContent';
+import { PageHeader, ButtonInfo } from '@common/PageHeader';
 import './ChordsEditor.scss';
 import { SongPart } from './SongPart';
 import { EditorContextProvider, useEditorContext } from './EditorContext';
@@ -9,7 +9,7 @@ import { SongBody } from '@model/song';
 import { Button, Notification, toaster } from 'rsuite';
 import { checkSongJsonFormat, getNewSong } from './utils';
 import { get } from 'lodash';
-import { EditableHeader } from './components';
+import { EditableHeader } from '@common/ChordsEditor';
 
 const CLASS = 'chords-editor';
 

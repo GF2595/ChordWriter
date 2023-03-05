@@ -1,7 +1,7 @@
 import { SongLine } from '@model/song';
 import React, { useCallback, useRef, useState } from 'react';
 import './EditLine.scss';
-import { InlineInput, InlineInputProps } from '../../components';
+import { InlineInput, InlineInputProps } from '@common/ChordsEditor';
 
 export interface EditLineProps {
     line: SongLine | string;
