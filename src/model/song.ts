@@ -3,11 +3,13 @@ export type ChordType = {
     mod: string;
 };
 
+export type LyricChordPair = {
+    lyric: string;
+    chord?: ChordType;
+};
+
 export type SongLine = {
-    firstChordOffset?: boolean;
-    lastChordOffset?: boolean;
-    chords?: Array<ChordType | null>;
-    lyrics: string[];
+    lyrics: LyricChordPair[];
     repeatStart?: number;
     repeatEnd?: boolean;
 };

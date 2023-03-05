@@ -14,7 +14,7 @@ export interface LyricsPartProps {
 }
 
 const newLine: (line?: string) => SongLine = (line) => ({
-    lyrics: !!line ? [line] : [],
+    lyrics: !!line ? [{ lyric: line }] : [],
 });
 
 export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
@@ -35,11 +35,11 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     const tableData: TableProps['data'] = lines.map((line, index) => {
         // TODO: key index
         return {
-            dataKey: line?.lyrics?.[0],
-            hasChords:
-                line.chords &&
-                line.chords.length &&
-                !(line.chords.length === 1 && !line.chords[0]),
+            dataKey:
+                line?.lyrics?.[0]?.lyric ||
+                line?.lyrics?.[1]?.lyric ||
+                `${index}`,
+            hasChords: line.lyrics.some(({ chord }) => !!chord),
             line: (
                 <Line
                     path={`${path}.lines[${index}]`}

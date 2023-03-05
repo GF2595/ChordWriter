@@ -1,147 +1,94 @@
-import { ChordType, SongLine } from '@model/song';
+// import { ChordType, SongLine } from '@model/song';
 
+import { ChordType, LyricChordPair } from '@model/song';
+
+/**
+ * Добавление аккорда в строку
+ * @param lyrics текущая строка
+ * @param onSave метод для сохранения новой строки
+ * @param chord аккорд
+ * @param lyricIndex номер блока строки. При значении -1 аккорд ставится над пустым первым блоком
+ * @param letterIndex номер буквы в блоке
+ */
 export const onAddChord = (
+    lyrics: LyricChordPair[],
+    onSave: (lyrics: LyricChordPair[]) => void,
     chord: ChordType,
-    line: SongLine,
-    lyric: string,
-    letterIndex: number,
-    index: number,
-    onAlterLine: (line: SongLine) => void
+    lyricIndex: number,
+    letterIndex?: number
 ): void => {
-    const { lyrics, chords } = line;
-
-    if (index === -1) {
-        onAlterLine({
-            lyrics: ['', ...lyrics],
-            chords: [chord, ...chords],
-            firstChordOffset: true,
-        });
-
+    if (
+        lyricIndex < -1 ||
+        lyricIndex > lyrics.length + 1 ||
+        (!letterIndex && letterIndex < 0)
+    ) {
+        console.error(`onAddChord wrong index: ${lyricIndex}`);
         return;
     }
 
-    if (chords && index === lyrics.length) {
-        onAlterLine({
-            lyrics: [...lyrics, ''],
-            chords: [...chords, chord],
-        });
+    if (lyricIndex === -1) {
+        if (!lyrics[0].lyric) {
+            console.error('onAddChord duplicate offset chord');
+            return;
+        }
 
+        onSave([{ lyric: '', chord }, ...lyrics]);
         return;
     }
 
-    if (chords && !chords[index] && letterIndex === 0) {
-        onAlterLine({
-            ...line,
-            chords:
-                index === 0
-                    ? [chord, ...chords.slice(1)]
-                    : [
-                          ...chords.slice(0, index),
-                          chord,
-                          ...chords.slice(index + 1),
-                      ],
-        });
-
+    if (lyricIndex === lyrics.length) {
+        onSave([...lyrics, { lyric: '', chord }]);
         return;
     }
 
-    if (!chords && letterIndex === 0) {
-        onAlterLine({
-            ...line,
-            chords: [chord],
-        });
+    const { lyric: currentLyric, chord: currentChord } = lyrics[lyricIndex];
 
-        return;
-    }
-
-    const newLyrics = [
-        ...lyrics.slice(0, index),
-        lyric.slice(0, letterIndex),
-        lyric.slice(letterIndex),
-        ...lyrics.slice(index + 1),
-    ];
-
-    if (chords) {
-        onAlterLine({
-            chords: [
-                ...chords.slice(0, index),
-                chords[index],
-                chord,
-                ...chords.slice(index + 1),
-            ],
-            lyrics: newLyrics,
-        });
-    } else {
-        onAlterLine({
-            chords: [undefined, chord],
-            lyrics: newLyrics,
-        });
-    }
+    onSave([
+        ...lyrics.slice(0, lyricIndex),
+        { lyric: currentLyric.slice(0, letterIndex), chord: currentChord },
+        { lyric: currentLyric.slice(letterIndex), chord },
+        ...lyrics.slice(lyricIndex + 1),
+    ]);
 };
 
-export const onEditChord = (
-    index: number,
-    chord: ChordType,
-    line: SongLine,
-    onAlterLine: (line: SongLine) => void
-): void => {
-    onAlterLine({
-        ...line,
-        chords: [
-            ...line.chords.slice(0, index),
-            chord,
-            ...line.chords.slice(index + 1),
-        ],
-    });
-};
-
+/**
+ * Удаление аккорда из строки
+ * @param lyrics текущая строка
+ * @param onSave метод для сохранения новой строки
+ * @param lyricIndex номер блока строки
+ */
 export const onRemoveChord = (
-    index: number,
-    line: SongLine,
-    onAlterLine: (line: SongLine) => void
+    lyrics: LyricChordPair[],
+    onSave: (lyrics: LyricChordPair[]) => void,
+    lyricIndex: number
 ): void => {
-    const { chords, lyrics } = line;
-
-    if (index === 0 && line.firstChordOffset) {
-        onAlterLine({
-            ...line,
-            lyrics: lyrics.slice(1),
-            chords: chords.slice(1),
-            firstChordOffset: false,
-        });
+    if (lyricIndex < 0 || lyricIndex >= lyrics.length) {
+        console.error(`onRemoveChord wrong index: ${lyricIndex}`);
         return;
     }
 
-    if (index === 0) {
-        onAlterLine({
-            ...line,
-            chords:
-                chords.length === 1
-                    ? undefined
-                    : [undefined, ...chords.slice(1)],
-        });
+    const { lyric } = lyrics[lyricIndex];
 
+    if (!lyric) {
+        onSave([
+            ...lyrics.slice(0, lyricIndex),
+            ...lyrics.slice(lyricIndex + 1),
+        ]);
         return;
     }
 
-    if (index === 1 && line.firstChordOffset) {
-        onAlterLine({
-            ...line,
-            chords: [chords[0], undefined, ...chords.slice(2)],
-        });
-
+    if (lyricIndex === 0) {
+        onSave([{ lyric }, ...lyrics.slice(1)]);
         return;
     }
 
-    onAlterLine({
-        chords:
-            chords.length === 2 && !chords[0]
-                ? undefined
-                : [...chords.slice(0, index), ...chords.slice(index + 1)],
-        lyrics: [
-            ...lyrics.slice(0, index - 1),
-            `${lyrics[index - 1]}${lyrics[index]}`,
-            ...lyrics.slice(index + 1),
-        ],
-    });
+    const { lyric: previousLyric, chord: previousChord } =
+        lyrics[lyricIndex - 1];
+
+    onSave([
+        ...lyrics.slice(0, lyricIndex - 1),
+        { lyric: `${previousLyric}${lyric}`, chord: previousChord },
+        ...lyrics.slice(lyricIndex + 1),
+    ]);
 };
+

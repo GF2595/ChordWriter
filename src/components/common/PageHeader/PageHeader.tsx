@@ -35,6 +35,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ buttons }) => {
 
                     return (
                         <Whisper
+                            key={`button.${title}.${index}`}
                             trigger={info ? 'hover' : 'none'}
                             placement={'bottomStart'}
                             delayOpen={400}

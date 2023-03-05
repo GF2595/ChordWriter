@@ -1,11 +1,12 @@
 import {
     ChordType,
     InstrumentalPartType,
+    LyricChordPair,
     LyricsPartType,
     Song,
     SongLine,
 } from '@model/song';
-import { has, isArray } from 'lodash';
+import { isArray } from 'lodash';
 
 export const getNewSong = (): Song => ({
     title: '',
@@ -17,6 +18,8 @@ const formatError = (error: string) =>
     `Ошибка чтения файла, ошибка формата: ${error}`;
 
 const testChord = (chord: ChordType, errorHeader: string) => {
+    if (chord === null) return;
+
     if (!chord) throw formatError(errorHeader);
 
     const { chord: chordLetter, mod } = chord;
@@ -28,25 +31,34 @@ const testChord = (chord: ChordType, errorHeader: string) => {
         throw formatError(`${errorHeader}, неверный формат поля mod`);
 };
 
+const testLyrics = (lyrics: LyricChordPair[], errorHeader: string) => {
+    if (!isArray(lyrics))
+        throw formatError(`${errorHeader}, неверный формат поля lyrics`);
+
+    const lyricsErrorHeader = `${errorHeader}, поле lyrics`;
+
+    lyrics.forEach((lyricBlock, index) => {
+        if (!lyricBlock)
+            throw formatError(
+                `${lyricsErrorHeader}, неверный формат блока #${index + 1}`
+            );
+
+        const { lyric, chord } = lyricBlock;
+
+        if (typeof lyric !== 'string')
+            throw `${lyricsErrorHeader}, блок #${
+                index + 1
+            }, неверный формат поля lyric`;
+
+        testChord(
+            chord,
+            `${lyricsErrorHeader}, блок #${index + 1}, поле chord`
+        );
+    });
+};
+
 const testLyricsLine = (line: SongLine, errorHeader: string) => {
-    const {
-        firstChordOffset,
-        lastChordOffset,
-        chords,
-        lyrics,
-        repeatEnd,
-        repeatStart,
-    } = line;
-
-    if (firstChordOffset && typeof firstChordOffset !== 'boolean')
-        throw formatError(
-            `${errorHeader}, неверный формат поля firstChordOffset`
-        );
-
-    if (lastChordOffset && typeof lastChordOffset !== 'boolean')
-        throw formatError(
-            `${errorHeader}, неверный формат поля lastChordOffset`
-        );
+    const { lyrics, repeatEnd, repeatStart } = line;
 
     if (repeatStart && typeof repeatStart !== 'number')
         throw formatError(`${errorHeader}, неверный формат поля repeatStart`);
@@ -54,26 +66,10 @@ const testLyricsLine = (line: SongLine, errorHeader: string) => {
     if (repeatEnd && typeof repeatEnd !== 'boolean')
         throw formatError(`${errorHeader}, неверный формат поля repeatEnd`);
 
-    if (!isArray(lyrics) || lyrics.some((lyric) => typeof lyric !== 'string'))
-        throw formatError(`${errorHeader}, неверный формат поля lyrics`);
+    testLyrics(lyrics, errorHeader);
 
-    if (!!chords) {
-        if (!isArray(chords))
-            throw formatError(`${errorHeader}, неверный формат поля chords`);
-
-        if (!!chords && chords.length !== lyrics.length)
-            throw formatError(
-                `${errorHeader}, длина полей lyrics и chords не совпадает`
-            );
-
-        chords.forEach((chord, index) => {
-            if (!chord && chord !== null)
-                throw formatError(`${errorHeader}, аккорд #${index + 1}`);
-
-            if (chord !== null)
-                testChord(chord, `${errorHeader}, аккорд #${index + 1}`);
-        });
-    }
+    // if (!isArray(lyrics) || lyrics.some((lyric) => typeof lyric !== 'string'))
+    //     throw formatError(`${errorHeader}, неверный формат поля lyrics`);
 };
 
 const testLyricsLinesArray = (lyricsLines: SongLine[], errorHeader: string) => {

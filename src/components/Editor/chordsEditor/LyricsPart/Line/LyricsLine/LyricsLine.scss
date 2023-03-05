@@ -33,6 +33,10 @@
         position: absolute;
         bottom: 1rem;
 
+        &--tail {
+            position: relative;
+        }
+
         &--offset {
             left: -10px;
         }

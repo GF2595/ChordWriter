@@ -3,7 +3,6 @@ import React from 'react';
 import { useEditorContext } from '../../EditorContext';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
-import { get } from 'lodash';
 
 export interface LineProps {
     path: string;
@@ -45,7 +44,7 @@ export const Line: React.FC<LineProps> = ({
                             value: {
                                 ...line,
                                 chords: undefined,
-                                lyrics: [text],
+                                lyrics: [{ lyric: text }],
                                 lastChordOffset: undefined,
                                 firstChordOffset: undefined,
                             },
@@ -59,12 +58,9 @@ export const Line: React.FC<LineProps> = ({
 
     return (
         <LyricsLine
-            line={line}
+            path={path}
             onToggleEdit={onSetLineEdit}
             onRemove={onRemoveLine}
-            onAlterLine={(line: SongLine) =>
-                dispatch({ type: 'setValue', payload: { path, value: line } })
-            }
             onAddLineAfter={onAddLineAfter}
             onAddLineBefore={onAddLineBefore}
         />
