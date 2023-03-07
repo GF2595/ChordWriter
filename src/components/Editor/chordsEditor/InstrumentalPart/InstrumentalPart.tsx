@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import { InstrumentalPartType } from '@model/song';
 import { ChordsLine } from './ChordsLine';
 

@@ -11,7 +11,7 @@ import {
     ChordEditPopup,
     IconButtonCluster,
 } from '@common/ChordsEditor';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import { ChordType } from '@model/song';
 import './ChordsLine.scss';
 

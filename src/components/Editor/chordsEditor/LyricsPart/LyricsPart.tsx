@@ -3,7 +3,7 @@ import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import EditIcon from '@rsuite/icons/Edit';
 import { IconButton } from '@common/IconButton';
 

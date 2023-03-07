@@ -18,9 +18,7 @@ const formatError = (error: string) =>
     `Ошибка чтения файла, ошибка формата: ${error}`;
 
 const testChord = (chord: ChordType, errorHeader: string) => {
-    if (chord === null) return;
-
-    if (!chord) throw formatError(errorHeader);
+    if (!chord) return;
 
     const { chord: chordLetter, mod } = chord;
 
@@ -45,6 +43,11 @@ const testLyrics = (lyrics: LyricChordPair[], errorHeader: string) => {
 
         const { lyric, chord } = lyricBlock;
 
+        if (!lyric && !chord)
+            throw formatError(
+                `${lyricsErrorHeader}, неверный формат блока #${index + 1}`
+            );
+
         if (typeof lyric !== 'string')
             throw `${lyricsErrorHeader}, блок #${
                 index + 1
@@ -67,9 +70,6 @@ const testLyricsLine = (line: SongLine, errorHeader: string) => {
         throw formatError(`${errorHeader}, неверный формат поля repeatEnd`);
 
     testLyrics(lyrics, errorHeader);
-
-    // if (!isArray(lyrics) || lyrics.some((lyric) => typeof lyric !== 'string'))
-    //     throw formatError(`${errorHeader}, неверный формат поля lyrics`);
 };
 
 const testLyricsLinesArray = (lyricsLines: SongLine[], errorHeader: string) => {

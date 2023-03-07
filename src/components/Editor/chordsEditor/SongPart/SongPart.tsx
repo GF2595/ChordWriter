@@ -4,7 +4,7 @@ import {
     SongPart as SongPartType,
 } from '@model/song';
 import React, { useCallback } from 'react';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
 import { PartHeader } from './PartHeader';

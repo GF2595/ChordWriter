@@ -11,7 +11,7 @@ import TrashIcon from '@rsuite/icons/Trash';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import { InputPicker } from 'rsuite';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 
 const CLASS = 'part-header';
 

@@ -3,7 +3,7 @@ import { PageContent } from '@common/PageContent';
 import { PageHeader, ButtonInfo } from '@common/PageHeader';
 import './ChordsEditor.scss';
 import { SongPart } from './SongPart';
-import { EditorContextProvider, useEditorContext } from './EditorContext';
+import { EditorContextProvider, useEditorContext } from '@components/EditorContext';
 import ListIcon from '@rsuite/icons/List';
 import { SongBody } from '@model/song';
 import { Button, Notification, toaster } from 'rsuite';

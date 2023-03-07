@@ -12,7 +12,7 @@ import './LyricsLine.scss';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import cn from 'classnames';
-import { useEditorContext } from '@components/Editor/ChordsEditor/EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import * as utils from './utils';
 
 const CLASS = 'lyrics-line';

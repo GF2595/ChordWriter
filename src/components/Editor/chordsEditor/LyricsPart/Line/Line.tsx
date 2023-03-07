@@ -1,6 +1,6 @@
 import { LyricsPartType, SongLine } from '@model/song';
 import React from 'react';
-import { useEditorContext } from '../../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
 
