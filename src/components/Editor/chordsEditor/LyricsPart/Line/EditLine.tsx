@@ -21,7 +21,7 @@ export const EditLine: React.FC<EditLineProps> = ({
     onMultilinePaste,
 }) => {
     const originalText = useRef(
-        typeof line === 'string' ? line : line.lyrics.join('')
+        typeof line === 'string' ? line : line.lyrics.map(block => block.lyric).join('')
     );
     const [text, setText] = useState(originalText.current);
 
