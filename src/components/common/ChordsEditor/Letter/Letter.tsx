@@ -20,6 +20,7 @@ export const Letter: React.FC<LetterProps> = ({
 }) => {
     const triggerRef = useRef();
     const isWhitespace = letter !== null && letter.trim() === '';
+    const isEmpty = letter === null;
 
     return (
         <Whisper
@@ -46,12 +47,12 @@ export const Letter: React.FC<LetterProps> = ({
             <span
                 className={cn(
                     CLASS,
-                    { [`${CLASS}-clickable`]: !hasChord && !isWhitespace },
-                    { [`${CLASS}-whitespace_clickable`]: isWhitespace },
-                    { [`${CLASS}-empty`]: letter === null }
+                    { [`${CLASS}-clickable`]: !hasChord && !(isWhitespace || isEmpty) },
+                    { [`${CLASS}-whitespace_clickable`]: isWhitespace || isEmpty },
+                    { [`${CLASS}-empty`]: isEmpty }
                 )}
             >
-                {letter}
+                {letter === null ? '  ' : letter}
             </span>
         </Whisper>
     );

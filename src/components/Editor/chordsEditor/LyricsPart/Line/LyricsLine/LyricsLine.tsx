@@ -120,7 +120,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
             {!!lyrics.length && (
                 <div
                     key={'offset'}
-                    className={`${CLASS}__letter-chord-container`}
+                    className={`${CLASS}__offset-container`}
                 >
                     {firstChordOffset && (
                         <Chord
@@ -157,7 +157,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                               onEdit={(chord) =>
                                                   onEditChord(chord, lyricIndex)
                                               }
-                                              onRemove={() =>
+                                              // [TODO]: Рефакторинг
+                                              onRemove={(firstChordOffset && lyricIndex === 1) ? () => onEditChord(null, lyricIndex) : () =>
                                                   onRemoveChord(lyricIndex)
                                               }
                                           />
@@ -168,7 +169,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                           hasChord={
                                               letterIndex === 0 && !!chord
                                           }
-                                          onAddChord={(chord) =>
+                                          // [TODO]: Рефакторинг
+                                          onAddChord={!chord ? (chord) => onEditChord(chord, lyricIndex) : (chord) => 
                                               onAddChord(
                                                   chord,
                                                   lyricIndex,

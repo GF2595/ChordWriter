@@ -42,6 +42,11 @@
         }
     }
 
+    &__offset-container {
+        position: relative;
+        display: flex;
+    }
+
     &__letter-chord-container {
         position: relative;
         display: flex;
