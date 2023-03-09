@@ -47,8 +47,14 @@ export const Letter: React.FC<LetterProps> = ({
             <span
                 className={cn(
                     CLASS,
-                    { [`${CLASS}-clickable`]: !hasChord && !(isWhitespace || isEmpty) },
-                    { [`${CLASS}-whitespace_clickable`]: isWhitespace || isEmpty },
+                    {
+                        [`${CLASS}-clickable`]:
+                            !hasChord && !(isWhitespace || isEmpty),
+                    },
+                    {
+                        [`${CLASS}-whitespace_clickable`]:
+                            isWhitespace || isEmpty,
+                    },
                     { [`${CLASS}-empty`]: isEmpty }
                 )}
             >
@@ -57,3 +63,4 @@ export const Letter: React.FC<LetterProps> = ({
         </Whisper>
     );
 };
+

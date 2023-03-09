@@ -97,3 +97,4 @@ export const ChordEditPopup = forwardRef<HTMLDivElement, ChordEditPopupProps>(
     }
 );
 
+ChordEditPopup.displayName = 'ChordEditPopup';

@@ -6,7 +6,7 @@ import React, {
     useEffect,
     useReducer,
 } from 'react';
-import { set, get, isArray } from 'lodash';
+import { set, get, isArray, noop } from 'lodash';
 import { insert, removeAt } from '@utils/array';
 
 export interface EditorContextProps {
@@ -26,8 +26,8 @@ const defaultValue: State = {
         author: '',
         songBody: [],
     },
-    dispatch: () => {},
-    untypedDispatch: () => {},
+    dispatch: noop,
+    untypedDispatch: noop,
 };
 
 type Payload<T = unknown> = {
@@ -216,3 +216,4 @@ export function useEditorContext<T = any>(path?: string): State<T> {
 
     return context;
 }
+

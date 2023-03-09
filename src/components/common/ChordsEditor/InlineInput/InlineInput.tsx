@@ -26,7 +26,6 @@ export interface InlineInputProps
 
 export const InlineInput: React.FC<InlineInputProps> = ({
     initialValue,
-    canSaveEmpty,
     onSave,
     onCancel,
     className,

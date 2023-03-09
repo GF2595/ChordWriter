@@ -20,7 +20,7 @@ const newLine: (line?: string) => SongLine = (line) => ({
 export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     const { value: part, dispatch } = useEditorContext(path);
 
-    const { lines, title } = part as LyricsPartType;
+    const { lines } = part as LyricsPartType;
     const [editedLine, setEditedLine] = useState(-1);
 
     const onRemoveLine = (index: number) => {

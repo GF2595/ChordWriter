@@ -82,6 +82,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
             {!line.length
                 ? [
                       <Whisper
+                          key={'first chord add area'}
                           placement={'top'}
                           trigger={'click'}
                           speaker={

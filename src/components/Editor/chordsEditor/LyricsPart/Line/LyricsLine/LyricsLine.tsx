@@ -118,10 +118,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     return (
         <div className={CLASS}>
             {!!lyrics.length && (
-                <div
-                    key={'offset'}
-                    className={`${CLASS}__offset-container`}
-                >
+                <div key={'offset'} className={`${CLASS}__offset-container`}>
                     {firstChordOffset && (
                         <Chord
                             absolutePositionedMod
@@ -147,6 +144,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                         {lyric.length
                             ? lyric.split('').map((letter, letterIndex) => (
                                   <div
+                                      key={`${letter}.${letterIndex}`}
                                       className={`${CLASS}__letter-chord-container`}
                                   >
                                       {letterIndex === 0 && !!chord && (
@@ -158,8 +156,18 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                                   onEditChord(chord, lyricIndex)
                                               }
                                               // [TODO]: Рефакторинг
-                                              onRemove={(firstChordOffset && lyricIndex === 1) ? () => onEditChord(null, lyricIndex) : () =>
-                                                  onRemoveChord(lyricIndex)
+                                              onRemove={
+                                                  firstChordOffset &&
+                                                  lyricIndex === 1
+                                                      ? () =>
+                                                            onEditChord(
+                                                                null,
+                                                                lyricIndex
+                                                            )
+                                                      : () =>
+                                                            onRemoveChord(
+                                                                lyricIndex
+                                                            )
                                               }
                                           />
                                       )}
@@ -170,12 +178,19 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                               letterIndex === 0 && !!chord
                                           }
                                           // [TODO]: Рефакторинг
-                                          onAddChord={!chord ? (chord) => onEditChord(chord, lyricIndex) : (chord) => 
-                                              onAddChord(
-                                                  chord,
-                                                  lyricIndex,
-                                                  letterIndex
-                                              )
+                                          onAddChord={
+                                              !chord
+                                                  ? (chord) =>
+                                                        onEditChord(
+                                                            chord,
+                                                            lyricIndex
+                                                        )
+                                                  : (chord) =>
+                                                        onAddChord(
+                                                            chord,
+                                                            lyricIndex,
+                                                            letterIndex
+                                                        )
                                           }
                                       />
                                   </div>
@@ -216,3 +231,4 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
         </div>
     );
 };
+

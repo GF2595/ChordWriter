@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PartContentType } from './types';
 import './PartHeader.scss';
 import cn from 'classnames';
@@ -140,3 +140,4 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
         </div>
     );
 };
+
