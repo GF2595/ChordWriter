@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import { EditableHeader } from '@common/ChordsEditor';
 import { PageContent } from '@common/PageContent';
-import { PageHeader, ButtonInfo } from '@common/PageHeader';
+import { ElementInfo, PageHeader } from '@common/PageHeader';
+import {
+    EditorContextProvider,
+    useEditorContext,
+} from '@components/EditorContext';
+import { SongBody } from '@model/song';
+import ListIcon from '@rsuite/icons/List';
+import { get } from 'lodash';
+import React, { useMemo, useState } from 'react';
+import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { SongPart } from './SongPart';
-import { EditorContextProvider, useEditorContext } from '@components/EditorContext';
-import ListIcon from '@rsuite/icons/List';
-import { SongBody } from '@model/song';
-import { Button, Notification, toaster } from 'rsuite';
 import { checkSongJsonFormat, getNewSong } from './utils';
-import { get } from 'lodash';
-import { EditableHeader } from '@common/ChordsEditor';
 
 const CLASS = 'chords-editor';
 
@@ -33,58 +36,75 @@ const EditorContent: React.FC = () => {
 
     const songBody = get(value, 'songBody') as SongBody;
 
-    const buttons: ButtonInfo[] = [
-        {
-            title: 'Новая',
-            info: 'Открыть редактор новой песни',
-            onClick: () => {
-                dispatch({
-                    type: 'setValue',
-                    payload: { value: getNewSong() },
-                });
-            },
-        },
-        {
-            title: 'Открыть',
-            info: 'Открыть *.json файл с сохранённой песней',
-            onClick: () => {
-                api.openFile()
-                    .then((file) => {
-                        if (!file) return;
-
-                        checkSongJsonFormat(file);
-
-                        dispatch({
-                            type: 'setValue',
-                            payload: { value: file },
-                        });
-                    })
-                    .catch((error) => {
-                        toaster.push(message(error), {
-                            placement: 'bottomEnd',
-                        });
+    const buttons: ElementInfo[] = useMemo(
+        () => [
+            {
+                title: 'Новая',
+                info: 'Открыть редактор новой песни',
+                onClick: () => {
+                    dispatch({
+                        type: 'setValue',
+                        payload: { value: getNewSong() },
                     });
+                },
             },
-        },
-        {
-            title: 'Сохранить',
-            info: 'Сохранить песню в *.json файл',
-            onClick: () => {
-                api.saveToNewFile(JSON.stringify(value, null, 4));
+            {
+                title: 'Открыть',
+                info: 'Открыть *.json файл с сохранённой песней',
+                onClick: () => {
+                    api.openFile()
+                        .then((file) => {
+                            if (!file) return;
+
+                            checkSongJsonFormat(file);
+
+                            dispatch({
+                                type: 'setValue',
+                                payload: { value: file },
+                            });
+                        })
+                        .catch((error) => {
+                            toaster.push(message(error), {
+                                placement: 'bottomEnd',
+                            });
+                        });
+                },
             },
-        },
-        {
-            icon: <ListIcon />,
-            active: structureVisible,
-            title: 'Структура',
-            info: 'Отобразить структуру (отдельные части и их типы) и элементы редактирования структуры песни',
-            onClick: () => setStructureVisible((value) => !value),
-        },
-    ];
+            {
+                title: 'Сохранить',
+                buttons: [
+                    {
+                        title: 'В файл...',
+                        info: 'Сохранить песню в *.json файл',
+                        onClick: () => {
+                            api.saveToNewFile(JSON.stringify(value, null, 4));
+                        },
+                    },
+                    'Divider',
+                    {
+                        title: 'В моноширинную запись',
+                        disabled: true,
+                    },
+                    {
+                        title: 'В PDF-файл...',
+                        disabled: true,
+                    },
+                ],
+            },
+            {
+                icon: <ListIcon />,
+                active: structureVisible,
+                title: 'Структура',
+                info: 'Отобразить структуру (отдельные части и их типы) и элементы редактирования структуры песни',
+                onClick: () => setStructureVisible((value) => !value),
+            },
+        ],
+        [api, dispatch, structureVisible, value]
+    );
 
     return (
         <>
-            <PageHeader buttons={buttons} />
+            <PageHeader elements={buttons} />
             <PageContent className={CLASS}>
                 <EditableHeader
                     size={'lg'}

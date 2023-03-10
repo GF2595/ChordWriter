@@ -1,7 +1,7 @@
 import { IconButton } from '@common/IconButton';
 import CheckIcon from '@rsuite/icons/Check';
 import CloseIcon from '@rsuite/icons/Close';
-import React, { CSSProperties, HTMLAttributes } from 'react';
+import React, { CSSProperties, HTMLAttributes, useEffect, useRef } from 'react';
 import './InlineInput.scss';
 
 const CLASS = 'inline-input';
@@ -44,9 +44,14 @@ export const InlineInput: React.FC<InlineInputProps> = ({
 
     const iconSide = iconSize ? `${iconSize}px` : undefined;
 
+    const inputRef = useRef<HTMLSpanElement>();
+
+    useEffect(() => inputRef.current.focus(), []);
+
     return (
         <div className={className}>
             <span
+                ref={inputRef}
                 style={fieldStyle}
                 role="textbox"
                 contentEditable
