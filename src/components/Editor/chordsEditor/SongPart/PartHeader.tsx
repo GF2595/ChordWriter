@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react';
-import { PartContentType } from './types';
-import './PartHeader.scss';
-import cn from 'classnames';
 import {
+    EditableHeader,
     IconButtonCluster,
     IconButtonInfo,
-    EditableHeader,
 } from '@common/ChordsEditor';
-import TrashIcon from '@rsuite/icons/Trash';
+import { useEditorContext } from '@components/EditorContext';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
+import TrashIcon from '@rsuite/icons/Trash';
+import cn from 'classnames';
+import React, { useMemo } from 'react';
 import { InputPicker } from 'rsuite';
-import { useEditorContext } from '@components/EditorContext';
+import './PartHeader.scss';
+import { PartContentType } from './types';
 
 const CLASS = 'part-header';
 
@@ -94,7 +94,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                     }),
             },
         ],
-        [dispatch]
+        [dispatch, partIndex, partsArrayPath]
     );
 
     return (

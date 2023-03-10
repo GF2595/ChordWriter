@@ -16,8 +16,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ elements }) => {
             <div className={`${CLASS}_content`}>
                 {elements.map((element, index) => (
                     <HeaderElement
-                        element={element}
                         key={`${index}.${element.title}`}
+                        {...element}
                     />
                 ))}
             </div>

@@ -12,18 +12,19 @@ import { ElementInfo } from './types';
 
 const CLASS = 'header-element';
 
-export interface HeaderElementProps {
-    element: ElementInfo;
-}
-
-export const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
+export const HeaderElement: React.FC<ElementInfo> = ({ title, ...element }) => {
     if ('buttons' in element) {
         const { buttons } = element;
 
         return (
-            // Видимо, разработчики потеряли size при типизации
-            // @ts-ignore
-            <Dropdown className={`${CLASS}__button`} size={'xs'} {...element}>
+            <Dropdown
+                className={`${CLASS}__button`}
+                // Видимо, разработчики потеряли size при типизации
+                // @ts-ignore
+                size={'xs'}
+                title={title}
+                {...element}
+            >
                 {buttons.map((menuElement, index) => {
                     if (menuElement === 'Divider')
                         return <Divider className={`${CLASS}__divider`} />;
@@ -52,7 +53,7 @@ export const HeaderElement: React.FC<HeaderElementProps> = ({ element }) => {
         );
     }
 
-    const { icon, info, title } = element;
+    const { icon, info } = element;
 
     return (
         <Whisper

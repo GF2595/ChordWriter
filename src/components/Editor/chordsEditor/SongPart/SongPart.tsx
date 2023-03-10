@@ -1,17 +1,17 @@
+import { useEditorContext } from '@components/EditorContext';
 import {
     InstrumentalPartType,
     LyricsPartType,
     SongPart as SongPartType,
 } from '@model/song';
+import cn from 'classnames';
 import React, { useCallback } from 'react';
-import { useEditorContext } from '@components/EditorContext';
+import { Divider } from 'rsuite';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
 import { PartHeader } from './PartHeader';
 import './SongPart.scss';
 import { PartContentType } from './types';
-import cn from 'classnames';
-import { Divider } from 'rsuite';
 
 const CLASS = 'song-part';
 
@@ -29,6 +29,35 @@ export const SongPart: React.FC<SongPartProps> = ({
     const path = `${partsArrayPath}[${partIndex}]`;
 
     const { value: part, dispatch } = useEditorContext(path);
+
+    const onSetType = useCallback(
+        (type: PartContentType | null) => {
+            let newPart: SongPartType = {
+                title: part?.title,
+            };
+
+            if (type === 'chords')
+                newPart = {
+                    ...newPart,
+                    chords: [[]],
+                };
+
+            if (type === 'lyrics')
+                newPart = {
+                    ...newPart,
+                    lines: [],
+                };
+
+            if (type === 'tab')
+                newPart = {
+                    ...newPart,
+                    tabs: '',
+                };
+
+            dispatch({ type: 'setValue', payload: { path, value: newPart } });
+        },
+        [dispatch, part.title, path]
+    );
 
     if (!part) return null;
 
@@ -49,32 +78,6 @@ export const SongPart: React.FC<SongPartProps> = ({
         if (!!chords) type = 'chords';
         else type = 'tab';
     }
-
-    const onSetType = useCallback((type: PartContentType | null) => {
-        let newPart: SongPartType = {
-            title: part.title,
-        };
-
-        if (type === 'chords')
-            newPart = {
-                ...newPart,
-                chords: [[]],
-            };
-
-        if (type === 'lyrics')
-            newPart = {
-                ...newPart,
-                lines: [],
-            };
-
-        if (type === 'tab')
-            newPart = {
-                ...newPart,
-                tabs: '',
-            };
-
-        dispatch({ type: 'setValue', payload: { path, value: newPart } });
-    }, []);
 
     return (
         <div className={CLASS}>

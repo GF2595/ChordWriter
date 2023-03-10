@@ -1,4 +1,6 @@
 import { Song } from '@model/song';
+import { insert, removeAt } from '@utils/array';
+import { get, isArray, noop, set } from 'lodash';
 import React, {
     createContext,
     useCallback,
@@ -6,8 +8,6 @@ import React, {
     useEffect,
     useReducer,
 } from 'react';
-import { set, get, isArray, noop } from 'lodash';
-import { insert, removeAt } from '@utils/array';
 
 export interface EditorContextProps {
     song: Song;
@@ -188,7 +188,7 @@ export const EditorContextProvider: React.FC<EditorContextProps> = ({
         return () => {
             document.removeEventListener('keydown', onUndoClick);
         };
-    }, []);
+    }, [onUndoClick]);
 
     return (
         <editorContext.Provider

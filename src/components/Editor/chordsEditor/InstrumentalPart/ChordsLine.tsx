@@ -1,10 +1,3 @@
-import React, { useMemo } from 'react';
-import cn from 'classnames';
-import EditIcon from '@rsuite/icons/Edit';
-import { Whisper } from 'rsuite';
-import TrashIcon from '@rsuite/icons/Trash';
-import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
-import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import {
     AddChordArea,
     Chord,
@@ -13,6 +6,13 @@ import {
 } from '@common/ChordsEditor';
 import { useEditorContext } from '@components/EditorContext';
 import { ChordType } from '@model/song';
+import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
+import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
+import EditIcon from '@rsuite/icons/Edit';
+import TrashIcon from '@rsuite/icons/Trash';
+import cn from 'classnames';
+import React, { useMemo } from 'react';
+import { Whisper } from 'rsuite';
 import './ChordsLine.scss';
 
 const CLASS = 'chords-line';
@@ -68,7 +68,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                     }),
             },
         ],
-        [dispatch]
+        [dispatch, lineArrayPath, lineIndex]
     );
 
     const line = value as ChordType[];
