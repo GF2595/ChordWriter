@@ -43,8 +43,8 @@ export const EditableHeader: React.FC<EditableHeaderProps> = ({
     const handleSave = useCallback(() => {
         setIsEditing((value) => !value);
 
-        dispatch({ type: 'setValue', payload: { path, value } });
-    }, [dispatch, path, value]);
+        dispatch({ type: 'setValue', payload: { path, value: text } });
+    }, [dispatch, path, text]);
 
     const handleCancel = useCallback(() => {
         setText(value);

@@ -1,7 +1,7 @@
+import { InlineInput, InlineInputProps } from '@common/ChordsEditor';
 import { SongLine } from '@model/song';
 import React, { useCallback, useRef, useState } from 'react';
 import './EditLine.scss';
-import { InlineInput, InlineInputProps } from '@common/ChordsEditor';
 
 export interface EditLineProps {
     line: SongLine | string;
@@ -21,7 +21,9 @@ export const EditLine: React.FC<EditLineProps> = ({
     onMultilinePaste,
 }) => {
     const originalText = useRef(
-        typeof line === 'string' ? line : line.lyrics.map(block => block.lyric).join('')
+        typeof line === 'string'
+            ? line
+            : line.lyrics.map((block) => block.lyric).join('')
     );
     const [text, setText] = useState(originalText.current);
 
@@ -63,6 +65,7 @@ export const EditLine: React.FC<EditLineProps> = ({
             placeholder={placeholder}
             onInput={(value) => setText(value.currentTarget.textContent)}
             onSave={() => onSave(text)}
+            disabled={!text}
             onCancel={onCancel}
             onKeyDown={(event) => {
                 if (event.key === 'Escape') onCancel();

@@ -14,7 +14,6 @@ export interface InlineInputProps
     initialValue: string[] | string;
     className?: string;
     placeholder?: string;
-    canSaveEmpty?: boolean;
     disabled?: boolean;
     fontSize?: number;
     iconSize?: number;
