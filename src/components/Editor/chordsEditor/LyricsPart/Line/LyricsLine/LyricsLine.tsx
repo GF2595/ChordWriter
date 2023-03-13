@@ -179,7 +179,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                                           }
                                           // [TODO]: Рефакторинг
                                           onAddChord={
-                                              !chord
+                                              !chord && letterIndex === 0
                                                   ? (chord) =>
                                                         onEditChord(
                                                             chord,
