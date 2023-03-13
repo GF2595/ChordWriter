@@ -8,12 +8,6 @@ import {
 } from '@model/song';
 import { isArray } from 'lodash';
 
-export const getNewSong = (): Song => ({
-    title: '',
-    author: '',
-    songBody: [],
-});
-
 const formatError = (error: string) =>
     `Ошибка чтения файла, ошибка формата: ${error}`;
 
@@ -133,3 +127,4 @@ export const checkSongJsonFormat = (song: Song): void => {
 
     songBody.forEach((part, index) => testPart(part, `Часть #${index + 1}`));
 };
+

@@ -11,6 +11,7 @@ import { get } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
+import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
 import { checkSongJsonFormat, getNewSong } from './utils';
 
@@ -18,6 +19,7 @@ const CLASS = 'chords-editor';
 
 const EditorContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
+    const [monospacedModalVisible, setMonospacedModalVisible] = useState(false);
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
 
@@ -83,11 +85,7 @@ const EditorContent: React.FC = () => {
                     'Divider',
                     {
                         title: 'В моноширинную запись',
-                        disabled: true,
-                    },
-                    {
-                        title: 'В PDF-файл...',
-                        disabled: true,
+                        onClick: () => setMonospacedModalVisible(true),
                     },
                 ],
             },
@@ -138,6 +136,10 @@ const EditorContent: React.FC = () => {
                     )}
                 </div>
             </PageContent>
+            <MonospacedModal
+                open={monospacedModalVisible}
+                onClose={() => setMonospacedModalVisible(false)}
+            />
         </>
     );
 };
