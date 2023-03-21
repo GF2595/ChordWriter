@@ -29,10 +29,8 @@ ipcMain.on('window/close', () => {
     win.close();
 });
 
-ipcMain.handle('dialog/openFile', () => {
-    // const win = BrowserWindow.getFocusedWindow();
-
-    return dialog
+ipcMain.handle('dialog/openFile', () =>
+    dialog
         .showOpenDialog({
             properties: ['openFile'],
             filters: [{ extensions: ['json'], name: '*' }],
@@ -47,8 +45,8 @@ ipcMain.handle('dialog/openFile', () => {
             const fileContents = JSON.parse(fileJson);
 
             return fileContents;
-        });
-});
+        })
+);
 
 ipcMain.handle('dialog/saveFile', (_, fileContents) => {
     return dialog
@@ -62,6 +60,47 @@ ipcMain.handle('dialog/saveFile', (_, fileContents) => {
 
             fs.writeFileSync(path, fileContents);
         });
+});
+
+ipcMain.on('action/showPdf', () => {
+    const main = BrowserWindow.getFocusedWindow();
+    const win = new BrowserWindow({ parent: main, frame: true });
+
+    win.loadFile('src/Songbook/index.html');
+    // win.webContents.send('song', song);
+
+    win.once('ready-to-show', () => {
+        win.show();
+        win.webContents.insertText('<div>Loem Ipsum</div>');
+        // win.webContents.openDevTools();
+    });
+});
+
+ipcMain.on('print', () => {
+    console.log('print!');
+    const win = BrowserWindow.getFocusedWindow();
+
+    win.webContents
+        .printToPDF({
+            pageSize: 'A4',
+            marginsType: 1,
+            printBackground: true,
+        })
+        .then((file) =>
+            dialog
+                .showSaveDialog({
+                    filters: [{ extensions: ['pdf'], name: '*' }],
+                })
+                .then((value) => {
+                    const path = value.filePath;
+
+                    if (!path) return;
+
+                    fs.writeFileSync(path, file);
+
+                    win.close();
+                })
+        );
 });
 
 const createWindow = (): void => {
@@ -114,3 +153,4 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+

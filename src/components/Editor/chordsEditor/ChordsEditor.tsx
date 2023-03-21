@@ -9,6 +9,7 @@ import { SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
 import React, { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { MonospacedModal } from './MonospacedModal';
@@ -17,11 +18,39 @@ import { checkSongJsonFormat, getNewSong } from './utils';
 
 const CLASS = 'chords-editor';
 
+const PdfPreview: React.FC = ({ children }) => {
+    const api = window.api.window;
+    const childWindow = window.open('', 'modal');
+    const [buttonVisible, setButtonVisible] = useState(true);
+
+    // childWindow.document.write('<div id="root"></div>');
+
+    return createPortal(
+        <div>
+            {buttonVisible && (
+                <Button
+                    onClick={() => {
+                        setButtonVisible(false);
+                        api.print();
+                    }}
+                >
+                    print
+                </Button>
+            )}
+            {children}
+            <h1>Название</h1>
+            <h2>Автор</h2>
+        </div>,
+        childWindow.document.body
+    );
+};
+
 const EditorContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
     const [monospacedModalVisible, setMonospacedModalVisible] = useState(false);
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
+    const [pdfPreview, setPdfPreview] = useState<React.ReactNode>(null);
 
     const message = (error: any) => (
         <Notification
@@ -87,6 +116,15 @@ const EditorContent: React.FC = () => {
                         title: 'В моноширинную запись',
                         onClick: () => setMonospacedModalVisible(true),
                     },
+                    {
+                        title: 'В PDF-файл',
+                        onClick: () => {
+                            setPdfPreview(<PdfPreview />);
+                            // childWindow;
+                            // api.showPdf(value);
+                            // api.print();
+                        },
+                    },
                 ],
             },
             {
@@ -140,6 +178,7 @@ const EditorContent: React.FC = () => {
                 open={monospacedModalVisible}
                 onClose={() => setMonospacedModalVisible(false)}
             />
+            {pdfPreview}
         </>
     );
 };

@@ -27,7 +27,12 @@ export const HeaderElement: React.FC<ElementInfo> = ({ title, ...element }) => {
             >
                 {buttons.map((menuElement, index) => {
                     if (menuElement === 'Divider')
-                        return <Divider className={`${CLASS}__divider`} />;
+                        return (
+                            <Divider
+                                key={`divider.${index}`}
+                                className={`${CLASS}__divider`}
+                            />
+                        );
 
                     const { info, title } = menuElement;
 

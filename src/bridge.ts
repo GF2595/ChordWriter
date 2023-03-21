@@ -1,3 +1,4 @@
+import { Song } from '@model/song';
 import { contextBridge, ipcRenderer } from 'electron';
 
 const _window = {
@@ -7,6 +8,8 @@ const _window = {
     openFile: (): Promise<any> => ipcRenderer.invoke('dialog/openFile'),
     saveToNewFile: (fileContents: string): Promise<any> =>
         ipcRenderer.invoke('dialog/saveFile', fileContents),
+    print: (): void => ipcRenderer.send('print'),
+    showPdf: (song: Song): void => ipcRenderer.send('action/showPdf', song),
 };
 
 export const API = {
