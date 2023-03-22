@@ -5,31 +5,54 @@ import {
     EditorContextProvider,
     useEditorContext,
 } from '@components/EditorContext';
+import { SongbookPdfBuilder } from '@components/SongbookPdfBuilder';
 import { SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
-import { checkSongJsonFormat, getNewSong } from './utils';
+import { checkSongJsonFormat, getNewSong, _getNewSong } from './utils';
 
 const CLASS = 'chords-editor';
 
-const PdfPreview: React.FC = ({ children }) => {
+function copyStyles(source: Document, target: Document) {
+    Array.from(
+        source.querySelectorAll('link[rel="stylesheet"], style')
+    ).forEach((link) => {
+        target.head.appendChild(link.cloneNode(true));
+    });
+}
+
+// ! TODO: приделать onClose
+const PdfPreview: React.FC<{ onClose?: () => void }> = ({
+    children,
+    onClose: _,
+}) => {
     const api = window.api.window;
-    const childWindow = window.open('', 'modal');
+    const childWindow = useMemo(
+        () => window.open('', 'modal', 'width=595, height=840'),
+        []
+    );
     const [buttonVisible, setButtonVisible] = useState(true);
 
-    // childWindow.document.write('<div id="root"></div>');
+    useEffect(() => {
+        const css = document.createElement('style');
+        css.type = 'text/css';
+        css.appendChild(document.createTextNode('section {margin-top: 24px;}'));
+        childWindow.document.head.appendChild(css);
+    }, []);
+    api.openDevTools();
 
     return createPortal(
-        <div>
+        <>
             {buttonVisible && (
                 <Button
                     onClick={() => {
+                        // ! TODO: кнопка не возвращается
                         setButtonVisible(false);
                         api.print();
                     }}
@@ -38,9 +61,7 @@ const PdfPreview: React.FC = ({ children }) => {
                 </Button>
             )}
             {children}
-            <h1>Название</h1>
-            <h2>Автор</h2>
-        </div>,
+        </>,
         childWindow.document.body
     );
 };
@@ -75,7 +96,8 @@ const EditorContent: React.FC = () => {
                 onClick: () => {
                     dispatch({
                         type: 'setValue',
-                        payload: { value: getNewSong() },
+                        // ! TODO: вернуть
+                        payload: { value: _getNewSong() },
                     });
                 },
             },
@@ -116,16 +138,18 @@ const EditorContent: React.FC = () => {
                         title: 'В моноширинную запись',
                         onClick: () => setMonospacedModalVisible(true),
                     },
-                    {
-                        title: 'В PDF-файл',
-                        onClick: () => {
-                            setPdfPreview(<PdfPreview />);
-                            // childWindow;
-                            // api.showPdf(value);
-                            // api.print();
-                        },
-                    },
                 ],
+            },
+            // ! TODO: вернуть на место
+            {
+                title: 'В PDF-файл',
+                onClick: () => {
+                    setPdfPreview(
+                        <PdfPreview onClose={() => setPdfPreview(undefined)}>
+                            <SongbookPdfBuilder song={value} />
+                        </PdfPreview>
+                    );
+                },
             },
             {
                 icon: <ListIcon />,

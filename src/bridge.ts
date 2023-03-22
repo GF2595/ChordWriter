@@ -10,6 +10,7 @@ const _window = {
         ipcRenderer.invoke('dialog/saveFile', fileContents),
     print: (): void => ipcRenderer.send('print'),
     showPdf: (song: Song): void => ipcRenderer.send('action/showPdf', song),
+    openDevTools: (): void => ipcRenderer.send('openDevTools'),
 };
 
 export const API = {
@@ -17,3 +18,4 @@ export const API = {
 };
 
 contextBridge.exposeInMainWorld('api', API);
+

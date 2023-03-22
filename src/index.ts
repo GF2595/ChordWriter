@@ -48,6 +48,10 @@ ipcMain.handle('dialog/openFile', () =>
         })
 );
 
+ipcMain.on('openDevTools', () =>
+    BrowserWindow.getFocusedWindow().webContents.openDevTools()
+);
+
 ipcMain.handle('dialog/saveFile', (_, fileContents) => {
     return dialog
         .showSaveDialog({
