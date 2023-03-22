@@ -5,12 +5,11 @@ import {
     EditorContextProvider,
     useEditorContext,
 } from '@components/EditorContext';
-import { SongbookPdfBuilder } from '@components/SongbookPdfBuilder';
+import { PdfPreviewWindow } from '@components/SongbookPdfBuilder';
 import { SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useMemo, useState } from 'react';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { MonospacedModal } from './MonospacedModal';
@@ -18,53 +17,6 @@ import { SongPart } from './SongPart';
 import { checkSongJsonFormat, getNewSong, _getNewSong } from './utils';
 
 const CLASS = 'chords-editor';
-
-function copyStyles(source: Document, target: Document) {
-    Array.from(
-        source.querySelectorAll('link[rel="stylesheet"], style')
-    ).forEach((link) => {
-        target.head.appendChild(link.cloneNode(true));
-    });
-}
-
-// ! TODO: приделать onClose
-const PdfPreview: React.FC<{ onClose?: () => void }> = ({
-    children,
-    onClose: _,
-}) => {
-    const api = window.api.window;
-    const childWindow = useMemo(
-        () => window.open('', 'modal', 'width=595, height=840'),
-        []
-    );
-    const [buttonVisible, setButtonVisible] = useState(true);
-
-    useEffect(() => {
-        const css = document.createElement('style');
-        css.type = 'text/css';
-        css.appendChild(document.createTextNode('section {margin-top: 24px;}'));
-        childWindow.document.head.appendChild(css);
-    }, []);
-    api.openDevTools();
-
-    return createPortal(
-        <>
-            {buttonVisible && (
-                <Button
-                    onClick={() => {
-                        // ! TODO: кнопка не возвращается
-                        setButtonVisible(false);
-                        api.print();
-                    }}
-                >
-                    print
-                </Button>
-            )}
-            {children}
-        </>,
-        childWindow.document.body
-    );
-};
 
 const EditorContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
@@ -145,9 +97,10 @@ const EditorContent: React.FC = () => {
                 title: 'В PDF-файл',
                 onClick: () => {
                     setPdfPreview(
-                        <PdfPreview onClose={() => setPdfPreview(undefined)}>
-                            <SongbookPdfBuilder song={value} />
-                        </PdfPreview>
+                        <PdfPreviewWindow
+                            onClose={() => setPdfPreview(undefined)}
+                            song={value}
+                        />
                     );
                 },
             },

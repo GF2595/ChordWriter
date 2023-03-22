@@ -1,6 +1,5 @@
 import { ChordType } from '@model/song';
 import React from 'react';
-import cn from 'classnames';
 
 export interface ChordProps {
     chord: ChordType;
@@ -29,7 +28,7 @@ export const Chord: React.FC<ChordProps> = ({
                 <sub
                     style={
                         absolutePositionedMod
-                            ? { position: 'absolute', bottom: '0.25rem' }
+                            ? { position: 'absolute', bottom: '-0.25rem' }
                             : undefined
                     }
                 >

@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-key */
 import { InstrumentalPartType } from '@model/song';
 import React from 'react';
 import { Chord } from './Chord';
+import { leftOffset } from './constants';
 
 export interface ChordsPartBodyProps {
     part: InstrumentalPartType;
@@ -11,7 +13,7 @@ export const ChordsPartBody: React.FC<ChordsPartBodyProps> = ({
 }) => (
     <>
         {chords?.map((line) => (
-            <div style={{ marginLeft: '16px' }}>
+            <div style={{ marginLeft: leftOffset }}>
                 {line.map((chord) => (
                     <Chord style={styles.chord} chord={chord} />
                 ))}

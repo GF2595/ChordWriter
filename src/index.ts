@@ -66,20 +66,6 @@ ipcMain.handle('dialog/saveFile', (_, fileContents) => {
         });
 });
 
-ipcMain.on('action/showPdf', () => {
-    const main = BrowserWindow.getFocusedWindow();
-    const win = new BrowserWindow({ parent: main, frame: true });
-
-    win.loadFile('src/Songbook/index.html');
-    // win.webContents.send('song', song);
-
-    win.once('ready-to-show', () => {
-        win.show();
-        win.webContents.insertText('<div>Loem Ipsum</div>');
-        // win.webContents.openDevTools();
-    });
-});
-
 ipcMain.on('print', () => {
     console.log('print!');
     const win = BrowserWindow.getFocusedWindow();
@@ -101,7 +87,6 @@ ipcMain.on('print', () => {
                     if (!path) return;
 
                     fs.writeFileSync(path, file);
-
                     win.close();
                 })
         );

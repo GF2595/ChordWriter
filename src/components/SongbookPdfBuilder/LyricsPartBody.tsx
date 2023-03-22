@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-key */
 import { LyricsPartType } from '@model/song';
 import React from 'react';
 import { Chord } from './Chord';
+import { leftOffset } from './constants';
 
 export interface LyricsPartBodyProps {
     part: LyricsPartType;
@@ -19,20 +21,22 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                             : undefined
                     }
                 >
-                    <div
+                    <span
                         style={{
-                            width: '16px',
+                            width: leftOffset,
                             position: 'relative',
                             display: 'inline-block',
+                            whiteSpace: 'pre',
                         }}
                     >
                         {!lyrics[0]?.lyric && !!lyrics[0].chord && (
                             <Chord
+                                absolutePositionedMod
                                 style={styles.chord}
                                 chord={lyrics[0].chord}
                             />
-                        )}
-                    </div>
+                        )}{' '}
+                    </span>
                     <span style={{ whiteSpace: 'pre' }}>
                         {lyrics.map(({ lyric, chord }, index) => {
                             if (index === 0 && !lyric) return null;
@@ -42,11 +46,12 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                     return (
                                         <span
                                             style={{
-                                                width: '16px',
+                                                width: leftOffset,
                                                 position: 'relative',
                                             }}
                                         >
                                             <Chord
+                                                absolutePositionedMod
                                                 style={styles.chord}
                                                 chord={chord}
                                             />
@@ -68,10 +73,15 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                             }}
                                         >
                                             <Chord
+                                                absolutePositionedMod
                                                 style={styles.chord}
                                                 chord={chord}
                                             />
-                                            <span style={{ whiteSpace: 'pre' }}>
+                                            <span
+                                                style={{
+                                                    whiteSpace: 'pre',
+                                                }}
+                                            >
                                                 {lyric[0]}
                                             </span>
                                         </span>
