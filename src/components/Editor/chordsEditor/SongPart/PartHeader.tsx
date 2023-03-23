@@ -76,7 +76,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                         payload: {
                             path: partsArrayPath,
                             index: partIndex,
-                            value: {},
+                            value: { lines: [] },
                         },
                     }),
             },
@@ -89,7 +89,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                         payload: {
                             path: partsArrayPath,
                             index: partIndex + 1,
-                            value: {},
+                            value: { lines: [] },
                         },
                     }),
             },

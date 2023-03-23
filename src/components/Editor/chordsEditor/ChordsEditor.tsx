@@ -7,6 +7,7 @@ import {
 } from '@components/EditorContext';
 import { LyricsPartType, SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
+import TextImageIcon from '@rsuite/icons/TextImage';
 import { get } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { Button, Notification, toaster } from 'rsuite';
@@ -15,8 +16,6 @@ import { MakePdfModal } from './MakePdfModal';
 import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
 import { checkSongJsonFormat, getNewSong } from './utils';
-import ChangeListIcon from '@rsuite/icons/ChangeList';
-import TextImageIcon from '@rsuite/icons/TextImage';
 
 const CLASS = 'chords-editor';
 
@@ -170,7 +169,10 @@ const EditorContent: React.FC = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'addArrayValue',
-                                    payload: { path: 'songBody', value: {} },
+                                    payload: {
+                                        path: 'songBody',
+                                        value: { lines: [] },
+                                    },
                                 });
                                 setStructureVisible(true);
                             }}
