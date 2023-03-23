@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import { InstrumentalPartType, LyricsPartType, Song } from '@model/song';
 import React from 'react';
 import { ChordsPartBody } from './ChordsPartBody';
@@ -14,8 +13,8 @@ export const SongbookPdfBuilder: React.FC<SongbookPdfBuilderProps> = ({
 }) => {
     return (
         <>
-            {songs.map((song) => (
-                <article>
+            {songs.map((song, index) => (
+                <article key={`${index}`}>
                     <div
                         style={{
                             display: 'flex',
@@ -37,8 +36,8 @@ export const SongbookPdfBuilder: React.FC<SongbookPdfBuilderProps> = ({
                         )}
                     </div>
                     <div className={'song-body'}>
-                        {song.songBody.map((part) => (
-                            <section>
+                        {song.songBody.map((part, index) => (
+                            <section key={`${index}`}>
                                 {!!part.title && (
                                     <span
                                         style={{

@@ -9,7 +9,7 @@ import { PdfPreviewWindow } from '@components/SongbookPdfBuilder';
 import { SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { MonospacedModal } from './MonospacedModal';
@@ -24,6 +24,7 @@ const EditorContent: React.FC = () => {
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
     const [pdfPreview, setPdfPreview] = useState<React.ReactNode>(null);
+    const ref = useRef(0);
 
     const message = (error: any) => (
         <Notification
@@ -90,19 +91,20 @@ const EditorContent: React.FC = () => {
                         title: 'В моноширинную запись',
                         onClick: () => setMonospacedModalVisible(true),
                     },
+                    {
+                        title: 'В PDF-файл',
+                        onClick: () => {
+                            ref.current = ref.current + 1;
+                            setPdfPreview(
+                                <PdfPreviewWindow
+                                    key={ref.current}
+                                    onClose={() => setPdfPreview(null)}
+                                    songs={[value]}
+                                />
+                            );
+                        },
+                    },
                 ],
-            },
-            // ! TODO: вернуть на место
-            {
-                title: 'В PDF-файл',
-                onClick: () => {
-                    setPdfPreview(
-                        <PdfPreviewWindow
-                            onClose={() => setPdfPreview(null)}
-                            songs={[value]}
-                        />
-                    );
-                },
             },
             {
                 icon: <ListIcon />,

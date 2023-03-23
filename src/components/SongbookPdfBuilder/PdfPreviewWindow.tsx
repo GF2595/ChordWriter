@@ -16,7 +16,12 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
 }) => {
     const api = window.api.window;
     const childWindow = useMemo(
-        () => window.open('', 'modal', 'width=794, resizable=false'),
+        () =>
+            window.open(
+                '',
+                'modal',
+                'width=794, resizable=false, fullscreenable=false'
+            ),
         []
     );
     const [buttonVisible, setButtonVisible] = useState(true);

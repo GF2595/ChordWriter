@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import { LyricsPartType } from '@model/song';
 import React from 'react';
 import { Chord } from './Chord';
@@ -13,8 +12,9 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
 }) => {
     return (
         <>
-            {lines.map(({ lyrics }) => (
+            {lines.map(({ lyrics }, index) => (
                 <div
+                    key={`${index}`}
                     style={
                         lyrics.some(({ chord }) => !!chord)
                             ? styles.lineWithChords
@@ -45,6 +45,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                 if (!!chord)
                                     return (
                                         <span
+                                            key={`${index}`}
                                             style={{
                                                 width: leftOffset,
                                                 position: 'relative',
@@ -61,7 +62,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
 
                             if (!!chord)
                                 return (
-                                    <span>
+                                    <span key={`${index}`}>
                                         <span
                                             style={{
                                                 position: 'relative',
