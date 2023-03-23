@@ -33,7 +33,9 @@ export const EditLine: React.FC<EditLineProps> = ({
 
     const onPaste: InlineInputProps['onPaste'] = useCallback(
         (event) => {
-            const pasteText = event.clipboardData.getData('text');
+            const pasteText = event.clipboardData
+                .getData('text')
+                .replace(/^\s+|\s+$/g, '');
             const selectionRange = window.getSelection().getRangeAt(0);
 
             const pasteLines = pasteText.split('\n').map((line) => line.trim());
