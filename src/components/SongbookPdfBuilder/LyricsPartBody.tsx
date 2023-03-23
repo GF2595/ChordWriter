@@ -59,8 +59,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                     );
                                 else return null;
 
-                            if (!!chord) {
-                                console.log(lyric[0]);
+                            if (!!chord)
                                 return (
                                     <span>
                                         <span
@@ -88,7 +87,6 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                         <span>{lyric.slice(1)}</span>
                                     </span>
                                 );
-                            }
 
                             return lyric;
                         })}

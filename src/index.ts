@@ -67,14 +67,12 @@ ipcMain.handle('dialog/saveFile', (_, fileContents) => {
 });
 
 ipcMain.on('print', () => {
-    console.log('print!');
     const win = BrowserWindow.getFocusedWindow();
 
     win.webContents
         .printToPDF({
             pageSize: 'A4',
             marginsType: 1,
-            printBackground: true,
         })
         .then((file) =>
             dialog

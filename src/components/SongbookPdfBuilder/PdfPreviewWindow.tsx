@@ -1,19 +1,22 @@
-import { Song } from '@model/song';
 import React, { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { bodyStyle } from './bodyStyle';
-import { SongbookPdfBuilder } from './SongbookPdfBuilder';
+import {
+    SongbookPdfBuilder,
+    SongbookPdfBuilderProps,
+} from './SongbookPdfBuilder';
 
-export interface PdfPreviewWindowProps {
+export interface PdfPreviewWindowProps extends SongbookPdfBuilderProps {
     onClose?: () => void;
-    song: Song;
 }
 
 // ! TODO: приделать onClose
-export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({ song }) => {
+export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
+    ...builderProps
+}) => {
     const api = window.api.window;
     const childWindow = useMemo(
-        () => window.open('', 'modal', 'width=595, height=840'),
+        () => window.open('', 'modal', 'width=794, resizable=false'),
         []
     );
     const [buttonVisible, setButtonVisible] = useState(true);
@@ -24,7 +27,6 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({ song }) => {
         css.appendChild(document.createTextNode(bodyStyle));
         childWindow.document.head.appendChild(css);
     }, []);
-    api.openDevTools();
 
     return createPortal(
         <>
@@ -52,7 +54,7 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({ song }) => {
                     Сохранить
                 </button>
             </div>
-            <SongbookPdfBuilder song={song} />
+            <SongbookPdfBuilder {...builderProps} />
         </>,
         childWindow.document.body
     );

@@ -98,8 +98,8 @@ const EditorContent: React.FC = () => {
                 onClick: () => {
                     setPdfPreview(
                         <PdfPreviewWindow
-                            onClose={() => setPdfPreview(undefined)}
-                            song={value}
+                            onClose={() => setPdfPreview(null)}
+                            songs={[value]}
                         />
                     );
                 },
