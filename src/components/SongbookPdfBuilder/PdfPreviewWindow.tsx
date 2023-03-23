@@ -19,7 +19,7 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
             window.open(
                 '',
                 'modal',
-                'width=794, resizable=false, fullscreenable=false'
+                'width=800, resizable=false, fullscreenable=false'
             ),
         []
     );
@@ -38,19 +38,20 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
         <>
             <div
                 style={{
-                    backgroundColor: 'gray',
+                    backgroundColor: 'rgba(128, 128, 128, 0.5)',
                     borderBottom: buttonVisible ? '1px solid darkgray' : 'none',
                     height: buttonVisible ? '30px' : 0,
                     display: 'flex',
                     alignItems: 'center',
                     transition: 'all 0.5s ease-in-out',
-                    position: 'absolute',
+                    position: 'fixed',
+                    top: 0,
                     width: '100%',
+                    zIndex: 10,
                 }}
             >
                 <button
                     style={{
-                        height: '20px',
                         marginLeft: '16px',
                         opacity: buttonVisible ? 1 : 0,
                     }}

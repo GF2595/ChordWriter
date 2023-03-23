@@ -12,12 +12,7 @@ export const SongbookPdfBuilder: React.FC<SongbookPdfBuilderProps> = ({
     songs,
 }) => {
     return (
-        <div
-            style={{
-                overflow: 'auto',
-                height: '100%',
-            }}
-        >
+        <>
             {songs.map((song, index) => (
                 <article key={`${index}`}>
                     <div
@@ -70,6 +65,6 @@ export const SongbookPdfBuilder: React.FC<SongbookPdfBuilderProps> = ({
                     </div>
                 </article>
             ))}
-        </div>
+        </>
     );
 };

@@ -132,10 +132,11 @@ const createWindow = (): void => {
         mainWindow.show();
         mainWindow.focus();
     });
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
 };
+
+app.on('browser-window-focus', () => {
+    BrowserWindow.getFocusedWindow()?.removeMenu();
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

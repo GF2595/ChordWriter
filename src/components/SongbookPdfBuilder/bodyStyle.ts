@@ -29,5 +29,19 @@ body {
     margin: 0;
     width: 794px;
     background: gray;
+    overflow: overlay;
+}
+
+button {
+    color: #575757;
+    border-radius: 6px;
+    border: none;
+    font-size: 11px;
+    height: 20px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #D7D7D7;
 }`;
 

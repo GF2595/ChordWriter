@@ -49,13 +49,14 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                             style={{
                                                 width: leftOffset,
                                                 position: 'relative',
+                                                whiteSpace: 'pre',
                                             }}
                                         >
                                             <Chord
                                                 absolutePositionedMod
-                                                style={styles.chord}
+                                                style={styles.chordTail}
                                                 chord={chord}
-                                            />
+                                            />{' '}
                                         </span>
                                     );
                                 else return null;
@@ -102,6 +103,10 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
 const styles: { [name: string]: React.CSSProperties } = {
     chord: {
         position: 'absolute',
+        bottom: '1rem',
+    },
+    chordTail: {
+        position: 'relative',
         bottom: '1rem',
     },
     lineWithChords: {
