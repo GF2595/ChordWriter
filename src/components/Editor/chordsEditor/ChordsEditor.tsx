@@ -14,7 +14,7 @@ import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
 import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
-import { checkSongJsonFormat, getNewSong, _getNewSong } from './utils';
+import { checkSongJsonFormat, getNewSong } from './utils';
 
 const CLASS = 'chords-editor';
 
@@ -49,8 +49,7 @@ const EditorContent: React.FC = () => {
                 onClick: () => {
                     dispatch({
                         type: 'setValue',
-                        // ! TODO: вернуть
-                        payload: { value: _getNewSong() },
+                        payload: { value: getNewSong() },
                     });
                 },
             },

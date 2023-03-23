@@ -10,7 +10,6 @@ export interface PdfPreviewWindowProps extends SongbookPdfBuilderProps {
     onClose?: () => void;
 }
 
-// ! TODO: приделать onClose
 export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
     ...builderProps
 }) => {
