@@ -9,7 +9,7 @@ export const bodyStyle = `section {
 article {
     break-after: page;
     break-inside: avoid-page;
-    padding: 32px 64px 32px 60px;
+    padding: 32px 44px 32px 80px;
     width: 670px;
     max-width: 670px;
     min-width: 670px;
@@ -32,6 +32,11 @@ body {
     background: gray;
     overflow: overlay;
     font-family: Calibri, sans-serif
+}
+
+h3 {
+    font-size: 1.6em;
+    margin-bottom: 0.5rem;
 }
 
 button {

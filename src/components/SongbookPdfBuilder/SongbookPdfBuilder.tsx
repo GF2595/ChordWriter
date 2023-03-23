@@ -28,7 +28,8 @@ export const SongbookPdfBuilder: React.FC<SongbookPdfBuilderProps> = ({
                             <span
                                 style={{
                                     alignSelf: 'end',
-                                    marginRight: '32px',
+                                    marginRight: '64px',
+                                    fontSize: '1.17em',
                                 }}
                             >
                                 {song.author}
