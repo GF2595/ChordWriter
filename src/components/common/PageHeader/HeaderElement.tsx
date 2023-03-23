@@ -9,6 +9,7 @@ import {
 } from 'rsuite';
 import './HeaderElement.scss';
 import { ElementInfo } from './types';
+import cn from 'classnames';
 
 const CLASS = 'header-element';
 
@@ -58,7 +59,7 @@ export const HeaderElement: React.FC<ElementInfo> = ({ title, ...element }) => {
         );
     }
 
-    const { icon, info } = element;
+    const { icon, info, active } = element;
 
     return (
         <Whisper
@@ -69,7 +70,9 @@ export const HeaderElement: React.FC<ElementInfo> = ({ title, ...element }) => {
         >
             {icon ? (
                 <IconButton
-                    className={`${CLASS}__button`}
+                    className={cn(`${CLASS}__button`, {
+                        [`${CLASS}__button_active`]: active,
+                    })}
                     size={'xs'}
                     {...element}
                 >

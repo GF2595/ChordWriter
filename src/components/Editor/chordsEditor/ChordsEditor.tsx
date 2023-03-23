@@ -15,6 +15,8 @@ import { MakePdfModal } from './MakePdfModal';
 import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
 import { checkSongJsonFormat, getNewSong } from './utils';
+import ChangeListIcon from '@rsuite/icons/ChangeList';
+import TextImageIcon from '@rsuite/icons/TextImage';
 
 const CLASS = 'chords-editor';
 
@@ -43,42 +45,42 @@ const EditorContent: React.FC = () => {
     const buttons: ElementInfo[] = useMemo(
         () => [
             {
-                title: 'Новая',
-                info: 'Открыть редактор новой песни',
-                onClick: () => {
-                    dispatch({
-                        type: 'setValue',
-                        payload: { value: getNewSong() },
-                    });
-                },
-            },
-            {
-                title: 'Открыть',
-                info: 'Открыть *.json файл с сохранённой песней',
-                onClick: () => {
-                    api.openFile()
-                        .then((file) => {
-                            if (!file) return;
-
-                            checkSongJsonFormat(file);
-
-                            dispatch({
-                                type: 'setValue',
-                                payload: { value: file },
-                            });
-                        })
-                        .catch((error) => {
-                            toaster.push(message(error), {
-                                placement: 'bottomEnd',
-                            });
-                        });
-                },
-            },
-            {
-                title: 'Сохранить',
+                title: 'Файл',
                 buttons: [
                     {
-                        title: 'В файл...',
+                        title: 'Создать',
+                        info: 'Открыть редактор новой песни',
+                        onClick: () => {
+                            dispatch({
+                                type: 'setValue',
+                                payload: { value: getNewSong() },
+                            });
+                        },
+                    },
+                    {
+                        title: 'Открыть',
+                        info: 'Открыть *.json файл с сохранённой песней',
+                        onClick: () => {
+                            api.openFile()
+                                .then((file) => {
+                                    if (!file) return;
+
+                                    checkSongJsonFormat(file);
+
+                                    dispatch({
+                                        type: 'setValue',
+                                        payload: { value: file },
+                                    });
+                                })
+                                .catch((error) => {
+                                    toaster.push(message(error), {
+                                        placement: 'bottomEnd',
+                                    });
+                                });
+                        },
+                    },
+                    {
+                        title: 'Сохранить как...',
                         info: 'Сохранить песню в *.json файл',
                         onClick: () => {
                             api.saveToNewFile(JSON.stringify(value, null, 4));
@@ -90,13 +92,13 @@ const EditorContent: React.FC = () => {
                         info: 'Вывести текущую песню в моноширинном формате',
                         onClick: () => setMonospacedModalVisible(true),
                     },
-                    'Divider',
-                    {
-                        title: 'Сборка PDF',
-                        info: 'Сохранить текущую песню или собрать песенник в формате PDF',
-                        onClick: () => setMakePdfModalVisible(true),
-                    },
                 ],
+            },
+            {
+                title: 'Сборка в PDF',
+                icon: <TextImageIcon />,
+                info: 'Сохранить текущую песню или собрать песенник в формате PDF',
+                onClick: () => setMakePdfModalVisible(true),
             },
             {
                 icon: <ListIcon />,
