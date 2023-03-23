@@ -11,6 +11,7 @@ export interface LineProps {
     onCancelLineEdit: () => void;
     onAddLineAfter: () => void;
     onAddLineBefore: () => void;
+    onSplitPart?: () => void;
     onMultilinePaste: (excessLines: string[]) => void;
 }
 
@@ -23,6 +24,7 @@ export const Line: React.FC<LineProps> = ({
     onAddLineAfter,
     onAddLineBefore,
     onMultilinePaste,
+    onSplitPart,
 }) => {
     const { value: line, dispatch } = useEditorContext(path);
 
@@ -62,6 +64,8 @@ export const Line: React.FC<LineProps> = ({
             onRemove={onRemoveLine}
             onAddLineAfter={onAddLineAfter}
             onAddLineBefore={onAddLineBefore}
+            onSplitPart={onSplitPart}
         />
     );
 };
+

@@ -5,7 +5,7 @@ import {
     EditorContextProvider,
     useEditorContext,
 } from '@components/EditorContext';
-import { SongBody } from '@model/song';
+import { LyricsPartType, SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
 import React, { useMemo, useState } from 'react';
@@ -128,6 +128,39 @@ const EditorContent: React.FC = () => {
                                 isStructureVisible={structureVisible}
                                 partsArrayPath={'songBody'}
                                 partIndex={index}
+                                onSplitPart={(partIndex, lineIndex) => {
+                                    const oldPart = songBody[
+                                        partIndex
+                                    ] as LyricsPartType;
+
+                                    if (!oldPart || !oldPart.lines?.[lineIndex])
+                                        return;
+
+                                    dispatch({
+                                        type: 'setValue',
+                                        payload: {
+                                            path: 'songBody',
+                                            value: [
+                                                ...songBody.slice(0, partIndex),
+                                                {
+                                                    ...oldPart,
+                                                    lines: oldPart.lines.slice(
+                                                        0,
+                                                        lineIndex
+                                                    ),
+                                                },
+                                                {
+                                                    lines: oldPart.lines.slice(
+                                                        lineIndex
+                                                    ),
+                                                },
+                                                ...songBody.slice(
+                                                    partIndex + 1
+                                                ),
+                                            ],
+                                        },
+                                    });
+                                }}
                             />
                         ))
                     ) : (

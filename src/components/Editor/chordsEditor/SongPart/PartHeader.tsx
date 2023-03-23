@@ -4,8 +4,8 @@ import {
     IconButtonInfo,
 } from '@common/ChordsEditor';
 import { useEditorContext } from '@components/EditorContext';
-import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
-import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
+import MoveDownIcon from '@rsuite/icons/MoveDown';
+import MoveUpIcon from '@rsuite/icons/MoveUp';
 import TrashIcon from '@rsuite/icons/Trash';
 import cn from 'classnames';
 import React, { useMemo } from 'react';
@@ -68,7 +68,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                 fill: 'firebrick',
             },
             {
-                Icon: ArrowUpLineIcon,
+                Icon: MoveUpIcon,
                 title: 'Добавить часть выше',
                 onClick: () =>
                     dispatch({
@@ -81,7 +81,7 @@ export const PartHeader: React.FC<PartHeaderProps> = ({
                     }),
             },
             {
-                Icon: ArrowDownLineIcon,
+                Icon: MoveDownIcon,
                 title: 'Добавить часть ниже',
                 onClick: () =>
                     dispatch({

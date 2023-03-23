@@ -19,12 +19,14 @@ export interface SongPartProps {
     partsArrayPath: string;
     partIndex: number;
     isStructureVisible?: boolean;
+    onSplitPart?: (partIndex: number, lineIndex: number) => void;
 }
 
 export const SongPart: React.FC<SongPartProps> = ({
     partsArrayPath,
     partIndex,
     isStructureVisible,
+    onSplitPart,
 }) => {
     const path = `${partsArrayPath}[${partIndex}]`;
 
@@ -68,7 +70,16 @@ export const SongPart: React.FC<SongPartProps> = ({
     let type: PartContentType = null;
 
     if (!!lines) {
-        content = <LyricsPart path={path} />;
+        content = (
+            <LyricsPart
+                onSplitPart={
+                    isStructureVisible
+                        ? (lineIndex) => onSplitPart(partIndex, lineIndex)
+                        : undefined
+                }
+                path={path}
+            />
+        );
         type = 'lyrics';
     }
 
@@ -100,3 +111,4 @@ export const SongPart: React.FC<SongPartProps> = ({
         </div>
     );
 };
+

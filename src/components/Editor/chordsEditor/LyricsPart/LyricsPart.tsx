@@ -11,13 +11,17 @@ const CLASS = 'lyrics-part';
 
 export interface LyricsPartProps {
     path: string;
+    onSplitPart?: (lineIndex: number) => void;
 }
 
 const newLine: (line?: string) => SongLine = (line) => ({
     lyrics: !!line ? [{ lyric: line }] : [],
 });
 
-export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
+export const LyricsPart: React.FC<LyricsPartProps> = ({
+    path,
+    onSplitPart,
+}) => {
     const { value: part, dispatch } = useEditorContext(path);
 
     const { lines } = part as LyricsPartType;
@@ -66,6 +70,11 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                                 index: index,
                             },
                         })
+                    }
+                    onSplitPart={
+                        onSplitPart && index !== 0
+                            ? () => onSplitPart(index)
+                            : undefined
                     }
                     onMultilinePaste={(excessLines: string[]) => {
                         excessLines.forEach((excessLine, excessLineIndex) => {

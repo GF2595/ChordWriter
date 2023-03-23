@@ -6,8 +6,8 @@ import {
 } from '@common/ChordsEditor';
 import { useEditorContext } from '@components/EditorContext';
 import { ChordType } from '@model/song';
-import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
-import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
+import MoveDownIcon from '@rsuite/icons/MoveDown';
+import MoveUpIcon from '@rsuite/icons/MoveUp';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import cn from 'classnames';
@@ -42,7 +42,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                 fill: 'firebrick',
             },
             {
-                Icon: ArrowUpLineIcon,
+                Icon: MoveUpIcon,
                 title: 'Добавить строку выше',
                 onClick: () =>
                     dispatch({
@@ -55,7 +55,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                     }),
             },
             {
-                Icon: ArrowDownLineIcon,
+                Icon: MoveDownIcon,
                 title: 'Добавить строку ниже',
                 onClick: () =>
                     dispatch({

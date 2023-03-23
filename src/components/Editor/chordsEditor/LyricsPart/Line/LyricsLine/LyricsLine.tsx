@@ -9,11 +9,12 @@ import {
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import './LyricsLine.scss';
-import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
-import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
+import MoveDownIcon from '@rsuite/icons/MoveDown';
+import MoveUpIcon from '@rsuite/icons/MoveUp';
 import cn from 'classnames';
 import { useEditorContext } from '@components/EditorContext';
 import * as utils from './utils';
+import SplitIcon from '@rsuite/icons/Split';
 
 const CLASS = 'lyrics-line';
 
@@ -23,6 +24,7 @@ export interface LyricsLineProps {
     onRemove: () => void;
     onAddLineBefore: () => void;
     onAddLineAfter: () => void;
+    onSplitPart?: () => void;
 }
 
 export const LyricsLine: React.FC<LyricsLineProps> = ({
@@ -31,6 +33,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
     onRemove,
     onAddLineBefore,
     onAddLineAfter,
+    onSplitPart,
 }) => {
     const {
         value: lyrics,
@@ -86,8 +89,8 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
         [dispatch, lyrics, path]
     );
 
-    const buttons: IconButtonInfo[] = useMemo(
-        () => [
+    const buttons: IconButtonInfo[] = useMemo(() => {
+        const result = [
             {
                 Icon: EditIcon,
                 title: 'Редактировать текст (редактирование стирает добавленные аккорды)',
@@ -100,18 +103,26 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
                 fill: 'firebrick',
             },
             {
-                Icon: ArrowUpLineIcon,
+                Icon: MoveUpIcon,
                 title: 'Добавить строку выше',
                 onClick: onAddLineBefore,
             },
             {
-                Icon: ArrowDownLineIcon,
+                Icon: MoveDownIcon,
                 title: 'Добавить строку ниже',
                 onClick: onAddLineAfter,
             },
-        ],
-        [onToggleEdit, onRemove, onAddLineAfter, onAddLineBefore]
-    );
+        ];
+
+        if (!!onSplitPart)
+            result.push({
+                Icon: SplitIcon,
+                title: 'Выделить новую часть, начиная с этой строки',
+                onClick: onSplitPart,
+            });
+
+        return result;
+    }, [onToggleEdit, onRemove, onAddLineAfter, onAddLineBefore, onSplitPart]);
 
     const firstChordOffset = !lyrics[0].lyric;
 
