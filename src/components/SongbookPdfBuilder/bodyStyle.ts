@@ -3,6 +3,7 @@ export const bodyStyle = `section {
     display: flex;
     flex-direction: column;
     break-inside: avoid;
+    min-width: 335px;
 }
 
 article {
@@ -30,6 +31,7 @@ body {
     width: 794px;
     background: gray;
     overflow: overlay;
+    font-family: Calibri, sans-serif
 }
 
 button {

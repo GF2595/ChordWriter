@@ -55,7 +55,11 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                 <Modal.Header closeButton={false}>
                     <Modal.Title>Сборка песенника</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={`${CLASS}__body`}>
+                    <span className={`${CLASS}__info`}>
+                        Добавьте песни в формате ChordWriter в список при помощи
+                        кнопки ниже и расположите в нужном порядке для вывода
+                    </span>
                     {!!songList.length ? (
                         <List
                             pressDelay={100}
@@ -130,7 +134,12 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                     >
                         Вывести PDF
                     </Button>
-                    <Button onClick={onClose} appearance="subtle" size={'xs'}>
+                    <Button
+                        onClick={onClose}
+                        appearance="subtle"
+                        size={'xs'}
+                        className={`${CLASS}__button-close`}
+                    >
                         Закрыть
                     </Button>
                 </Modal.Footer>

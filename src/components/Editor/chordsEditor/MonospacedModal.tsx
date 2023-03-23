@@ -3,6 +3,9 @@ import { Song } from '@model/song';
 import React from 'react';
 import { Button, Input, Modal, ModalProps } from 'rsuite';
 import { getMonospacedText } from './utils';
+import './MonospacedModal.scss';
+
+const CLASS = 'monospaced-modal';
 
 export interface MonospacedModalProps
     extends Pick<ModalProps, 'open' | 'onClose'> {}
@@ -30,7 +33,12 @@ export const MonospacedModal: React.FC<MonospacedModalProps> = ({
                 />
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onClose} appearance="subtle">
+                <Button
+                    className={`${CLASS}__button-close`}
+                    size={'xs'}
+                    onClick={onClose}
+                    appearance="subtle"
+                >
                     Закрыть
                 </Button>
             </Modal.Footer>

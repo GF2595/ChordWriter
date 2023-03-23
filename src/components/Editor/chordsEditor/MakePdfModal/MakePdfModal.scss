@@ -4,6 +4,11 @@ $border: 1px solid gray;
 $border-radius: 6px;
 
 .make-pdf-modal {
+    &__body {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__list {
         border: $border;
         border-radius: $border-radius;
@@ -21,6 +26,15 @@ $border-radius: 6px;
 
     &__button-left {
         float: left;
+    }
+
+    &__button-close {
+        color: firebrick !important;
+    }
+
+    &__info {
+        margin-bottom: $spacing-lg;
+        font-size: 12px;
     }
 }
 
