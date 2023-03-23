@@ -48,6 +48,27 @@ ipcMain.handle('dialog/openFile', () =>
         })
 );
 
+ipcMain.handle('dialog/openFiles', () =>
+    dialog
+        .showOpenDialog({
+            properties: ['openFile', 'multiSelections'],
+            filters: [{ extensions: ['json'], name: '*' }],
+        })
+        .then((value) => {
+            const result: any[] = [];
+
+            value.filePaths.forEach((path) => {
+                if (!path) return;
+
+                const fileJson = fs.readFileSync(path).toString();
+
+                result.push(JSON.parse(fileJson));
+            });
+
+            return result;
+        })
+);
+
 ipcMain.on('openDevTools', () =>
     BrowserWindow.getFocusedWindow().webContents.openDevTools()
 );

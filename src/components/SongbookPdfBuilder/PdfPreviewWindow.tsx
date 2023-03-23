@@ -30,6 +30,8 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
         css.type = 'text/css';
         css.appendChild(document.createTextNode(bodyStyle));
         childWindow.document.head.appendChild(css);
+        // Под новое окно создаётся новый комонент => задаём свойства только на маунте
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return createPortal(
@@ -42,6 +44,8 @@ export const PdfPreviewWindow: React.FC<PdfPreviewWindowProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     transition: 'all 0.5s ease-in-out',
+                    position: 'absolute',
+                    width: '100%',
                 }}
             >
                 <button

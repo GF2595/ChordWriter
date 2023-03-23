@@ -5,13 +5,13 @@ import {
     EditorContextProvider,
     useEditorContext,
 } from '@components/EditorContext';
-import { PdfPreviewWindow } from '@components/SongbookPdfBuilder';
 import { SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
 import { get } from 'lodash';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Notification, toaster } from 'rsuite';
 import './ChordsEditor.scss';
+import { MakePdfModal } from './MakePdfModal';
 import { MonospacedModal } from './MonospacedModal';
 import { SongPart } from './SongPart';
 import { checkSongJsonFormat, getNewSong } from './utils';
@@ -21,10 +21,9 @@ const CLASS = 'chords-editor';
 const EditorContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
     const [monospacedModalVisible, setMonospacedModalVisible] = useState(false);
+    const [makePdfModalVisible, setMakePdfModalVisible] = useState(false);
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
-    const [pdfPreview, setPdfPreview] = useState<React.ReactNode>(null);
-    const ref = useRef(0);
 
     const message = (error: any) => (
         <Notification
@@ -88,20 +87,14 @@ const EditorContent: React.FC = () => {
                     'Divider',
                     {
                         title: 'В моноширинную запись',
+                        info: 'Вывести текущую песню в моноширинном формате',
                         onClick: () => setMonospacedModalVisible(true),
                     },
+                    'Divider',
                     {
-                        title: 'В PDF-файл',
-                        onClick: () => {
-                            ref.current = ref.current + 1;
-                            setPdfPreview(
-                                <PdfPreviewWindow
-                                    key={ref.current}
-                                    onClose={() => setPdfPreview(null)}
-                                    songs={[value]}
-                                />
-                            );
-                        },
+                        title: 'Сборка PDF',
+                        info: 'Сохранить текущую песню или собрать песенник в формате PDF',
+                        onClick: () => setMakePdfModalVisible(true),
                     },
                 ],
             },
@@ -156,7 +149,12 @@ const EditorContent: React.FC = () => {
                 open={monospacedModalVisible}
                 onClose={() => setMonospacedModalVisible(false)}
             />
-            {pdfPreview}
+            {makePdfModalVisible && (
+                <MakePdfModal
+                    open={makePdfModalVisible}
+                    onClose={() => setMakePdfModalVisible(false)}
+                />
+            )}
         </>
     );
 };
