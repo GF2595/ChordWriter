@@ -1,0 +1,26 @@
+@import '@stylesheets/common.scss';
+
+.header-element {
+    &__button {
+        margin-left: $spacing-xs;
+
+        & > ul {
+            top: calc(100% + 1px) !important;
+            padding: 0;
+            font-size: 12px;
+        }
+
+        &_active {
+            color: firebrick !important;
+        }
+    }
+
+    &__popover {
+        height: unset !important;
+    }
+
+    &__divider {
+        margin: 0 $spacing;
+    }
+}
+

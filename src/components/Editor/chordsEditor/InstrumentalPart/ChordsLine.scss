@@ -4,7 +4,7 @@
     display: flex;
 
     &--offset {
-        margin-left: $spacing;
+        margin-left: $left-line-offset;
     }
 
     &__empty-button:hover {

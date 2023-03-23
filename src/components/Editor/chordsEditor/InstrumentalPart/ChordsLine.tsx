@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
-import cn from 'classnames';
-import EditIcon from '@rsuite/icons/Edit';
-import { Whisper } from 'rsuite';
-import TrashIcon from '@rsuite/icons/Trash';
-import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
-import ArrowUpLineIcon from '@rsuite/icons/ArrowUpLine';
 import {
     AddChordArea,
     Chord,
     ChordEditPopup,
     IconButtonCluster,
-} from '../components';
-import { useEditorContext } from '../EditorContext';
+} from '@common/ChordsEditor';
+import { useEditorContext } from '@components/EditorContext';
 import { ChordType } from '@model/song';
+import MoveDownIcon from '@rsuite/icons/MoveDown';
+import MoveUpIcon from '@rsuite/icons/MoveUp';
+import EditIcon from '@rsuite/icons/Edit';
+import TrashIcon from '@rsuite/icons/Trash';
+import cn from 'classnames';
+import React, { useMemo } from 'react';
+import { Whisper } from 'rsuite';
 import './ChordsLine.scss';
 
 const CLASS = 'chords-line';
@@ -42,7 +42,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                 fill: 'firebrick',
             },
             {
-                Icon: ArrowUpLineIcon,
+                Icon: MoveUpIcon,
                 title: 'Добавить строку выше',
                 onClick: () =>
                     dispatch({
@@ -55,7 +55,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                     }),
             },
             {
-                Icon: ArrowDownLineIcon,
+                Icon: MoveDownIcon,
                 title: 'Добавить строку ниже',
                 onClick: () =>
                     dispatch({
@@ -68,7 +68,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                     }),
             },
         ],
-        [dispatch]
+        [dispatch, lineArrayPath, lineIndex]
     );
 
     const line = value as ChordType[];
@@ -82,6 +82,7 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
             {!line.length
                 ? [
                       <Whisper
+                          key={'first chord add area'}
                           placement={'top'}
                           trigger={'click'}
                           speaker={
@@ -120,7 +121,6 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
                       />,
                       ...line.map((chord, chordIndex) => [
                           <Chord
-                              hasPadding={false}
                               key={`${lineIndex}_${chordIndex}_${chord}`}
                               chord={chord}
                               onEdit={(chord) =>
@@ -166,3 +166,4 @@ export const ChordsLine: React.FC<ChordsLineProps> = ({
         </div>
     );
 };
+

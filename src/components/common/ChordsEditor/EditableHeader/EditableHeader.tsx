@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { InlineInput } from '@common/ChordsEditor/InlineInput';
+import { useEditorContext } from '@components/EditorContext';
 import EditIcon from '@rsuite/icons/Edit';
 import cn from 'classnames';
+import React, { useCallback, useEffect, useState } from 'react';
 import './EditableHeader.scss';
-import { useEditorContext } from '../../EditorContext';
-import { InlineInput } from '../InlineInput';
 
 const CLASS = 'editable-header';
 
@@ -40,13 +40,11 @@ export const EditableHeader: React.FC<EditableHeaderProps> = ({
         setText(value || '');
     }, [value, setText]);
 
-    const onEdit = (value: string) =>
-        dispatch({ type: 'setValue', payload: { path, value } });
-
     const handleSave = useCallback(() => {
         setIsEditing((value) => !value);
-        onEdit(text);
-    }, [onEdit, setIsEditing, text]);
+
+        dispatch({ type: 'setValue', payload: { path, value: text } });
+    }, [dispatch, path, text]);
 
     const handleCancel = useCallback(() => {
         setText(value);

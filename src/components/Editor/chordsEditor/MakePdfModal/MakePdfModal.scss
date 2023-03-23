@@ -1,0 +1,40 @@
+@import '@stylesheets/common.scss';
+
+$border: 1px solid gray;
+$border-radius: 6px;
+
+.make-pdf-modal {
+    &__body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__list {
+        border: $border;
+        border-radius: $border-radius;
+        padding: 0 $spacing-xs;
+    }
+
+    &__list-placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: $border;
+        border-radius: $border-radius;
+        height: 40px;
+    }
+
+    &__button-left {
+        float: left;
+    }
+
+    &__button-close {
+        color: firebrick !important;
+    }
+
+    &__info {
+        margin-bottom: $spacing-lg;
+        font-size: 12px;
+    }
+}
+

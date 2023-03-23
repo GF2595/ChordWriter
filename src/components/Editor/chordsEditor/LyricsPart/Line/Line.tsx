@@ -1,9 +1,7 @@
-import { LyricsPartType, SongLine } from '@model/song';
 import React from 'react';
-import { useEditorContext } from '../../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
-import { get } from 'lodash';
 
 export interface LineProps {
     path: string;
@@ -13,6 +11,7 @@ export interface LineProps {
     onCancelLineEdit: () => void;
     onAddLineAfter: () => void;
     onAddLineBefore: () => void;
+    onSplitPart?: () => void;
     onMultilinePaste: (excessLines: string[]) => void;
 }
 
@@ -25,6 +24,7 @@ export const Line: React.FC<LineProps> = ({
     onAddLineAfter,
     onAddLineBefore,
     onMultilinePaste,
+    onSplitPart,
 }) => {
     const { value: line, dispatch } = useEditorContext(path);
 
@@ -45,7 +45,7 @@ export const Line: React.FC<LineProps> = ({
                             value: {
                                 ...line,
                                 chords: undefined,
-                                lyrics: [text],
+                                lyrics: [{ lyric: text }],
                                 lastChordOffset: undefined,
                                 firstChordOffset: undefined,
                             },
@@ -59,14 +59,13 @@ export const Line: React.FC<LineProps> = ({
 
     return (
         <LyricsLine
-            line={line}
+            path={path}
             onToggleEdit={onSetLineEdit}
             onRemove={onRemoveLine}
-            onAlterLine={(line: SongLine) =>
-                dispatch({ type: 'setValue', payload: { path, value: line } })
-            }
             onAddLineAfter={onAddLineAfter}
             onAddLineBefore={onAddLineBefore}
+            onSplitPart={onSplitPart}
         />
     );
 };
+

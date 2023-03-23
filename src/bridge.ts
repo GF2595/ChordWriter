@@ -5,8 +5,11 @@ const _window = {
     maximize: (): void => ipcRenderer.send('window/maximize'),
     close: (): void => ipcRenderer.send('window/close'),
     openFile: (): Promise<any> => ipcRenderer.invoke('dialog/openFile'),
+    openFiles: (): Promise<any> => ipcRenderer.invoke('dialog/openFiles'),
     saveToNewFile: (fileContents: string): Promise<any> =>
         ipcRenderer.invoke('dialog/saveFile', fileContents),
+    print: (): void => ipcRenderer.send('print'),
+    openDevTools: (): void => ipcRenderer.send('openDevTools'),
 };
 
 export const API = {
@@ -14,3 +17,4 @@ export const API = {
 };
 
 contextBridge.exposeInMainWorld('api', API);
+

@@ -1,7 +1,7 @@
+import { InlineInput, InlineInputProps } from '@common/ChordsEditor';
 import { SongLine } from '@model/song';
 import React, { useCallback, useRef, useState } from 'react';
 import './EditLine.scss';
-import { InlineInput, InlineInputProps } from '../../components';
 
 export interface EditLineProps {
     line: SongLine | string;
@@ -21,7 +21,9 @@ export const EditLine: React.FC<EditLineProps> = ({
     onMultilinePaste,
 }) => {
     const originalText = useRef(
-        typeof line === 'string' ? line : line.lyrics.join('')
+        typeof line === 'string'
+            ? line
+            : line.lyrics.map((block) => block.lyric).join('')
     );
     const [text, setText] = useState(originalText.current);
 
@@ -31,7 +33,9 @@ export const EditLine: React.FC<EditLineProps> = ({
 
     const onPaste: InlineInputProps['onPaste'] = useCallback(
         (event) => {
-            const pasteText = event.clipboardData.getData('text');
+            const pasteText = event.clipboardData
+                .getData('text')
+                .replace(/^\s+|\s+$/g, '');
             const selectionRange = window.getSelection().getRangeAt(0);
 
             const pasteLines = pasteText.split('\n').map((line) => line.trim());
@@ -63,6 +67,7 @@ export const EditLine: React.FC<EditLineProps> = ({
             placeholder={placeholder}
             onInput={(value) => setText(value.currentTarget.textContent)}
             onSave={() => onSave(text)}
+            disabled={!text}
             onCancel={onCancel}
             onKeyDown={(event) => {
                 if (event.key === 'Escape') onCancel();

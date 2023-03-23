@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import { PageContent } from '@components/common/PageContent';
-import { PageHeader, ButtonInfo } from '@components/common/PageHeader';
-import './ChordsEditor.scss';
-import { SongPart } from './SongPart';
-import { EditorContextProvider, useEditorContext } from './EditorContext';
+import { EditableHeader } from '@common/ChordsEditor';
+import { PageContent } from '@common/PageContent';
+import { ElementInfo, PageHeader } from '@common/PageHeader';
+import {
+    EditorContextProvider,
+    useEditorContext,
+} from '@components/EditorContext';
+import { LyricsPartType, SongBody } from '@model/song';
 import ListIcon from '@rsuite/icons/List';
-import { SongBody } from '@model/song';
-import { Button, Notification, toaster } from 'rsuite';
-import { checkSongJsonFormat, getNewSong } from './utils';
 import { get } from 'lodash';
-import { EditableHeader } from './components';
+import React, { useMemo, useState } from 'react';
+import { Button, Notification, toaster } from 'rsuite';
+import './ChordsEditor.scss';
+import { MakePdfModal } from './MakePdfModal';
+import { MonospacedModal } from './MonospacedModal';
+import { SongPart } from './SongPart';
+import { checkSongJsonFormat, getNewSong } from './utils';
+import ChangeListIcon from '@rsuite/icons/ChangeList';
+import TextImageIcon from '@rsuite/icons/TextImage';
 
 const CLASS = 'chords-editor';
 
 const EditorContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
+    const [monospacedModalVisible, setMonospacedModalVisible] = useState(false);
+    const [makePdfModalVisible, setMakePdfModalVisible] = useState(false);
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
 
@@ -33,58 +42,78 @@ const EditorContent: React.FC = () => {
 
     const songBody = get(value, 'songBody') as SongBody;
 
-    const buttons: ButtonInfo[] = [
-        {
-            title: 'Новая',
-            info: 'Открыть редактор новой песни',
-            onClick: () => {
-                dispatch({
-                    type: 'setValue',
-                    payload: { value: getNewSong() },
-                });
-            },
-        },
-        {
-            title: 'Открыть',
-            info: 'Открыть *.json файл с сохранённой песней',
-            onClick: () => {
-                api.openFile()
-                    .then((file) => {
-                        if (!file) return;
+    const buttons: ElementInfo[] = useMemo(
+        () => [
+            {
+                title: 'Файл',
+                buttons: [
+                    {
+                        title: 'Создать',
+                        info: 'Открыть редактор новой песни',
+                        onClick: () => {
+                            dispatch({
+                                type: 'setValue',
+                                payload: { value: getNewSong() },
+                            });
+                        },
+                    },
+                    {
+                        title: 'Открыть',
+                        info: 'Открыть *.json файл с сохранённой песней',
+                        onClick: () => {
+                            api.openFile()
+                                .then((file) => {
+                                    if (!file) return;
 
-                        checkSongJsonFormat(file);
+                                    checkSongJsonFormat(file);
 
-                        dispatch({
-                            type: 'setValue',
-                            payload: { value: file },
-                        });
-                    })
-                    .catch((error) => {
-                        toaster.push(message(error), {
-                            placement: 'bottomEnd',
-                        });
-                    });
+                                    dispatch({
+                                        type: 'setValue',
+                                        payload: { value: file },
+                                    });
+                                })
+                                .catch((error) => {
+                                    toaster.push(message(error), {
+                                        placement: 'bottomEnd',
+                                    });
+                                });
+                        },
+                    },
+                    {
+                        title: 'Сохранить как...',
+                        info: 'Сохранить песню в *.json файл',
+                        onClick: () => {
+                            api.saveToNewFile(JSON.stringify(value, null, 4));
+                        },
+                    },
+                    'Divider',
+                    {
+                        title: 'В моноширинную запись',
+                        info: 'Вывести текущую песню в моноширинном формате',
+                        onClick: () => setMonospacedModalVisible(true),
+                    },
+                ],
             },
-        },
-        {
-            title: 'Сохранить',
-            info: 'Сохранить песню в *.json файл',
-            onClick: () => {
-                api.saveToNewFile(JSON.stringify(value, null, 4));
+            {
+                title: 'Сборка в PDF',
+                icon: <TextImageIcon />,
+                info: 'Сохранить текущую песню или собрать песенник в формате PDF',
+                onClick: () => setMakePdfModalVisible(true),
             },
-        },
-        {
-            icon: <ListIcon />,
-            active: structureVisible,
-            title: 'Структура',
-            info: 'Отобразить структуру (отдельные части и их типы) и элементы редактирования структуры песни',
-            onClick: () => setStructureVisible((value) => !value),
-        },
-    ];
+            {
+                icon: <ListIcon />,
+                active: structureVisible,
+                title: 'Структура',
+                info: 'Отобразить структуру (отдельные части и их типы) и элементы редактирования структуры песни',
+                onClick: () => setStructureVisible((value) => !value),
+            },
+        ],
+        [api, dispatch, structureVisible, value]
+    );
 
     return (
         <>
-            <PageHeader buttons={buttons} />
+            <PageHeader elements={buttons} />
             <PageContent className={CLASS}>
                 <EditableHeader
                     size={'lg'}
@@ -101,6 +130,39 @@ const EditorContent: React.FC = () => {
                                 isStructureVisible={structureVisible}
                                 partsArrayPath={'songBody'}
                                 partIndex={index}
+                                onSplitPart={(partIndex, lineIndex) => {
+                                    const oldPart = songBody[
+                                        partIndex
+                                    ] as LyricsPartType;
+
+                                    if (!oldPart || !oldPart.lines?.[lineIndex])
+                                        return;
+
+                                    dispatch({
+                                        type: 'setValue',
+                                        payload: {
+                                            path: 'songBody',
+                                            value: [
+                                                ...songBody.slice(0, partIndex),
+                                                {
+                                                    ...oldPart,
+                                                    lines: oldPart.lines.slice(
+                                                        0,
+                                                        lineIndex
+                                                    ),
+                                                },
+                                                {
+                                                    lines: oldPart.lines.slice(
+                                                        lineIndex
+                                                    ),
+                                                },
+                                                ...songBody.slice(
+                                                    partIndex + 1
+                                                ),
+                                            ],
+                                        },
+                                    });
+                                }}
                             />
                         ))
                     ) : (
@@ -118,6 +180,16 @@ const EditorContent: React.FC = () => {
                     )}
                 </div>
             </PageContent>
+            <MonospacedModal
+                open={monospacedModalVisible}
+                onClose={() => setMonospacedModalVisible(false)}
+            />
+            {makePdfModalVisible && (
+                <MakePdfModal
+                    open={makePdfModalVisible}
+                    onClose={() => setMakePdfModalVisible(false)}
+                />
+            )}
         </>
     );
 };

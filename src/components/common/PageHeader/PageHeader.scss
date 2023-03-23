@@ -1,4 +1,5 @@
-@import '../../../stylesheets/common.scss';
+@import '@stylesheets/common.scss';
+
 .header {
     display: flex;
     flex-direction: row;
@@ -12,13 +13,6 @@
         align-items: center;
         justify-content: center;
         padding: $spacing $spacing $spacing-xs $spacing;
-    }
-    &__button {
-        margin-left: $spacing-xs;
-    }
-
-    &__popover {
-        height: unset !important;
     }
 }
 

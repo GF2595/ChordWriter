@@ -1,17 +1,17 @@
+import { useEditorContext } from '@components/EditorContext';
 import {
     InstrumentalPartType,
     LyricsPartType,
     SongPart as SongPartType,
 } from '@model/song';
+import cn from 'classnames';
 import React, { useCallback } from 'react';
-import { useEditorContext } from '../EditorContext';
+import { Divider } from 'rsuite';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
 import { PartHeader } from './PartHeader';
 import './SongPart.scss';
 import { PartContentType } from './types';
-import cn from 'classnames';
-import { Divider } from 'rsuite';
 
 const CLASS = 'song-part';
 
@@ -19,16 +19,47 @@ export interface SongPartProps {
     partsArrayPath: string;
     partIndex: number;
     isStructureVisible?: boolean;
+    onSplitPart?: (partIndex: number, lineIndex: number) => void;
 }
 
 export const SongPart: React.FC<SongPartProps> = ({
     partsArrayPath,
     partIndex,
     isStructureVisible,
+    onSplitPart,
 }) => {
     const path = `${partsArrayPath}[${partIndex}]`;
 
     const { value: part, dispatch } = useEditorContext(path);
+
+    const onSetType = useCallback(
+        (type: PartContentType | null) => {
+            let newPart: SongPartType = {
+                title: part?.title,
+            };
+
+            if (type === 'chords')
+                newPart = {
+                    ...newPart,
+                    chords: [[]],
+                };
+
+            if (type === 'lyrics')
+                newPart = {
+                    ...newPart,
+                    lines: [],
+                };
+
+            if (type === 'tab')
+                newPart = {
+                    ...newPart,
+                    tabs: '',
+                };
+
+            dispatch({ type: 'setValue', payload: { path, value: newPart } });
+        },
+        [dispatch, part.title, path]
+    );
 
     if (!part) return null;
 
@@ -39,7 +70,16 @@ export const SongPart: React.FC<SongPartProps> = ({
     let type: PartContentType = null;
 
     if (!!lines) {
-        content = <LyricsPart path={path} />;
+        content = (
+            <LyricsPart
+                onSplitPart={
+                    isStructureVisible
+                        ? (lineIndex) => onSplitPart(partIndex, lineIndex)
+                        : undefined
+                }
+                path={path}
+            />
+        );
         type = 'lyrics';
     }
 
@@ -49,32 +89,6 @@ export const SongPart: React.FC<SongPartProps> = ({
         if (!!chords) type = 'chords';
         else type = 'tab';
     }
-
-    const onSetType = useCallback((type: PartContentType | null) => {
-        let newPart: SongPartType = {
-            title: part.title,
-        };
-
-        if (type === 'chords')
-            newPart = {
-                ...newPart,
-                chords: [[]],
-            };
-
-        if (type === 'lyrics')
-            newPart = {
-                ...newPart,
-                lines: [],
-            };
-
-        if (type === 'tab')
-            newPart = {
-                ...newPart,
-                tabs: '',
-            };
-
-        dispatch({ type: 'setValue', payload: { path, value: newPart } });
-    }, []);
 
     return (
         <div className={CLASS}>
@@ -97,3 +111,4 @@ export const SongPart: React.FC<SongPartProps> = ({
         </div>
     );
 };
+

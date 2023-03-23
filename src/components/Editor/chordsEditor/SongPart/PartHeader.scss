@@ -18,7 +18,7 @@
     &__type-picker {
         width: 100px;
         margin-top: $spacing-xs;
-        margin-left: $spacing-lg;
+        margin-left: $left-line-offset;
         border: none;
         box-shadow: none !important;
 
@@ -34,7 +34,7 @@
 
     &__regular-title {
         font-weight: bolder;
-        padding-left: $spacing;
+        padding-left: $left-line-offset;
     }
 
     &__editable_title {

@@ -12,6 +12,7 @@
         "resolveJsonModule": true,
         "jsx": "react",
         "paths": {
+            "@common/*": ["src/components/common/*"],
             "@components/*": ["src/components/*"],
             "@stylesheets/*": ["src/stylesheets/*"],
             "@model/*": ["src/model/*"],

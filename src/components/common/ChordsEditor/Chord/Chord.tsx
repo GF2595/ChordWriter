@@ -1,36 +1,35 @@
-import React from 'react';
+import { ChordEditPopup } from '@common/ChordsEditor/ChordEditPopup';
 import { ChordType } from '@model/song';
 import cn from 'classnames';
-import './Chord.scss';
-import { ChordEditPopup } from '../ChordEditPopup';
+import React, { useRef } from 'react';
 import { Whisper } from 'rsuite';
+import './Chord.scss';
 
 const CLASS = 'chord';
 
 export interface ChordProps {
     chord: ChordType;
-    hasPadding?: boolean;
     className?: string;
+    absolutePositionedMod?: boolean;
     onEdit?: (chord: ChordType) => void;
     onRemove?: () => void;
 }
 
 export const Chord: React.FC<ChordProps> = ({
     chord: chordBase,
-    hasPadding = true,
     className,
+    absolutePositionedMod,
     onEdit,
     onRemove,
 }) => {
     const { chord, mod } = chordBase;
 
-    const whisperRef = React.useRef<any>();
+    const whisperRef = useRef<{ close: () => void }>();
 
     const chordContent = (
         <span
             className={cn(
                 CLASS,
-                { [`${CLASS}-with_padding`]: hasPadding },
                 { [`${CLASS}-clickable`]: !!onEdit && !!onRemove },
                 className
             )}
@@ -40,7 +39,13 @@ export const Chord: React.FC<ChordProps> = ({
             }}
         >
             {chord.length ? chord : ' '}
-            <sub>{mod}</sub>
+            <sub
+                className={cn({
+                    [`${CLASS}__absolute-mod`]: absolutePositionedMod,
+                })}
+            >
+                {mod}
+            </sub>
         </span>
     );
 
@@ -69,3 +74,4 @@ export const Chord: React.FC<ChordProps> = ({
         </Whisper>
     );
 };
+

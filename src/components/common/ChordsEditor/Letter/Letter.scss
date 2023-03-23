@@ -1,4 +1,6 @@
 @import '@stylesheets/colors';
+@import '@stylesheets/common';
+
 .letter {
     cursor: default;
     white-space: pre;
@@ -14,6 +16,9 @@
         &:hover {
             background: linear-gradient(white, rgba($text-hover-shadow, 0.5));
         }
+    }
+    &-empty {
+        width: $left-line-offset;
     }
     &__popover {
         height: unset !important;

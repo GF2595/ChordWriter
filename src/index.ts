@@ -29,10 +29,8 @@ ipcMain.on('window/close', () => {
     win.close();
 });
 
-ipcMain.handle('dialog/openFile', () => {
-    // const win = BrowserWindow.getFocusedWindow();
-
-    return dialog
+ipcMain.handle('dialog/openFile', () =>
+    dialog
         .showOpenDialog({
             properties: ['openFile'],
             filters: [{ extensions: ['json'], name: '*' }],
@@ -47,8 +45,33 @@ ipcMain.handle('dialog/openFile', () => {
             const fileContents = JSON.parse(fileJson);
 
             return fileContents;
-        });
-});
+        })
+);
+
+ipcMain.handle('dialog/openFiles', () =>
+    dialog
+        .showOpenDialog({
+            properties: ['openFile', 'multiSelections'],
+            filters: [{ extensions: ['json'], name: '*' }],
+        })
+        .then((value) => {
+            const result: any[] = [];
+
+            value.filePaths.forEach((path) => {
+                if (!path) return;
+
+                const fileJson = fs.readFileSync(path).toString();
+
+                result.push(JSON.parse(fileJson));
+            });
+
+            return result;
+        })
+);
+
+ipcMain.on('openDevTools', () =>
+    BrowserWindow.getFocusedWindow().webContents.openDevTools()
+);
 
 ipcMain.handle('dialog/saveFile', (_, fileContents) => {
     return dialog
@@ -62,6 +85,30 @@ ipcMain.handle('dialog/saveFile', (_, fileContents) => {
 
             fs.writeFileSync(path, fileContents);
         });
+});
+
+ipcMain.on('print', () => {
+    const win = BrowserWindow.getFocusedWindow();
+
+    win.webContents
+        .printToPDF({
+            pageSize: 'A4',
+            marginsType: 1,
+        })
+        .then((file) =>
+            dialog
+                .showSaveDialog({
+                    filters: [{ extensions: ['pdf'], name: '*' }],
+                })
+                .then((value) => {
+                    const path = value.filePath;
+
+                    if (!path) return;
+
+                    fs.writeFileSync(path, file);
+                    win.close();
+                })
+        );
 });
 
 const createWindow = (): void => {
@@ -85,10 +132,11 @@ const createWindow = (): void => {
         mainWindow.show();
         mainWindow.focus();
     });
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
 };
+
+app.on('browser-window-focus', () => {
+    BrowserWindow.getFocusedWindow()?.removeMenu();
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -114,3 +162,4 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+

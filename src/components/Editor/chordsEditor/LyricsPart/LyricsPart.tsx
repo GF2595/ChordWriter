@@ -3,24 +3,28 @@ import { LyricsPartType, SongLine } from '@model/song';
 import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
-import { useEditorContext } from '../EditorContext';
+import { useEditorContext } from '@components/EditorContext';
 import EditIcon from '@rsuite/icons/Edit';
-import { IconButton } from '@components/common/IconButton';
+import { IconButton } from '@common/IconButton';
 
 const CLASS = 'lyrics-part';
 
 export interface LyricsPartProps {
     path: string;
+    onSplitPart?: (lineIndex: number) => void;
 }
 
 const newLine: (line?: string) => SongLine = (line) => ({
-    lyrics: !!line ? [line] : [],
+    lyrics: !!line ? [{ lyric: line }] : [],
 });
 
-export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
+export const LyricsPart: React.FC<LyricsPartProps> = ({
+    path,
+    onSplitPart,
+}) => {
     const { value: part, dispatch } = useEditorContext(path);
 
-    const { lines, title } = part as LyricsPartType;
+    const { lines } = part as LyricsPartType;
     const [editedLine, setEditedLine] = useState(-1);
 
     const onRemoveLine = (index: number) => {
@@ -35,11 +39,11 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
     const tableData: TableProps['data'] = lines.map((line, index) => {
         // TODO: key index
         return {
-            dataKey: line?.lyrics?.[0],
-            hasChords:
-                line.chords &&
-                line.chords.length &&
-                !(line.chords.length === 1 && !line.chords[0]),
+            dataKey:
+                line?.lyrics?.[0]?.lyric ||
+                line?.lyrics?.[1]?.lyric ||
+                `${index}`,
+            hasChords: line.lyrics.some(({ chord }) => !!chord),
             line: (
                 <Line
                     path={`${path}.lines[${index}]`}
@@ -66,6 +70,11 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({ path }) => {
                                 index: index,
                             },
                         })
+                    }
+                    onSplitPart={
+                        onSplitPart && index !== 0
+                            ? () => onSplitPart(index)
+                            : undefined
                     }
                     onMultilinePaste={(excessLines: string[]) => {
                         excessLines.forEach((excessLine, excessLineIndex) => {

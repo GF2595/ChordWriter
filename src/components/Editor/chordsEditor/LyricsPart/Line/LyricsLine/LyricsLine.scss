@@ -29,9 +29,29 @@
         visibility: hidden;
     }
 
-    &__chord-offset {
+    &__chord {
         position: absolute;
-        left: 0px;
-        top: 0px;
+        bottom: 1rem;
+
+        &--tail {
+            position: relative;
+        }
+
+        &--offset {
+            left: -10px;
+        }
+    }
+
+    &__offset-container {
+        position: relative;
+        display: flex;
+    }
+
+    &__letter-chord-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }
+

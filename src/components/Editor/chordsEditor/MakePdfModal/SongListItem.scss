@@ -1,0 +1,18 @@
+@import '@stylesheets/common.scss';
+
+.song-list-item {
+    display: flex;
+    align-items: center;
+
+    &__name {
+        flex: 1;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    &__remove-button {
+        margin: auto $spacing;
+    }
+}
+
