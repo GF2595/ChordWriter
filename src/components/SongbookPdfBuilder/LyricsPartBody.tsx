@@ -50,6 +50,11 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                                 width: leftOffset,
                                                 position: 'relative',
                                                 whiteSpace: 'pre',
+                                                // [TODO] Нормальное решение здесь и в LyricsLine
+                                                marginLeft: !!lyrics[index - 1]
+                                                    ?.lyric
+                                                    ? '12px'
+                                                    : 0,
                                             }}
                                         >
                                             <Chord
