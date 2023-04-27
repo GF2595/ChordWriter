@@ -1,5 +1,5 @@
-import React from 'react';
 import { useEditorContext } from '@components/EditorContext';
+import React, { useCallback } from 'react';
 import { EditLine } from './EditLine';
 import { LyricsLine } from './LyricsLine';
 
@@ -28,30 +28,40 @@ export const Line: React.FC<LineProps> = ({
 }) => {
     const { value: line, dispatch } = useEditorContext(path);
 
-    if (!line) return null;
-
     const isLyricsEmpty = !line?.lyrics || !line.lyrics.length;
+
+    const handleSave = useCallback(
+        (text) => {
+            onCancelLineEdit();
+            dispatch({
+                type: 'setValue',
+                payload: {
+                    path,
+                    value: {
+                        ...line,
+                        chords: undefined,
+                        lyrics: [{ lyric: text }],
+                        lastChordOffset: undefined,
+                        firstChordOffset: undefined,
+                    },
+                },
+            });
+        },
+        [dispatch, line, onCancelLineEdit, path]
+    );
+
+    // TODO: рефакторинг
+    if (!line) return null;
 
     if (isLyricsEmpty || isEdited)
         return (
             <EditLine
                 line={line}
-                onSave={(text) => {
-                    onCancelLineEdit();
-                    dispatch({
-                        type: 'setValue',
-                        payload: {
-                            path,
-                            value: {
-                                ...line,
-                                chords: undefined,
-                                lyrics: [{ lyric: text }],
-                                lastChordOffset: undefined,
-                                firstChordOffset: undefined,
-                            },
-                        },
-                    });
+                onSaveWithNewLine={(text) => {
+                    handleSave(text);
+                    onAddLineAfter();
                 }}
+                onSave={handleSave}
                 onCancel={isLyricsEmpty ? onRemoveLine : onCancelLineEdit}
                 onMultilinePaste={onMultilinePaste}
             />

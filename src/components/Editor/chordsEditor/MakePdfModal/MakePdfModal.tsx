@@ -66,7 +66,6 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                             size={'sm'}
                             sortable
                             onSort={handleSortEnd}
-                            placeholder={'Добавьте чего-нибудь'}
                             className={`${CLASS}__list`}
                         >
                             {songList.map((song, index) => (
