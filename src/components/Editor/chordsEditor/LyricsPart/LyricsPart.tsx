@@ -1,25 +1,26 @@
+import { IconButton } from '@common/IconButton';
+import { useEditorContext } from '@components/EditorContext';
+import { LyricsPartType } from '@model/song';
+import EditIcon from '@rsuite/icons/Edit';
 import React, { useState } from 'react';
-import { LyricsPartType, SongLine } from '@model/song';
-import './LyricsPart.scss';
 import { Cell, Column, HeaderCell, Table, TableProps } from 'rsuite-table';
 import { Line } from './Line';
-import { useEditorContext } from '@components/EditorContext';
-import EditIcon from '@rsuite/icons/Edit';
-import { IconButton } from '@common/IconButton';
+import './LyricsPart.scss';
+import { newLine, newPartFromLines } from './utils';
 
 const CLASS = 'lyrics-part';
 
 export interface LyricsPartProps {
     path: string;
+    partsArrayPath: string;
+    partIndex: number;
     onSplitPart?: (lineIndex: number) => void;
 }
 
-const newLine: (line?: string) => SongLine = (line) => ({
-    lyrics: !!line ? [{ lyric: line }] : [],
-});
-
 export const LyricsPart: React.FC<LyricsPartProps> = ({
     path,
+    partsArrayPath,
+    partIndex,
     onSplitPart,
 }) => {
     const { value: part, dispatch } = useEditorContext(path);
@@ -77,13 +78,49 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({
                             : undefined
                     }
                     onMultilinePaste={(excessLines: string[]) => {
-                        excessLines.forEach((excessLine, excessLineIndex) => {
+                        console.log('Tick!');
+                        const linesByParts: string[][] = [];
+
+                        if (excessLines.some((line) => !line)) {
+                            let lastSplitEndIndex = 0;
+
+                            excessLines.forEach((line, index) => {
+                                if (!line) {
+                                    linesByParts.push(
+                                        excessLines.slice(
+                                            lastSplitEndIndex,
+                                            index
+                                        )
+                                    );
+                                    lastSplitEndIndex = index + 1;
+                                }
+                            });
+
+                            linesByParts.push(
+                                excessLines.slice(lastSplitEndIndex)
+                            );
+                        } else linesByParts.push(excessLines);
+
+                        linesByParts[0].forEach(
+                            (excessLine, excessLineIndex) => {
+                                dispatch({
+                                    type: 'addArrayValue',
+                                    payload: {
+                                        path: `${path}.lines`,
+                                        value: newLine(excessLine),
+                                        index: index + 1 + excessLineIndex,
+                                    },
+                                });
+                            }
+                        );
+
+                        linesByParts.slice(1).forEach((part, index) => {
                             dispatch({
                                 type: 'addArrayValue',
                                 payload: {
-                                    path: `${path}.lines`,
-                                    value: newLine(excessLine),
-                                    index: index + 1 + excessLineIndex,
+                                    path: partsArrayPath,
+                                    value: newPartFromLines(part),
+                                    index: partIndex + 1 + index,
                                 },
                             });
                         });

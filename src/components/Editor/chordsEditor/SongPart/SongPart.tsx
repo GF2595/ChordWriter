@@ -78,6 +78,8 @@ export const SongPart: React.FC<SongPartProps> = ({
                         : undefined
                 }
                 path={path}
+                partsArrayPath={partsArrayPath}
+                partIndex={partIndex}
             />
         );
         type = 'lyrics';
