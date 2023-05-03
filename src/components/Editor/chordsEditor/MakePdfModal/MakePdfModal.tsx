@@ -4,7 +4,16 @@ import { Song } from '@model/song';
 import { removeAt } from '@utils/array';
 import { isArray } from 'lodash';
 import React, { useRef, useState } from 'react';
-import { Button, List, Modal, ModalProps, Notification, toaster } from 'rsuite';
+import {
+    Button,
+    Checkbox,
+    CheckboxGroup,
+    List,
+    Modal,
+    ModalProps,
+    Notification,
+    toaster,
+} from 'rsuite';
 import { checkSongJsonFormat } from '../utils';
 import './MakePdfModal.scss';
 import { SongListItem } from './SongListItem';
@@ -34,6 +43,7 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
         !!song.title || !!song.author || !!song.songBody.length ? [song] : []
     );
     const ref = useRef(0);
+    const [showChords, setShowChords] = useState(true);
 
     const handleSortEnd = ({
         oldIndex,
@@ -88,6 +98,20 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                             </span>
                         </div>
                     )}
+                    <CheckboxGroup inline>
+                        <Checkbox
+                            checked={showChords}
+                            onChange={(_, checked) => setShowChords(checked)}
+                        >
+                            Выводить аккорды
+                        </Checkbox>
+                    </CheckboxGroup>
+                    {/*<CheckboxGroup inline>
+                        <Checkbox disabled>
+                            Добавить алфавитный указатель
+                        </Checkbox>
+                        <Checkbox disabled>Добавить содержание</Checkbox>
+                    </CheckboxGroup>*/}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -124,6 +148,7 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                                     key={ref.current}
                                     onClose={() => setPdfPreview(null)}
                                     songs={songList}
+                                    showChords={showChords}
                                 />
                             );
                         }}
