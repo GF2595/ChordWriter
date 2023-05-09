@@ -9,6 +9,7 @@ export interface EditLineProps {
     canSaveEmpty?: boolean;
     onSave: (text: string) => void;
     onSaveWithNewLine?: (text: string) => void;
+    onSaveEmpty?: () => void;
     onCancel: () => void;
     onMultilinePaste?: (excessLines: string[]) => void;
 }
@@ -19,6 +20,7 @@ export const EditLine: React.FC<EditLineProps> = ({
     placeholder,
     onSave,
     onSaveWithNewLine,
+    onSaveEmpty,
     onCancel,
     onMultilinePaste,
 }) => {
@@ -74,7 +76,8 @@ export const EditLine: React.FC<EditLineProps> = ({
                 }
 
                 if (event.key === 'Enter') {
-                    if (!text && !canSaveEmpty) onCancel();
+                    if (!text && !canSaveEmpty)
+                        onSaveEmpty ? onSaveEmpty() : onCancel();
                     else if (event.shiftKey || !onSaveWithNewLine) onSave(text);
                     else onSaveWithNewLine(text);
 

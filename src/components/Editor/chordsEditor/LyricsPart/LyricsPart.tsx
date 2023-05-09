@@ -15,6 +15,7 @@ export interface LyricsPartProps {
     partsArrayPath: string;
     partIndex: number;
     onSplitPart?: (lineIndex: number) => void;
+    onAddPartAfter?: () => void;
 }
 
 export const LyricsPart: React.FC<LyricsPartProps> = ({
@@ -22,6 +23,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({
     partsArrayPath,
     partIndex,
     onSplitPart,
+    onAddPartAfter,
 }) => {
     const { value: part, dispatch } = useEditorContext(path);
 
@@ -77,6 +79,7 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({
                             ? () => onSplitPart(index)
                             : undefined
                     }
+                    onCreateNewPart={!!index ? onAddPartAfter : undefined}
                     onMultilinePaste={(excessLines: string[]) => {
                         console.log('Tick!');
                         const linesByParts: string[][] = [];
