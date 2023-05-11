@@ -5,10 +5,12 @@ import { leftOffset } from './constants';
 
 export interface LyricsPartBodyProps {
     part: LyricsPartType;
+    showChords: boolean;
 }
 
 export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
     part: { lines },
+    showChords,
 }) => {
     return (
         <>
@@ -16,7 +18,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                 <div
                     key={`${index}`}
                     style={
-                        lyrics.some(({ chord }) => !!chord)
+                        showChords && lyrics.some(({ chord }) => !!chord)
                             ? styles.lineWithChords
                             : undefined
                     }
@@ -29,7 +31,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                             whiteSpace: 'pre',
                         }}
                     >
-                        {!lyrics[0]?.lyric && !!lyrics[0].chord && (
+                        {false && !lyrics[0]?.lyric && !!lyrics[0].chord && (
                             <Chord
                                 absolutePositionedMod
                                 style={styles.chord}
@@ -42,7 +44,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                             if (index === 0 && !lyric) return null;
 
                             if (!lyric)
-                                if (!!chord)
+                                if (showChords && !!chord)
                                     return (
                                         <span
                                             key={`${index}`}
@@ -66,7 +68,7 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                                     );
                                 else return null;
 
-                            if (!!chord)
+                            if (showChords && !!chord)
                                 return (
                                     <span key={`${index}`}>
                                         <span

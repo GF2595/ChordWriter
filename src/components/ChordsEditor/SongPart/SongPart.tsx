@@ -9,6 +9,7 @@ import React, { useCallback } from 'react';
 import { Divider } from 'rsuite';
 import { InstrumentalPart } from '../InstrumentalPart';
 import { LyricsPart } from '../LyricsPart';
+import { newLine } from '../LyricsPart/utils';
 import { PartHeader } from './PartHeader';
 import './SongPart.scss';
 import { PartContentType } from './types';
@@ -78,6 +79,18 @@ export const SongPart: React.FC<SongPartProps> = ({
                         : undefined
                 }
                 path={path}
+                partsArrayPath={partsArrayPath}
+                partIndex={partIndex}
+                onAddPartAfter={() =>
+                    dispatch({
+                        type: 'addArrayValue',
+                        payload: {
+                            path: partsArrayPath,
+                            index: partIndex + 1,
+                            value: { lines: [newLine()] },
+                        },
+                    })
+                }
             />
         );
         type = 'lyrics';

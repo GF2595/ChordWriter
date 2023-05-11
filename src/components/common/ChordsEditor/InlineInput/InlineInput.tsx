@@ -45,7 +45,15 @@ export const InlineInput: React.FC<InlineInputProps> = ({
 
     const inputRef = useRef<HTMLSpanElement>();
 
-    useEffect(() => inputRef.current.focus(), []);
+    useEffect(() => {
+        inputRef.current.focus();
+        const range = document.createRange();
+        range.selectNodeContents(inputRef.current);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }, []);
 
     return (
         <div className={className}>

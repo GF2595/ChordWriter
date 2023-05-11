@@ -1,0 +1,15 @@
+@import '@stylesheets/common.scss';
+
+.placeholder-menu {
+    height: 100%;
+    padding-bottom: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__button:not(:first-child) {
+        margin-top: $spacing;
+    }
+}
+

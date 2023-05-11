@@ -2,10 +2,18 @@ import { useEditorContext } from '@components/EditorContext';
 import { PdfPreviewWindow } from '@components/SongbookPdfBuilder';
 import { Song } from '@model/song';
 import { removeAt } from '@utils/array';
+import { checkSongJsonFormat } from '@utils/checkFormat';
 import { isArray } from 'lodash';
 import React, { useRef, useState } from 'react';
-import { Button, List, Modal, ModalProps, Notification, toaster } from 'rsuite';
-import { checkSongJsonFormat } from '../utils';
+import {
+    Button,
+    Checkbox,
+    List,
+    Modal,
+    ModalProps,
+    Notification,
+    toaster,
+} from 'rsuite';
 import './MakePdfModal.scss';
 import { SongListItem } from './SongListItem';
 
@@ -27,13 +35,14 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
     ...modalProps
 }) => {
     const api = window.api.window;
-    const { value: song } = useEditorContext<Song>();
+    const { value: song } = useEditorContext<Song | undefined>();
 
     const [pdfPreview, setPdfPreview] = useState<React.ReactNode>(null);
     const [songList, setSongList] = useState(
-        !!song.title || !!song.author || !!song.songBody.length ? [song] : []
+        !!song?.title || !!song?.author || !!song?.songBody.length ? [song] : []
     );
     const ref = useRef(0);
+    const [showChords, setShowChords] = useState(true);
 
     const handleSortEnd = ({
         oldIndex,
@@ -66,7 +75,6 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                             size={'sm'}
                             sortable
                             onSort={handleSortEnd}
-                            placeholder={'Добавьте чего-нибудь'}
                             className={`${CLASS}__list`}
                         >
                             {songList.map((song, index) => (
@@ -89,6 +97,18 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                             </span>
                         </div>
                     )}
+                    <Checkbox
+                        checked={showChords}
+                        onChange={(_, checked) => setShowChords(checked)}
+                    >
+                        Выводить аккорды
+                    </Checkbox>
+                    {/*<CheckboxGroup inline>
+                        <Checkbox disabled>
+                            Добавить алфавитный указатель
+                        </Checkbox>
+                        <Checkbox disabled>Добавить содержание</Checkbox>
+                    </CheckboxGroup>*/}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -125,6 +145,7 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                                     key={ref.current}
                                     onClose={() => setPdfPreview(null)}
                                     songs={songList}
+                                    showChords={showChords}
                                 />
                             );
                         }}

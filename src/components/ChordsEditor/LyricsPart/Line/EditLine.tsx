@@ -8,6 +8,8 @@ export interface EditLineProps {
     placeholder?: string;
     canSaveEmpty?: boolean;
     onSave: (text: string) => void;
+    onSaveWithNewLine?: (text: string) => void;
+    onSaveEmpty?: () => void;
     onCancel: () => void;
     onMultilinePaste?: (excessLines: string[]) => void;
 }
@@ -17,6 +19,8 @@ export const EditLine: React.FC<EditLineProps> = ({
     canSaveEmpty,
     placeholder,
     onSave,
+    onSaveWithNewLine,
+    onSaveEmpty,
     onCancel,
     onMultilinePaste,
 }) => {
@@ -26,10 +30,6 @@ export const EditLine: React.FC<EditLineProps> = ({
             : line.lyrics.map((block) => block.lyric).join('')
     );
     const [text, setText] = useState(originalText.current);
-
-    const disabled =
-        !originalText.current.localeCompare(text) ||
-        (!canSaveEmpty && !text.length);
 
     const onPaste: InlineInputProps['onPaste'] = useCallback(
         (event) => {
@@ -70,11 +70,17 @@ export const EditLine: React.FC<EditLineProps> = ({
             disabled={!text}
             onCancel={onCancel}
             onKeyDown={(event) => {
-                if (event.key === 'Escape') onCancel();
-            }}
-            onKeyPress={(event) => {
+                if (event.key === 'Escape') {
+                    onCancel();
+                    event.preventDefault();
+                }
+
                 if (event.key === 'Enter') {
-                    disabled ? onCancel() : onSave(text);
+                    if (!text && !canSaveEmpty)
+                        onSaveEmpty ? onSaveEmpty() : onCancel();
+                    else if (event.shiftKey || !onSaveWithNewLine) onSave(text);
+                    else onSaveWithNewLine(text);
+
                     event.preventDefault();
                 }
             }}

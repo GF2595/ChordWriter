@@ -21,11 +21,7 @@ type State<T = any> = {
 };
 
 const defaultValue: State = {
-    value: {
-        title: '',
-        author: '',
-        songBody: [],
-    },
+    value: undefined,
     dispatch: noop,
     untypedDispatch: noop,
 };
@@ -137,7 +133,9 @@ const Actions: {
     },
 };
 
-const editorReducer = (state: Song, { type, payload }: Action) => {
+const editorReducer = (state: Song | undefined, { type, payload }: Action) => {
+    console.log(state);
+
     console.groupCollapsed(
         `%c${type} action`,
         'color: CadetBlue',
@@ -145,7 +143,10 @@ const editorReducer = (state: Song, { type, payload }: Action) => {
         `path: ${payload.path}`
     );
     console.log('Payload:', JSON.parse(JSON.stringify(payload)));
-    console.log('Previous state:', JSON.parse(JSON.stringify(state)));
+    console.log(
+        'Previous state:',
+        !!state ? JSON.parse(JSON.stringify(state)) : undefined
+    );
 
     const newState = Actions[type](state, payload);
 

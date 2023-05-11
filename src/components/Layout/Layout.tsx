@@ -1,4 +1,4 @@
-import { EditorPage } from '../Editor';
+import { Home } from '@components/Home';
 import React from 'react';
 import { Container, Content } from 'rsuite';
 import { Header } from './Header';
@@ -10,7 +10,7 @@ export const Layout: React.FC = () => {
             <Header />
             <Container className={'no-drag'}>
                 <Content>
-                    <EditorPage />
+                    <Home />
                 </Content>
             </Container>
         </Container>

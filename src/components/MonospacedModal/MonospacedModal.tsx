@@ -2,8 +2,8 @@ import { useEditorContext } from '@components/EditorContext';
 import { Song } from '@model/song';
 import React from 'react';
 import { Button, Input, Modal, ModalProps } from 'rsuite';
-import { getMonospacedText } from './utils';
 import './MonospacedModal.scss';
+import { getMonospacedText } from './utils';
 
 const CLASS = 'monospaced-modal';
 
