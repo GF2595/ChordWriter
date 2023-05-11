@@ -81,7 +81,6 @@ export const LyricsPart: React.FC<LyricsPartProps> = ({
                     }
                     onCreateNewPart={!!index ? onAddPartAfter : undefined}
                     onMultilinePaste={(excessLines: string[]) => {
-                        console.log('Tick!');
                         const linesByParts: string[][] = [];
 
                         if (excessLines.some((line) => !line)) {

@@ -2,19 +2,18 @@ import { useEditorContext } from '@components/EditorContext';
 import { PdfPreviewWindow } from '@components/SongbookPdfBuilder';
 import { Song } from '@model/song';
 import { removeAt } from '@utils/array';
+import { checkSongJsonFormat } from '@utils/checkFormat';
 import { isArray } from 'lodash';
 import React, { useRef, useState } from 'react';
 import {
     Button,
     Checkbox,
-    CheckboxGroup,
     List,
     Modal,
     ModalProps,
     Notification,
     toaster,
 } from 'rsuite';
-import { checkSongJsonFormat } from '../utils';
 import './MakePdfModal.scss';
 import { SongListItem } from './SongListItem';
 
@@ -36,11 +35,11 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
     ...modalProps
 }) => {
     const api = window.api.window;
-    const { value: song } = useEditorContext<Song>();
+    const { value: song } = useEditorContext<Song | undefined>();
 
     const [pdfPreview, setPdfPreview] = useState<React.ReactNode>(null);
     const [songList, setSongList] = useState(
-        !!song.title || !!song.author || !!song.songBody.length ? [song] : []
+        !!song?.title || !!song?.author || !!song?.songBody.length ? [song] : []
     );
     const ref = useRef(0);
     const [showChords, setShowChords] = useState(true);
@@ -98,14 +97,12 @@ export const MakePdfModal: React.FC<MakePdfModalProps> = ({
                             </span>
                         </div>
                     )}
-                    <CheckboxGroup inline>
-                        <Checkbox
-                            checked={showChords}
-                            onChange={(_, checked) => setShowChords(checked)}
-                        >
-                            Выводить аккорды
-                        </Checkbox>
-                    </CheckboxGroup>
+                    <Checkbox
+                        checked={showChords}
+                        onChange={(_, checked) => setShowChords(checked)}
+                    >
+                        Выводить аккорды
+                    </Checkbox>
                     {/*<CheckboxGroup inline>
                         <Checkbox disabled>
                             Добавить алфавитный указатель

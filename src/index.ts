@@ -131,7 +131,7 @@ const createWindow = (): void => {
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();
         mainWindow.focus();
-        // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     });
 };
 
