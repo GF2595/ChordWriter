@@ -7,6 +7,7 @@ import {
 } from '@components/EditorContext';
 import { MakePdfModal } from '@components/MakePdfModal';
 import { MonospacedModal } from '@components/MonospacedModal';
+import { TextImportModal } from '@components/TextImportModal';
 import ListIcon from '@rsuite/icons/List';
 import TextImageIcon from '@rsuite/icons/TextImage';
 import { checkSongJsonFormat } from '@utils/checkFormat';
@@ -22,6 +23,7 @@ const HomePageContent: React.FC = () => {
     const [structureVisible, setStructureVisible] = useState(false);
     const [monospacedModalVisible, setMonospacedModalVisible] = useState(false);
     const [makePdfModalVisible, setMakePdfModalVisible] = useState(false);
+    const [textImportModalVisible, setTextImportModalVisible] = useState(false);
     const { value, dispatch } = useEditorContext();
     const api = window.api.window;
 
@@ -96,6 +98,11 @@ const HomePageContent: React.FC = () => {
                     },
                     'Divider',
                     {
+                        title: 'Импорт из текстовой записи',
+                        info: 'Импорт песни в редактор из текстовой записи с сохранением аккордов',
+                        onClick: () => setTextImportModalVisible(true),
+                    },
+                    {
                         title: 'В моноширинную запись',
                         info: 'Вывести текущую песню в моноширинном формате',
                         disabled: !hasEditedSong,
@@ -135,6 +142,7 @@ const HomePageContent: React.FC = () => {
                         onCreateSong={onCreateSong}
                         onMakePdf={() => setMakePdfModalVisible(true)}
                         onOpenSong={onOpenSong}
+                        onImportText={() => setTextImportModalVisible(true)}
                     />
                 )}
             </PageContent>
@@ -148,6 +156,10 @@ const HomePageContent: React.FC = () => {
                     onClose={() => setMakePdfModalVisible(false)}
                 />
             )}
+            <TextImportModal
+                open={textImportModalVisible}
+                onClose={() => setTextImportModalVisible(false)}
+            />
         </>
     );
 };

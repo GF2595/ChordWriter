@@ -1,20 +1,20 @@
-import { ChordType, LyricChordPair } from '@model/song';
-import React, { useCallback, useMemo } from 'react';
 import {
+    Chord,
     IconButtonCluster,
     IconButtonInfo,
-    Chord,
     Letter,
 } from '@common/ChordsEditor';
+import { useEditorContext } from '@components/EditorContext';
+import { ChordType, LyricChordPair } from '@model/song';
 import EditIcon from '@rsuite/icons/Edit';
-import TrashIcon from '@rsuite/icons/Trash';
-import './LyricsLine.scss';
 import MoveDownIcon from '@rsuite/icons/MoveDown';
 import MoveUpIcon from '@rsuite/icons/MoveUp';
-import cn from 'classnames';
-import { useEditorContext } from '@components/EditorContext';
-import * as utils from './utils';
 import SplitIcon from '@rsuite/icons/Split';
+import TrashIcon from '@rsuite/icons/Trash';
+import cn from 'classnames';
+import React, { useCallback, useMemo } from 'react';
+import './LyricsLine.scss';
+import * as utils from './utils';
 
 const CLASS = 'lyrics-line';
 
@@ -124,7 +124,7 @@ export const LyricsLine: React.FC<LyricsLineProps> = ({
         return result;
     }, [onToggleEdit, onRemove, onAddLineAfter, onAddLineBefore, onSplitPart]);
 
-    const firstChordOffset = !lyrics[0].lyric;
+    const firstChordOffset = !lyrics[0].lyric && !!lyrics[0].chord;
 
     return (
         <div className={CLASS}>
