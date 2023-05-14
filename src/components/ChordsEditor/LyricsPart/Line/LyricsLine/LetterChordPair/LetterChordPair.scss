@@ -1,0 +1,29 @@
+@import '@stylesheets/common.scss';
+
+.letter-chord-pair {
+    position: relative;
+    display: flex;
+    height: 100%;
+    align-items: end;
+
+    &--non-offset {
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
+    }
+
+    &__chord {
+        position: absolute;
+        bottom: 1rem;
+
+        &--tail {
+            position: relative;
+            margin-left: $spacing-xs;
+        }
+
+        &--offset {
+            left: -10px;
+        }
+    }
+}
+

@@ -7,6 +7,7 @@
     align-items: flex-end;
     margin-bottom: 1px;
     position: relative;
+    height: 100%;
 
     &:hover .lyrics-line__icon {
         visibility: visible;
@@ -16,9 +17,12 @@
         display: flex;
         flex-direction: column;
         white-space: pre;
+        height: 100%;
+        justify-content: end;
         &_line {
             display: flex;
             flex-direction: row;
+            height: 100%;
         }
     }
     &__actions {
@@ -27,31 +31,6 @@
 
     &__icon {
         visibility: hidden;
-    }
-
-    &__chord {
-        position: absolute;
-        bottom: 1rem;
-
-        &--tail {
-            position: relative;
-        }
-
-        &--offset {
-            left: -10px;
-        }
-    }
-
-    &__offset-container {
-        position: relative;
-        display: flex;
-    }
-
-    &__letter-chord-container {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 }
 
