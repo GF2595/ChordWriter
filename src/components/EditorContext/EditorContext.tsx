@@ -11,6 +11,7 @@ import React, {
 
 export interface EditorContextProps {
     song: Song;
+    children: React.ReactNode;
 }
 
 // TODO: any

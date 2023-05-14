@@ -33,7 +33,7 @@ export const Line: React.FC<LineProps> = ({
     const isLyricsEmpty = !line?.lyrics || !line.lyrics.length;
 
     const handleSave = useCallback(
-        (text) => {
+        (text: string) => {
             onCancelLineEdit();
             dispatch({
                 type: 'setValue',
