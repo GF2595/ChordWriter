@@ -2,6 +2,8 @@ import { EditableHeader } from '@common/ChordsEditor';
 import { useEditorContext } from '@components/EditorContext';
 import { LyricsPartType, SongBody } from '@model/song';
 import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Button } from 'rsuite';
 import './ChordsEditor.scss';
 import { SongPart } from './SongPart';
@@ -22,7 +24,7 @@ export const ChordsEditor: React.FC<ChordsEditorProps> = ({
         useEditorContext<SongBody>('songBody');
 
     return (
-        <>
+        <DndProvider backend={HTML5Backend}>
             <EditableHeader
                 size={'lg'}
                 alt={'Добавьте название'}
@@ -88,7 +90,7 @@ export const ChordsEditor: React.FC<ChordsEditorProps> = ({
                     </Button>
                 )}
             </div>
-        </>
+        </DndProvider>
     );
 };
 

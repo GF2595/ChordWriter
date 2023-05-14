@@ -176,8 +176,6 @@ export const parseTextSong: (text: string) => Song = (text) => {
 
     const songBody: SongBody = [];
 
-    console.log(textByParts);
-
     textByParts.forEach((part) => {
         const parsedPart = parsePart(part);
         if (!!parsedPart) songBody.push(parsedPart);

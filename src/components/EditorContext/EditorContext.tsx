@@ -134,8 +134,6 @@ const Actions: {
 };
 
 const editorReducer = (state: Song | undefined, { type, payload }: Action) => {
-    console.log(state);
-
     console.groupCollapsed(
         `%c${type} action`,
         'color: CadetBlue',
