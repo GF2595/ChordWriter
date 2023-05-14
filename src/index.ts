@@ -25,8 +25,7 @@ ipcMain.on('window/maximize', () => {
 });
 
 ipcMain.on('window/close', () => {
-    const win = BrowserWindow.getFocusedWindow();
-    win.close();
+    app.quit();
 });
 
 ipcMain.handle('dialog/openFile', () =>
