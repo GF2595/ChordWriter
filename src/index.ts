@@ -25,7 +25,7 @@ ipcMain.on('window/maximize', () => {
 });
 
 ipcMain.on('window/close', () => {
-    app.quit();
+    BrowserWindow.getAllWindows().forEach((win) => win.close());
 });
 
 ipcMain.handle('dialog/openFile', () =>
@@ -130,6 +130,7 @@ const createWindow = (): void => {
     mainWindow.on('ready-to-show', () => {
         mainWindow.show();
         mainWindow.focus();
+        mainWindow.webContents.openDevTools();
     });
 };
 
