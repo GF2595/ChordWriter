@@ -1,8 +1,8 @@
 {
     "name": "chordwriter",
     "productName": "chordwriter",
-    "version": "1.0.0",
-    "description": "My Electron application description",
+    "version": "1.2.1",
+    "description": "Songbooks and songs with chords WYSIWYG editor",
     "main": ".webpack/main",
     "scripts": {
         "start": "electron-forge start",
@@ -12,7 +12,7 @@
         "lint": "eslint --ext .ts,.tsx ."
     },
     "keywords": [],
-    "author": "Александр",
+    "author": "Alexander Danilov",
     "license": "MIT",
     "config": {
         "forge": {
@@ -21,7 +21,7 @@
                 {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
-                        "name": "chordwriter"
+                        "name": "ChordWriter"
                     }
                 },
                 {
@@ -32,10 +32,6 @@
                 },
                 {
                     "name": "@electron-forge/maker-deb",
-                    "config": {}
-                },
-                {
-                    "name": "@electron-forge/maker-rpm",
                     "config": {}
                 }
             ],
@@ -102,3 +98,4 @@
         "sass-loader": "^12.2.0"
     }
 }
+

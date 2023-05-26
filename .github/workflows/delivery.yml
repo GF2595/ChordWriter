@@ -1,0 +1,68 @@
+name: Release publish
+run-name: ${{ github.actor }} is publishing a release
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    make-windows:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
+            - run: npm install
+            - run: npx electron-forge make --platform=win32 --arch=x64
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: win
+                  path: out/make/squirrel.windows/x64/*.exe
+
+    #   coming after tests on linux
+    #   make-ubuntu:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #       - uses: actions/checkout@v3
+    #       - uses: actions/setup-node@v3
+    #         with:
+    #           node-version: '18'
+    #       - run: npm install
+    #       - run: npx electron-forge make --platform=linux --arch=x64
+    #       - uses: actions/upload-artifact@v3
+    #         with:
+    #           name: deb
+    #           path: out/make/deb/x64/*.deb
+
+    #   coming after signatures fix
+    #   make-darwin:
+    #     runs-on: macos-latest
+    #     steps:
+    #       - uses: actions/checkout@v3
+    #       - uses: actions/setup-node@v3
+    #         with:
+    #           node-version: '18'
+    #       - run: npm install
+    #       - run: npx electron-forge make --platform=darwin --arch=x64
+    #       - uses: actions/upload-artifact@v3
+    #         with:
+    #           name: mac
+    #           path: out/make/zip/darwin/x64/*.zip
+
+    tagged-release:
+        name: 'Tagged Release'
+        permissions: write-all
+        needs: [make-windows]
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            - uses: actions/download-artifact@v3
+              with:
+                  path: artifacts
+            - uses: 'marvinpinto/action-automatic-releases@latest'
+              with:
+                  repo_token: '${{ secrets.GITHUB_TOKEN }}'
+                  prerelease: false
+                  files: |
+                      artifacts/win/*

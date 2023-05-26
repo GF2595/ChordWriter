@@ -1,0 +1,19 @@
+name: Node_test
+run-name: ${{ github.actor }} toggled test
+
+on:
+    pull_request:
+        branches: main
+    push:
+        branches: main
+jobs:
+    test_pull_request:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
+            - run: npm install
+            - run: npm run lint
+            - run: npm run package
