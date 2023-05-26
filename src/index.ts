@@ -25,7 +25,7 @@ ipcMain.on('window/maximize', () => {
 });
 
 ipcMain.on('window/close', () => {
-    app.quit();
+    BrowserWindow.getAllWindows().forEach((win) => win.close());
 });
 
 ipcMain.handle('dialog/openFile', () =>
