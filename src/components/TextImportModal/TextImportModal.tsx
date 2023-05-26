@@ -27,6 +27,7 @@ export const TextImportModal: React.FC<TextImportModalProps> = ({
                     as="textarea"
                     rows={15}
                     placeholder="Вставьте сюда текст песни"
+                    style={{ resize: 'none', fontFamily: 'monospace' }}
                     onChange={(value) =>
                         setTextAreaValue(
                             isArray(value) ? value.join('\n') : `${value}`
