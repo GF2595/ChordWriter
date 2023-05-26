@@ -2,6 +2,13 @@
 
 Songbooks writing software.
 
+## Availability:
+**Windows 10 and higher:** Setup.exe in latest release
+
+**Linux:** *.deb coming soon*
+
+**macOS:** *x64 packages coming soon*
+
 ## What is it capable of?
 
 This software is aimed to deliver a WYSIWYG-editor for songs with chords and songbooks.
