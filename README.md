@@ -13,7 +13,7 @@ For now using ChordWriter you can:
 3. Export created songs to monotype text;
 4. Import songs from monotyped text.
 
-![Specification example](images/interface.png)
+![Specification example](images/interface.jpg)
 
 ## How to use ChordWriter?
 
