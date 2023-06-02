@@ -72,9 +72,14 @@ export const LetterChordPair: React.FC<LetterChordPairProps> = ({
     const onAddChord = useCallback(
         (chord: ChordType) =>
             onChangeLyrics((lyrics) =>
-                addChordToLyrics(lyrics, chord, lyricIndex, letterIndex)
+                addChordToLyrics(
+                    lyrics,
+                    chord,
+                    offset ? -1 : lyricIndex,
+                    letterIndex
+                )
             ),
-        [letterIndex, lyricIndex, onChangeLyrics]
+        [letterIndex, lyricIndex, offset, onChangeLyrics]
     );
 
     const onRemoveChord = useCallback(
