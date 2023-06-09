@@ -31,13 +31,15 @@ export const LyricsPartBody: React.FC<LyricsPartBodyProps> = ({
                             whiteSpace: 'pre',
                         }}
                     >
-                        {false && !lyrics[0]?.lyric && !!lyrics[0].chord && (
-                            <Chord
-                                absolutePositionedMod
-                                style={styles.chord}
-                                chord={lyrics[0].chord}
-                            />
-                        )}{' '}
+                        {showChords &&
+                            !lyrics[0]?.lyric &&
+                            !!lyrics[0].chord && (
+                                <Chord
+                                    absolutePositionedMod
+                                    style={styles.chord}
+                                    chord={lyrics[0].chord}
+                                />
+                            )}{' '}
                     </span>
                     <span style={{ whiteSpace: 'pre' }}>
                         {lyrics.map(({ lyric, chord }, index) => {
